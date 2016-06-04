@@ -1,6 +1,9 @@
 package com.ashish.jiraissuetracker.utils;
 
 import android.content.Context;
+import android.content.Intent;
+import android.provider.Settings;
+import android.support.v7.app.AlertDialog;
 
 /**
  * Created by Ashish on 11/05/16.
@@ -16,7 +19,7 @@ public class UIUtils {
         return result;
     }
 
-    public static void showNoInternetDialog(String text, Context context) {
-        
+    public static void openAndroidSettingsScreen(Context context) {
+        context.startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
     }
 }

@@ -1,18 +1,25 @@
 package com.ashish.jiraissuetracker.activities;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import com.android.volley.NoConnectionError;
 import com.android.volley.VolleyError;
 import com.ashish.jiraissuetracker.R;
 import com.ashish.jiraissuetracker.extras.RequestTags;
+import com.ashish.jiraissuetracker.preferences.ZPreferences;
 import com.ashish.jiraissuetracker.requests.AppRequests;
 import com.ashish.jiraissuetracker.serverApi.AppRequestListener;
 import com.ashish.jiraissuetracker.utils.DebugUtils;
+import com.ashish.jiraissuetracker.utils.UIUtils;
 
 /**
  * Created by Ashish on 04/06/16.
@@ -21,6 +28,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
     EditText etUserName, etPassword, etUrl;
     ProgressDialog progressDialog;
+    private AlertDialog alertDialog;
+    FrameLayout loginButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,8 +39,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         etPassword = (EditText) findViewById(R.id.password);
         etUserName = (EditText) findViewById(R.id.username);
         etUrl = (EditText) findViewById(R.id.jiraurl);
+        loginButton = (FrameLayout) findViewById(R.id.loginbutton);
 
-        findViewById(R.id.loginbutton).setOnClickListener(this);
+        loginButton.setOnClickListener(this);
     }
 
     @Override
@@ -55,8 +65,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         String message = null;
         if (checkIfEdittextEmpty(etUserName)) {
             message = "Please enter userName";
-        } else if (checkIfEdittextEmpty(etUserName)) {
+        } else if (checkIfEdittextEmpty(etPassword)) {
             message = "Please enter password";
+        } else if (checkIfEdittextEmpty(etUrl)) {
+            message = "Please enter JIRA url";
         }
 
         return message;
@@ -71,6 +83,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
     @Override
     public void onRequestStarted(String requestTag) {
+        if (progressDialog != null) {
+            progressDialog.dismiss();
+        }
+
         if (requestTag.equalsIgnoreCase(LOGIN_REQUEST)) {
             progressDialog = ProgressDialog.show(this, "Logging In", "Please wait. Verifying credentials.", true, false);
         }
@@ -84,17 +100,55 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         }
 
         if (error instanceof NoConnectionError) {
-
+            showNoInternetDialog();
         } else {
-
+            showWrongPasswordDialog();
         }
+    }
+
+    private void showWrongPasswordDialog() {
+        alertDialog = new AlertDialog.Builder(this).setCancelable(true)
+                .setMessage("Invalid credentials. Please verify that you entered correct details and try logging in again.")
+                .setTitle("Failed to login")
+                .setPositiveButton("Dismiss", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        alertDialog.dismiss();
+                    }
+                }).show();
     }
 
     @Override
     public void onRequestCompleted(String requestTag, String response) {
-        DebugUtils.log("complete");
         if (progressDialog != null) {
             progressDialog.dismiss();
         }
+
+        moveToHomeActivity();
+    }
+
+    private void moveToHomeActivity() {
+        ZPreferences.setIsUserLogin(this, true);
+
+        Intent intent = new Intent(this, HomeActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+    }
+
+    void showNoInternetDialog() {
+        alertDialog = new AlertDialog.Builder(this).setCancelable(true)
+                .setMessage("Please check your internet connection and try again.")
+                .setTitle("Unable to connect")
+                .setNeutralButton("Settings", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        UIUtils.openAndroidSettingsScreen(LoginActivity.this);
+                    }
+                }).setPositiveButton("Retry", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        loginButton.performClick();
+                    }
+                }).show();
     }
 }

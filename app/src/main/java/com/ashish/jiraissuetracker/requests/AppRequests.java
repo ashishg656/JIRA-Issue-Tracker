@@ -7,6 +7,7 @@ import com.android.volley.Request;
 import com.ashish.jiraissuetracker.application.AppApplication;
 import com.ashish.jiraissuetracker.extras.AppUrls;
 import com.ashish.jiraissuetracker.extras.RequestTags;
+import com.ashish.jiraissuetracker.preferences.ZPreferences;
 import com.ashish.jiraissuetracker.serverApi.AppRequestListener;
 import com.ashish.jiraissuetracker.serverApi.CustomStringRequest;
 
@@ -26,8 +27,16 @@ public class AppRequests implements RequestTags {
 
         HashMap<String, String> headers = new HashMap<>();
         headers.put("Authorization", headerToken);
-        CustomStringRequest request = new CustomStringRequest(Request.Method.GET, urlJira, LOGIN_REQUEST, requestListener, null, headers);
 
+        ZPreferences.setHeaderTokenAuth(context, headerToken);
+
+        CustomStringRequest request = new CustomStringRequest(Request.Method.GET, urlJira, LOGIN_REQUEST, requestListener, null, headers);
         AppApplication.getInstance().addToRequestQueue(request, LOGIN_REQUEST, context);
+    }
+
+    public static HashMap<String, String> getHeader(Context context) {
+        HashMap<String, String> headers = new HashMap<>();
+        headers.put("Authorization", ZPreferences.getHeaderTokenAuth(context));
+        return headers;
     }
 }

@@ -6,5 +6,5 @@ package com.ashish.jiraissuetracker.extras;
 public class AppUrls {
 
     // all projects url or login url
-    public static final String LOGIN_URL = "/rest/api/2/project";
+    public static final String LOGIN_URL = "/rest/api/2/myself";
 }

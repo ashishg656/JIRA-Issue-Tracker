@@ -17,6 +17,21 @@ public class ZPreferences {
     private static final String USER_NAME = "username";
     private static final String USER_EMAIL = "useremail";
     private static final String GCM_TOKEN = "gcm_token";
+    private static final String HEADER_TOKEN_AUTH = "header_token_auth";
+
+    public static void setHeaderTokenAuth(Context context, String text) {
+        Editor editor = context.getSharedPreferences(KEY, Context.MODE_PRIVATE)
+                .edit();
+        editor.putString(HEADER_TOKEN_AUTH, text);
+        editor.commit();
+    }
+
+    public static String getHeaderTokenAuth(Context context) {
+        SharedPreferences savedSession = context.getSharedPreferences(KEY,
+                Context.MODE_PRIVATE);
+        return savedSession.getString(HEADER_TOKEN_AUTH, null);
+    }
+
 
     public static void setGcmToken(Context context, String text) {
         Editor editor = context.getSharedPreferences(KEY, Context.MODE_PRIVATE)
