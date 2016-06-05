@@ -19,7 +19,7 @@ import java.util.HashMap;
 public class AppRequests implements RequestTags {
 
     public static void makeLoginRequest(String urlJira, String userName, String password, AppRequestListener requestListener, Context context) {
-        urlJira = "https://" + urlJira + AppUrls.LOGIN_URL;
+        urlJira = urlJira + AppUrls.LOGIN_URL;
 
         String headerToken = userName + ":" + password;
         headerToken = Base64.encodeToString(headerToken.toString().getBytes(), Base64.DEFAULT);

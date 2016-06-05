@@ -47,10 +47,10 @@
                 android:id="@+id/jiraurl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="JIRA Url"
+                android:hint="Base Url"
                 android:inputType="textEmailAddress"
                 android:singleLine="true"
-                android:text="jiraissuetracker.atlassian.net" />
+                android:text="https://jiraissuetracker.atlassian.net/" />
         </android.support.design.widget.TextInputLayout>
     </LinearLayout>
 

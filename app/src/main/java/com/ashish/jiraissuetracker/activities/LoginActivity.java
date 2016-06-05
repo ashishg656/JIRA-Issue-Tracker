@@ -10,11 +10,13 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.android.volley.NoConnectionError;
 import com.android.volley.VolleyError;
 import com.ashish.jiraissuetracker.R;
 import com.ashish.jiraissuetracker.extras.RequestTags;
+import com.ashish.jiraissuetracker.objects.LoginObject;
 import com.ashish.jiraissuetracker.preferences.ZPreferences;
 import com.ashish.jiraissuetracker.requests.AppRequests;
 import com.ashish.jiraissuetracker.serverApi.AppRequestListener;
@@ -68,7 +70,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         } else if (checkIfEdittextEmpty(etPassword)) {
             message = "Please enter password";
         } else if (checkIfEdittextEmpty(etUrl)) {
-            message = "Please enter JIRA url";
+            message = "Please enter Base url";
         }
 
         return message;
@@ -102,13 +104,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         if (error instanceof NoConnectionError) {
             showNoInternetDialog();
         } else {
-            showWrongPasswordDialog();
+            showWrongPasswordDialog("Invalid credentials. Please verify that you entered correct details and try logging in again.");
         }
     }
 
-    private void showWrongPasswordDialog() {
+    private void showWrongPasswordDialog(String message) {
         alertDialog = new AlertDialog.Builder(this).setCancelable(true)
-                .setMessage("Invalid credentials. Please verify that you entered correct details and try logging in again.")
+                .setMessage(message)
                 .setTitle("Failed to login")
                 .setPositiveButton("Dismiss", new DialogInterface.OnClickListener() {
                     @Override
@@ -124,12 +126,34 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             progressDialog.dismiss();
         }
 
-        moveToHomeActivity();
+        try {
+            LoginObject loginObject = LoginObject.parseLoginObject(response);
+
+            String profileImage = loginObject.getAvatarUrls().getSize16();
+            if (profileImage != null) {
+                profileImage = profileImage.substring(0, profileImage.length() - 2);
+                profileImage = profileImage + "400";
+            }
+
+            ZPreferences.setUserEmail(this, loginObject.getEmailAddress());
+            ZPreferences.setUserName(this, loginObject.getDisplayName());
+            ZPreferences.setUserProfileID(this, loginObject.getName());
+            ZPreferences.setUserImageURL(this, profileImage);
+            if (!loginObject.isActive()) {
+                showWrongPasswordDialog("It seems that your account is no longer active. Please contact your company's administrator to reactivate your account or contact JIRA support");
+                return;
+            }
+
+            ZPreferences.setIsUserLogin(this, true);
+
+            moveToHomeActivity();
+        } catch (Exception e) {
+            e.printStackTrace();
+            makeToast("Some error occured. Please try again");
+        }
     }
 
     private void moveToHomeActivity() {
-        ZPreferences.setIsUserLogin(this, true);
-
         Intent intent = new Intent(this, HomeActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
