@@ -56,13 +56,6 @@ public class AppApplication extends Application {
         return mRequestQueue;
     }
 
-    public RequestQueue getRequestQueue(Context context) {
-        if (mRequestQueue == null) {
-            mRequestQueue = Volley.newRequestQueue(context);
-        }
-        return mRequestQueue;
-    }
-
     public static void initImageLoader(Context context) {
         BitmapFactory.Options decodingOptions = new BitmapFactory.Options();
 
@@ -87,10 +80,5 @@ public class AppApplication extends Application {
     public <T> void addToRequestQueue(Request<T> req, @NonNull String tag) {
         req.setTag(tag);
         getRequestQueue().add(req);
-    }
-
-    public <T> void addToRequestQueue(Request<T> req, @NonNull String tag, Context context) {
-        req.setTag(tag);
-        getRequestQueue(context).add(req);
     }
 }

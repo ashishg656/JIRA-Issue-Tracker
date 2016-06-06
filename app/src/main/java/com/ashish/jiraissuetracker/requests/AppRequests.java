@@ -28,10 +28,11 @@ public class AppRequests implements RequestTags {
         HashMap<String, String> headers = new HashMap<>();
         headers.put("Authorization", headerToken);
 
+        ZPreferences.setBaseUrl(context, urlJira);
         ZPreferences.setHeaderTokenAuth(context, headerToken);
 
         CustomStringRequest request = new CustomStringRequest(Request.Method.GET, urlJira, LOGIN_REQUEST, requestListener, null, headers);
-        AppApplication.getInstance().addToRequestQueue(request, LOGIN_REQUEST, context);
+        AppApplication.getInstance().addToRequestQueue(request, LOGIN_REQUEST);
     }
 
     public static HashMap<String, String> getHeader(Context context) {

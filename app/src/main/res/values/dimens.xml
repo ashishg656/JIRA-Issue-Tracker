@@ -19,4 +19,8 @@
     <dimen name="z_font_medium">18sp</dimen>
 
     <dimen name="material_button_height">48dp</dimen>
+
+    <!-- navigation drawer -->
+    <dimen name="z_drawer_header_top_padding">56dp</dimen>
+    <dimen name="z_drawer_profile_image_height">64dp</dimen>
 </resources>

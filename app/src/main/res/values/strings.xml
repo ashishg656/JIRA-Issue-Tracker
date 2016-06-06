@@ -1,9 +1,10 @@
 <resources>
-    <string name="app_name">Group Chat</string>
+    <string name="app_name">JIRA Issue Tracker</string>
 
     <string name="action_settings">Settings</string>
 
     <string name="no_connection">Looks like you are not connected to internet.\nPlease check your internet connection settings and click to Retry.</string>
-    <string name="action_users">Active Users</string>
     <string name="title_activity_splash">JIRA Issue Tracker</string>
+    <string name="z_open_drawer">OpenDrawer</string>
+    <string name="z_close_drawer">CloseDrawer</string>
 </resources>

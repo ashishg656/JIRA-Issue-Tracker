@@ -24,7 +24,12 @@ public class SplashActivity extends BaseActivity {
         setContentView(R.layout.splash_activity_layout);
 
         if (ZPreferences.isUserLogIn(this)) {
-
+            new Timer().schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    switchToHomeActivity();
+                }
+            }, 1000);
         } else {
             new Timer().schedule(new TimerTask() {
                 @Override
@@ -33,6 +38,12 @@ public class SplashActivity extends BaseActivity {
                 }
             }, 1000);
         }
+    }
+
+    private void switchToHomeActivity() {
+        Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
+        this.finish();
     }
 
     private void switchToLoginActivity() {

@@ -18,6 +18,20 @@ public class ZPreferences {
     private static final String USER_EMAIL = "useremail";
     private static final String GCM_TOKEN = "gcm_token";
     private static final String HEADER_TOKEN_AUTH = "header_token_auth";
+    private static final String BASE_URL = "base_url";
+
+    public static void setBaseUrl(Context context, String text) {
+        Editor editor = context.getSharedPreferences(KEY, Context.MODE_PRIVATE)
+                .edit();
+        editor.putString(BASE_URL, text);
+        editor.commit();
+    }
+
+    public static String getBaseUrl(Context context) {
+        SharedPreferences savedSession = context.getSharedPreferences(KEY,
+                Context.MODE_PRIVATE);
+        return savedSession.getString(BASE_URL, null);
+    }
 
     public static void setHeaderTokenAuth(Context context, String text) {
         Editor editor = context.getSharedPreferences(KEY, Context.MODE_PRIVATE)
