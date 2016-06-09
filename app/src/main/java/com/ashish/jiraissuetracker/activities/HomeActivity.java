@@ -184,7 +184,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
         @Override
         public CharSequence getPageTitle(int position) {
             if (position == 0) {
-                return "Issues";
+                return "My Issues";
             } else if (position == 1) {
                 return "Activity Stream";
             } else if (position == 3) {

@@ -19,6 +19,7 @@ import java.util.HashMap;
 public class AppRequests implements RequestTags {
 
     public static void makeLoginRequest(String urlJira, String userName, String password, AppRequestListener requestListener, Context context) {
+        ZPreferences.setBaseUrl(context, urlJira);
         urlJira = urlJira + AppUrls.LOGIN_URL;
 
         String headerToken = userName + ":" + password;
@@ -28,11 +29,16 @@ public class AppRequests implements RequestTags {
         HashMap<String, String> headers = new HashMap<>();
         headers.put("Authorization", headerToken);
 
-        ZPreferences.setBaseUrl(context, urlJira);
         ZPreferences.setHeaderTokenAuth(context, headerToken);
 
         CustomStringRequest request = new CustomStringRequest(Request.Method.GET, urlJira, LOGIN_REQUEST, requestListener, null, headers);
         AppApplication.getInstance().addToRequestQueue(request, LOGIN_REQUEST);
+    }
+
+    public static void makeIssuesRequest(String url, AppRequestListener requestListener, Context context) {
+        CustomStringRequest request = new CustomStringRequest(Request.Method.GET, url,
+                ISSUES_REQUEST, requestListener, null, getHeader(context));
+        AppApplication.getInstance().addToRequestQueue(request, ISSUES_REQUEST);
     }
 
     public static HashMap<String, String> getHeader(Context context) {

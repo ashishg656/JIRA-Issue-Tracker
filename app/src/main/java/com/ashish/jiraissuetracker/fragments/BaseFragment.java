@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 public class BaseFragment extends Fragment {
 
     View rootView;
+    String requestUrl;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -22,5 +23,21 @@ public class BaseFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+    }
+
+    public void showProgressLayout() {
+
+    }
+
+    public void hideProgressLayout() {
+
+    }
+
+    public void showErrorLayout() {
+
+    }
+
+    public void hideErrorLayout() {
+
     }
 }

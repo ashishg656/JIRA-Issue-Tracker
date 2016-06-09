@@ -6,5 +6,6 @@ package com.ashish.jiraissuetracker.extras;
 public interface RequestTags {
 
     public String LOGIN_REQUEST = "Login Request";
+    public String ISSUES_REQUEST = "Issues Request";
 
 }

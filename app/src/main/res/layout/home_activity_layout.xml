@@ -65,7 +65,4 @@
             app:itemBackground="@null"
             app:menu="@menu/z_drawer_items_menu" />
     </android.support.v4.widget.DrawerLayout>
-
-    <include layout="@layout/splash_activity_layout" />
-
 </FrameLayout>

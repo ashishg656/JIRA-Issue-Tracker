@@ -7,4 +7,5 @@ public class AppUrls {
 
     // all projects url or login url
     public static final String LOGIN_URL = "rest/api/2/myself";
+    public static final String SEARCH_ISSUES_URL = "rest/api/2/search?jql";
 }
