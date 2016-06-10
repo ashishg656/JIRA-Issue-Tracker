@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="z_tag_position">0</integer>
+    <integer name="z_tag_holder">1</integer>
+</resources>

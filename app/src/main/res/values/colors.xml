@@ -30,4 +30,7 @@
     <!-- common colors -->
     <color name="white">#ffffff</color>
     <color name="z_white_transparency">#80ffffff</color>
+
+    <color name="issue_type_text_color">#1b5e20</color>
+    <color name="issue_priority_text_color">#1b5e20</color>
 </resources>

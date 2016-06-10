@@ -25,6 +25,10 @@ public class BaseFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
     }
 
+    public void setProgressAndErrorLayoutVariables() {
+
+    }
+
     public void showProgressLayout() {
 
     }

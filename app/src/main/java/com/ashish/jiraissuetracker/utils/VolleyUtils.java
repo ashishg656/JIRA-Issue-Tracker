@@ -4,6 +4,8 @@ import com.android.volley.Cache;
 import com.ashish.jiraissuetracker.application.AppApplication;
 import com.google.gson.Gson;
 
+import java.io.UnsupportedEncodingException;
+
 /**
  * Created by Ashish on 10/05/16.
  */
@@ -13,7 +15,7 @@ public class VolleyUtils {
         return new Gson().fromJson(response, objectClass);
     }
 
-    public static Object getResponseFromCache(Class objectClass, String url) {
+    public static Object getResponseFromCache(Class objectClass, String url) throws Exception {
         try {
             Cache.Entry entry = AppApplication.getInstance()
                     .getRequestQueue().getCache().get(url);
@@ -22,7 +24,7 @@ public class VolleyUtils {
                     objectClass);
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            throw e;
         }
     }
 }

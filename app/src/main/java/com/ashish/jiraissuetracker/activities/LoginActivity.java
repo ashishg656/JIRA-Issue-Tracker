@@ -5,23 +5,21 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.android.volley.NoConnectionError;
 import com.android.volley.VolleyError;
 import com.ashish.jiraissuetracker.R;
 import com.ashish.jiraissuetracker.extras.RequestTags;
-import com.ashish.jiraissuetracker.objects.LoginObject;
+import com.ashish.jiraissuetracker.objects.login.LoginObjectResponse;
 import com.ashish.jiraissuetracker.preferences.ZPreferences;
 import com.ashish.jiraissuetracker.requests.AppRequests;
 import com.ashish.jiraissuetracker.serverApi.AppRequestListener;
 import com.ashish.jiraissuetracker.utils.DebugUtils;
 import com.ashish.jiraissuetracker.utils.UIUtils;
+import com.ashish.jiraissuetracker.utils.VolleyUtils;
 
 /**
  * Created by Ashish on 04/06/16.
@@ -127,9 +125,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         }
 
         try {
-            LoginObject loginObject = LoginObject.parseLoginObject(response);
+            LoginObjectResponse loginObject = (LoginObjectResponse) VolleyUtils.getResponseObject(response, LoginObjectResponse.class);
 
-            String profileImage = loginObject.getAvatarUrls().getSize16();
+            String profileImage = loginObject.getAvatarUrls().get48x48();
             if (profileImage != null) {
                 profileImage = profileImage.substring(0, profileImage.length() - 2);
                 profileImage = profileImage + "400";
@@ -139,7 +137,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             ZPreferences.setUserName(this, loginObject.getDisplayName());
             ZPreferences.setUserProfileID(this, loginObject.getName());
             ZPreferences.setUserImageURL(this, profileImage);
-            if (!loginObject.isActive()) {
+            if (!loginObject.getActive()) {
                 showWrongPasswordDialog("It seems that your account is no longer active. Please contact your company's administrator to reactivate your account or contact JIRA support");
                 return;
             }

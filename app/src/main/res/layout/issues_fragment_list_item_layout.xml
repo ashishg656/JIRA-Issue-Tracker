@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="6dp"
+    android:layout_marginLeft="6dp"
+    android:layout_marginRight="6dp"
+    android:background="@drawable/ic_cart_bg_shadow"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:foreground="?attr/selectableItemBackground">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/issue_key"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/z_margin_medium"
+                android:layout_marginRight="@dimen/z_margin_medium"
+                android:layout_marginTop="@dimen/z_margin_medium"
+                android:text="HOG-353"
+                android:textColor="@color/z_text_color_dark"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/issue_summary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/z_margin_medium"
+                android:layout_marginRight="@dimen/z_margin_medium"
+                android:layout_marginTop="@dimen/z_margin_small"
+                android:ellipsize="end"
+                android:maxLines="4"
+                android:text="Issue summary goes here. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuri"
+                android:textColor="@color/z_text_color_medium_dark" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/z_margin_medium"
+                android:layout_marginLeft="@dimen/z_margin_large"
+                android:layout_marginRight="@dimen/z_margin_large"
+                android:layout_marginTop="@dimen/z_margin_medium"
+                android:gravity="right|center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/issue_type_image"
+                    android:layout_width="@dimen/issue_list_issue_type_image_height"
+                    android:layout_height="@dimen/issue_list_issue_type_image_height" />
+
+                <TextView
+                    android:id="@+id/issue_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/z_margin_mini"
+                    android:includeFontPadding="false"
+                    android:text="BUG"
+                    android:textColor="@color/issue_type_text_color"
+                    android:textSize="@dimen/z_font_mini" />
+
+                <ImageView
+                    android:id="@+id/issue_priority_image"
+                    android:layout_width="@dimen/issue_list_issue_type_image_height"
+                    android:layout_height="@dimen/issue_list_issue_type_image_height"
+                    android:layout_marginLeft="@dimen/z_margin_large"
+                    android:src="@drawable/issue_priority_image" />
+
+                <TextView
+                    android:id="@+id/issue_priority"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/z_margin_mini"
+                    android:includeFontPadding="false"
+                    android:text="Highest"
+                    android:textColor="@color/issue_priority_text_color"
+                    android:textSize="@dimen/z_font_mini" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/z_grey_shade_3" />
+
+            <TextView
+                android:id="@+id/issue_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:gravity="center"
+                android:padding="@dimen/z_margin_small"
+                android:text="STATUS"
+                android:textColor="@color/colorPrimary" />
+        </LinearLayout>
+    </FrameLayout>
+
+</LinearLayout>

@@ -9,11 +9,14 @@ import android.view.ViewGroup;
 
 import com.android.volley.VolleyError;
 import com.ashish.jiraissuetracker.R;
+import com.ashish.jiraissuetracker.adapters.IssuesFragmentListAdapter;
 import com.ashish.jiraissuetracker.extras.AppUrls;
 import com.ashish.jiraissuetracker.extras.RequestTags;
+import com.ashish.jiraissuetracker.objects.issues.SearchListingResponseObject;
 import com.ashish.jiraissuetracker.preferences.ZPreferences;
 import com.ashish.jiraissuetracker.requests.AppRequests;
 import com.ashish.jiraissuetracker.serverApi.AppRequestListener;
+import com.ashish.jiraissuetracker.utils.VolleyUtils;
 
 /**
  * Created by Ashish on 07/06/16.
@@ -22,6 +25,11 @@ public class IssuesFragment extends BaseFragment implements AppRequestListener, 
 
     RecyclerView recyclerView;
     LinearLayoutManager layoutManager;
+
+    int startAt = 0;
+    int pageSize = 20;
+    boolean isMoreAllowed = true;
+    IssuesFragmentListAdapter adapter;
 
     public static IssuesFragment newInstance(Bundle e) {
         IssuesFragment frg = new IssuesFragment();
@@ -45,14 +53,17 @@ public class IssuesFragment extends BaseFragment implements AppRequestListener, 
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
+        setProgressAndErrorLayoutVariables();
+
         loadData();
     }
 
     private void loadData() {
-        requestUrl = ZPreferences.getBaseUrl(getActivity()) + AppUrls.SEARCH_ISSUES_URL
-                + "=assignee=" + ZPreferences.getUserProfileID(getActivity());
+        if (isMoreAllowed) {
+            requestUrl = ZPreferences.getBaseUrl(getActivity()) + AppUrls.getSearchIssuesUrl(ZPreferences.getUserProfileID(getActivity()), startAt, pageSize);
 
-        AppRequests.makeIssuesRequest(requestUrl, this, getActivity());
+            AppRequests.makeIssuesRequest(requestUrl, this, getActivity());
+        }
     }
 
     @Override
@@ -68,16 +79,47 @@ public class IssuesFragment extends BaseFragment implements AppRequestListener, 
         if (requestTag.equalsIgnoreCase(ISSUES_REQUEST)) {
             showErrorLayout();
             hideProgressLayout();
+
+            try {
+                SearchListingResponseObject issuesData = (SearchListingResponseObject) VolleyUtils.getResponseFromCache(SearchListingResponseObject.class, requestUrl);
+                setAdapterData(issuesData);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
     @Override
     public void onRequestCompleted(String requestTag, String response) {
         if (requestTag.equalsIgnoreCase(ISSUES_REQUEST)) {
-            showErrorLayout();
-            hideProgressLayout();
+            SearchListingResponseObject issuesData = (SearchListingResponseObject) VolleyUtils.getResponseObject(response, SearchListingResponseObject.class);
 
+            setAdapterData(issuesData);
+        }
+    }
 
+    private void setAdapterData(SearchListingResponseObject issuesData) {
+        hideProgressLayout();
+        hideErrorLayout();
+
+        try {
+            if (issuesData.getIssues() != null) {
+                if (issuesData.getIssues().size() < pageSize) {
+                    isMoreAllowed = false;
+                } else {
+                    isMoreAllowed = true;
+                    startAt = startAt + pageSize;
+                }
+            }
+
+            if (adapter == null) {
+                adapter = new IssuesFragmentListAdapter(issuesData.getIssues(), getActivity(), isMoreAllowed);
+                recyclerView.setAdapter(adapter);
+            } else {
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

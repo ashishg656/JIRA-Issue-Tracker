@@ -23,4 +23,6 @@
     <!-- navigation drawer -->
     <dimen name="z_drawer_header_top_padding">56dp</dimen>
     <dimen name="z_drawer_profile_image_height">64dp</dimen>
+
+    <dimen name="issue_list_issue_type_image_height">14dp</dimen>
 </resources>
