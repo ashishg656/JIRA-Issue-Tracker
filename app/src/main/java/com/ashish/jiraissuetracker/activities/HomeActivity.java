@@ -53,11 +53,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
     HashMap<Integer, Fragment> fragmentHashMap;
 
     @Override
-    void broadcastForIssueStatusChangeReceived(Intent intent) {
-
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_activity_layout);

@@ -19,11 +19,6 @@ import java.util.TimerTask;
 public class SplashActivity extends BaseActivity {
 
     @Override
-    void broadcastForIssueStatusChangeReceived(Intent intent) {
-
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_activity_layout);

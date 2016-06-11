@@ -1,5 +1,7 @@
 package com.ashish.jiraissuetracker.fragments;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
@@ -14,6 +16,7 @@ import com.android.volley.VolleyError;
 import com.ashish.jiraissuetracker.R;
 import com.ashish.jiraissuetracker.adapters.ChangeIssueStatusFragmentListAdapter;
 import com.ashish.jiraissuetracker.extras.AppUrls;
+import com.ashish.jiraissuetracker.extras.LocalBroadcastTypes;
 import com.ashish.jiraissuetracker.extras.RequestTags;
 import com.ashish.jiraissuetracker.objects.getAllStatusForProject.GetAllStatusForProjectObject;
 import com.ashish.jiraissuetracker.objects.getIssueTransitions.GetIssueTransitionObject;
@@ -40,11 +43,6 @@ public class ChangeIssueStatusFragment extends BaseFragment implements AppReques
         ChangeIssueStatusFragment frg = new ChangeIssueStatusFragment();
         frg.setArguments(bundle);
         return frg;
-    }
-
-    @Override
-    void broadcastForIssueStatusChangeReceived(Intent intent) {
-
     }
 
     @Override

@@ -32,11 +32,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     FrameLayout loginButton;
 
     @Override
-    void broadcastForIssueStatusChangeReceived(Intent intent) {
-
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity_layout);

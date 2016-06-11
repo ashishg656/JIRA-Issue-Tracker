@@ -1,5 +1,7 @@
 package com.ashish.jiraissuetracker.fragments;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
@@ -15,6 +17,7 @@ import com.ashish.jiraissuetracker.R;
 import com.ashish.jiraissuetracker.adapters.IssuesFragmentListAdapter;
 import com.ashish.jiraissuetracker.broadcasts.LocalBroadcastMaker;
 import com.ashish.jiraissuetracker.extras.AppUrls;
+import com.ashish.jiraissuetracker.extras.LocalBroadcastTypes;
 import com.ashish.jiraissuetracker.extras.RequestTags;
 import com.ashish.jiraissuetracker.objects.issues.SearchListingResponseObject;
 import com.ashish.jiraissuetracker.preferences.ZPreferences;
@@ -34,6 +37,18 @@ public class IssuesFragment extends BaseFragment implements AppRequestListener, 
     int pageSize = 20;
     boolean isMoreAllowed = true;
     IssuesFragmentListAdapter adapter;
+
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent != null) {
+                int type = intent.getIntExtra("type", -1);
+                if (type == LocalBroadcastTypes.TYPE_ISSUE_STATUS_CHANGE) {
+                    broadcastForIssueStatusChangeReceived(intent);
+                }
+            }
+        }
+    };
 
     public static IssuesFragment newInstance(Bundle e) {
         IssuesFragment frg = new IssuesFragment();
@@ -149,7 +164,6 @@ public class IssuesFragment extends BaseFragment implements AppRequestListener, 
     }
 
     // broadcasts
-    @Override
     void broadcastForIssueStatusChangeReceived(Intent intent) {
         try {
             String issueid = intent.getStringExtra("issueid");
