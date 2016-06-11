@@ -1,10 +1,12 @@
 package com.ashish.jiraissuetracker.fragments;
 
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -14,15 +16,14 @@ import com.ashish.jiraissuetracker.adapters.ChangeIssueStatusFragmentListAdapter
 import com.ashish.jiraissuetracker.extras.AppUrls;
 import com.ashish.jiraissuetracker.extras.RequestTags;
 import com.ashish.jiraissuetracker.objects.getAllStatusForProject.GetAllStatusForProjectObject;
-import com.ashish.jiraissuetracker.objects.getAllStatusForProject.Status;
+import com.ashish.jiraissuetracker.objects.getIssueTransitions.GetIssueTransitionObject;
 import com.ashish.jiraissuetracker.preferences.ZPreferences;
 import com.ashish.jiraissuetracker.requests.AppRequests;
 import com.ashish.jiraissuetracker.serverApi.AppRequestListener;
 import com.ashish.jiraissuetracker.utils.VolleyUtils;
 import com.google.gson.Gson;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.security.spec.ECField;
 
 /**
  * Created by Ashish on 11/06/16.
@@ -34,14 +35,16 @@ public class ChangeIssueStatusFragment extends BaseFragment implements AppReques
     TextView cancelButton;
 
     String projectid, issuetype, currentStatus, issueid;
-    GetAllStatusForProjectObject[] mData;
-
-    List<Status> statusList;
 
     public static ChangeIssueStatusFragment newInstance(Bundle bundle) {
         ChangeIssueStatusFragment frg = new ChangeIssueStatusFragment();
         frg.setArguments(bundle);
         return frg;
+    }
+
+    @Override
+    void broadcastForIssueStatusChangeReceived(Intent intent) {
+
     }
 
     @Override
@@ -70,14 +73,14 @@ public class ChangeIssueStatusFragment extends BaseFragment implements AppReques
     }
 
     private void loadData() {
-        String url = ZPreferences.getBaseUrl(getActivity()) + AppUrls.getAllStatusForProject(projectid);
+        String url = ZPreferences.getBaseUrl(getActivity()) + AppUrls.getIssueTransitions(issueid);
 
-        AppRequests.makeGetAllStatusForProjectRequest(url, this, getActivity());
+        AppRequests.makeGetIssueTransitionsRequest(url, this, getActivity());
     }
 
     @Override
     public void onRequestStarted(String requestTag) {
-        if (requestTag.equalsIgnoreCase(RequestTags.GET_ALL_STATUS_FOR_PROJECT)) {
+        if (requestTag.equalsIgnoreCase(RequestTags.GET_TRANSITIONS_FOR_ISSUE)) {
             hideErrorLayout();
             showProgressLayout();
         }
@@ -85,7 +88,7 @@ public class ChangeIssueStatusFragment extends BaseFragment implements AppReques
 
     @Override
     public void onRequestFailed(String requestTag, VolleyError error) {
-        if (requestTag.equalsIgnoreCase(RequestTags.GET_ALL_STATUS_FOR_PROJECT)) {
+        if (requestTag.equalsIgnoreCase(RequestTags.GET_TRANSITIONS_FOR_ISSUE)) {
             hideProgressLayout();
             showErrorLayout();
         }
@@ -93,26 +96,18 @@ public class ChangeIssueStatusFragment extends BaseFragment implements AppReques
 
     @Override
     public void onRequestCompleted(String requestTag, String response) {
-        if (requestTag.equalsIgnoreCase(RequestTags.GET_ALL_STATUS_FOR_PROJECT)) {
+        if (requestTag.equalsIgnoreCase(RequestTags.GET_TRANSITIONS_FOR_ISSUE)) {
             hideErrorLayout();
             hideProgressLayout();
 
-            mData = new Gson().fromJson(response, GetAllStatusForProjectObject[].class);
-            setAdapterData();
+            GetIssueTransitionObject mData = (GetIssueTransitionObject) VolleyUtils.getResponseObject(response, GetIssueTransitionObject.class);
+            setAdapterData(mData);
         }
     }
 
-    private void setAdapterData() {
-        for (GetAllStatusForProjectObject obj : mData) {
-            if (obj.getName().equalsIgnoreCase(issuetype)) {
-                statusList = obj.getStatuses();
-
-                adapter = new ChangeIssueStatusFragmentListAdapter(issueid, statusList, currentStatus, getActivity());
-                listView.setAdapter(adapter);
-
-                return;
-            }
-        }
+    private void setAdapterData(GetIssueTransitionObject mData) {
+        adapter = new ChangeIssueStatusFragmentListAdapter(issueid, mData.getTransitions(), currentStatus, getActivity());
+        listView.setAdapter(adapter);
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.ashish.jiraissuetracker.adapters;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,31 +13,39 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.ashish.jiraissuetracker.R;
 import com.ashish.jiraissuetracker.activities.BaseActivity;
+import com.ashish.jiraissuetracker.broadcasts.LocalBroadcastMaker;
 import com.ashish.jiraissuetracker.extras.AppUrls;
 import com.ashish.jiraissuetracker.extras.RequestTags;
 import com.ashish.jiraissuetracker.objects.getAllStatusForProject.Status;
+import com.ashish.jiraissuetracker.objects.getIssueTransitions.ChangeIssueStatusPayloadObject;
 import com.ashish.jiraissuetracker.objects.getIssueTransitions.GetIssueTransitionObject;
 import com.ashish.jiraissuetracker.objects.getIssueTransitions.Transition;
 import com.ashish.jiraissuetracker.preferences.ZPreferences;
 import com.ashish.jiraissuetracker.requests.AppRequests;
 import com.ashish.jiraissuetracker.serverApi.AppRequestListener;
+import com.ashish.jiraissuetracker.serverApi.AppRequestListenerJsonObject;
 import com.ashish.jiraissuetracker.utils.VolleyUtils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 
 /**
  * Created by Ashish on 11/06/16.
  */
-public class ChangeIssueStatusFragmentListAdapter extends BaseAdapter implements AppRequestListener {
+public class ChangeIssueStatusFragmentListAdapter extends BaseAdapter implements AppRequestListenerJsonObject {
 
-    List<Status> mData;
+    List<Transition> mData;
     String currentStatus, issueId;
     Context context;
+    String newStatus;
+
     LayoutInflater layoutInflater;
     MyClickListener clickListener;
     ProgressDialog progressDialog;
 
-    public ChangeIssueStatusFragmentListAdapter(String issueId, List<Status> mData, String currentStatus, Context context) {
+    public ChangeIssueStatusFragmentListAdapter(String issueId, List<Transition> mData, String currentStatus, Context context) {
         this.mData = mData;
         this.currentStatus = currentStatus;
         this.context = context;
@@ -83,16 +92,16 @@ public class ChangeIssueStatusFragmentListAdapter extends BaseAdapter implements
 
     @Override
     public void onRequestStarted(String requestTag) {
-        if (requestTag.equalsIgnoreCase(RequestTags.GET_TRANSITIONS_FOR_ISSUE)) {
+        if (requestTag.equalsIgnoreCase(RequestTags.POST_TRANSITIONS_FOR_ISSUE)) {
             if (progressDialog != null)
                 progressDialog.dismiss();
-            progressDialog = ProgressDialog.show(context, "Please Wait", "Getting Issue Transitions", true, false);
+            progressDialog = ProgressDialog.show(context, "Please Wait", "Changing Issue Status", true, false);
         }
     }
 
     @Override
     public void onRequestFailed(String requestTag, VolleyError error) {
-        if (requestTag.equalsIgnoreCase(RequestTags.GET_TRANSITIONS_FOR_ISSUE)) {
+        if (requestTag.equalsIgnoreCase(RequestTags.POST_TRANSITIONS_FOR_ISSUE)) {
             if (progressDialog != null)
                 progressDialog.dismiss();
 
@@ -101,15 +110,14 @@ public class ChangeIssueStatusFragmentListAdapter extends BaseAdapter implements
     }
 
     @Override
-    public void onRequestCompleted(String requestTag, String response) {
-        if (requestTag.equalsIgnoreCase(RequestTags.GET_TRANSITIONS_FOR_ISSUE)) {
+    public void onRequestCompleted(String requestTag, JSONObject response) {
+        if (requestTag.equalsIgnoreCase(RequestTags.POST_TRANSITIONS_FOR_ISSUE)) {
             if (progressDialog != null)
                 progressDialog.dismiss();
 
-            GetIssueTransitionObject obj = (GetIssueTransitionObject) VolleyUtils.getResponseObject(response, GetIssueTransitionObject.class);
-            for (Transition transition : obj.getTransitions()) {
-
-            }
+            ((BaseActivity) context).makeToast("Issue status changed successfully.");
+            LocalBroadcastMaker.makeBroadcastForIssueStatusChange(issueId, newStatus, context);
+            ((BaseActivity) context).onBackPressed();
         }
     }
 
@@ -125,7 +133,18 @@ public class ChangeIssueStatusFragmentListAdapter extends BaseAdapter implements
     }
 
     private void changeIssueStatus(int pos) {
-        String url = ZPreferences.getBaseUrl(context) + AppUrls.getIssueTransitions(issueId);
-        AppRequests.getIssueTransitions(url, this, context);
+        try {
+            JSONObject jsonObject = new JSONObject();
+            JSONObject transitionObject = new JSONObject();
+            transitionObject.put("id", mData.get(pos).getId());
+            jsonObject.put("transition", transitionObject);
+
+            newStatus = mData.get(pos).getName();
+
+            String url = ZPreferences.getBaseUrl(context) + AppUrls.getIssueTransitionsPost(issueId);
+            AppRequests.makePostIssueTransitionsRequest(url, this, context, jsonObject);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

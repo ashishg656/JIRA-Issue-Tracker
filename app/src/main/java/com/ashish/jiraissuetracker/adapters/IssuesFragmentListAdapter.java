@@ -86,6 +86,18 @@ public class IssuesFragmentListAdapter extends RecyclerView.Adapter<RecyclerView
         }
     }
 
+    public void changeIssueStatus(String issueid, String newstatus) {
+        if (mData != null) {
+            for (int i = 0; 1 < mData.size(); i++) {
+                if (mData.get(i).getId().equalsIgnoreCase(issueid)) {
+                    mData.get(i).getFields().getStatus().setName(newstatus);
+                    notifyItemChanged(i);
+                    return;
+                }
+            }
+        }
+    }
+
     class IssueHolder extends RecyclerView.ViewHolder {
 
         TextView key, summary, type, priority, status;

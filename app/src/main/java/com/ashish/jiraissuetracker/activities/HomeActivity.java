@@ -1,6 +1,7 @@
 package com.ashish.jiraissuetracker.activities;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -50,6 +51,11 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
     ProgressDialog progressDialog;
 
     HashMap<Integer, Fragment> fragmentHashMap;
+
+    @Override
+    void broadcastForIssueStatusChangeReceived(Intent intent) {
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -22,4 +22,8 @@ public class AppUrls {
     public static String getIssueTransitions(String issueId) {
         return "rest/api/2/issue/" + issueId + "/transitions?expand=transitions.fields";
     }
+
+    public static String getIssueTransitionsPost(String issueId) {
+        return "rest/api/2/issue/" + issueId + "/transitions";
+    }
 }

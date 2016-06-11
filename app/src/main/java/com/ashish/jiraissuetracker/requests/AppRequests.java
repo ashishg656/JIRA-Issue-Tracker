@@ -9,7 +9,11 @@ import com.ashish.jiraissuetracker.extras.AppUrls;
 import com.ashish.jiraissuetracker.extras.RequestTags;
 import com.ashish.jiraissuetracker.preferences.ZPreferences;
 import com.ashish.jiraissuetracker.serverApi.AppRequestListener;
+import com.ashish.jiraissuetracker.serverApi.AppRequestListenerJsonObject;
+import com.ashish.jiraissuetracker.serverApi.CustomJsonObjectRequest;
 import com.ashish.jiraissuetracker.serverApi.CustomStringRequest;
+
+import org.json.JSONObject;
 
 import java.util.HashMap;
 
@@ -47,10 +51,16 @@ public class AppRequests implements RequestTags {
         AppApplication.getInstance().addToRequestQueue(request, GET_ALL_STATUS_FOR_PROJECT);
     }
 
-    public static void getIssueTransitions(String url, AppRequestListener requestListener, Context context) {
+    public static void makeGetIssueTransitionsRequest(String url, AppRequestListener requestListener, Context context) {
         CustomStringRequest request = new CustomStringRequest(Request.Method.GET, url,
                 GET_TRANSITIONS_FOR_ISSUE, requestListener, null, getHeader(context));
         AppApplication.getInstance().addToRequestQueue(request, GET_TRANSITIONS_FOR_ISSUE);
+    }
+
+    public static void makePostIssueTransitionsRequest(String url, AppRequestListenerJsonObject requestListener, Context context, JSONObject jsonObject) {
+        CustomJsonObjectRequest request = new CustomJsonObjectRequest(Request.Method.POST, url, jsonObject,
+                POST_TRANSITIONS_FOR_ISSUE, requestListener, null, getHeader(context));
+        AppApplication.getInstance().addToRequestQueue(request, POST_TRANSITIONS_FOR_ISSUE);
     }
 
     public static HashMap<String, String> getHeader(Context context) {

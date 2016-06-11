@@ -1,6 +1,9 @@
 package com.ashish.jiraissuetracker.fragments;
 
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,6 +13,7 @@ import android.view.ViewGroup;
 import com.android.volley.VolleyError;
 import com.ashish.jiraissuetracker.R;
 import com.ashish.jiraissuetracker.adapters.IssuesFragmentListAdapter;
+import com.ashish.jiraissuetracker.broadcasts.LocalBroadcastMaker;
 import com.ashish.jiraissuetracker.extras.AppUrls;
 import com.ashish.jiraissuetracker.extras.RequestTags;
 import com.ashish.jiraissuetracker.objects.issues.SearchListingResponseObject;
@@ -117,6 +121,42 @@ public class IssuesFragment extends BaseFragment implements AppRequestListener, 
                 recyclerView.setAdapter(adapter);
             } else {
 
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onStart() {
+        try {
+            LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver,
+                    new IntentFilter(LocalBroadcastMaker.BROADCAST_INTENT_FILTER_EVENT));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        super.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        try {
+            LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        super.onStop();
+    }
+
+    // broadcasts
+    @Override
+    void broadcastForIssueStatusChangeReceived(Intent intent) {
+        try {
+            String issueid = intent.getStringExtra("issueid");
+            String newstatus = intent.getStringExtra("newstatus");
+
+            if (adapter != null) {
+                adapter.changeIssueStatus(issueid, newstatus);
             }
         } catch (Exception e) {
             e.printStackTrace();

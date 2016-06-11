@@ -10,19 +10,19 @@ public class DebugUtils {
     public static boolean showTags = true;
 
     public static void log(String message) {
-        if (showTags) {
+        if (showTags && message != null) {
             Log.w("jiraissuetracker", message);
         }
     }
 
     public static void logRequests(String message) {
-        if (showTags) {
+        if (showTags && message != null) {
             Log.w("CustomStringRequest", message);
         }
     }
 
     public static void printToSystem(String response) {
-        if (showTags) {
+        if (showTags && response != null) {
             System.out.println(response);
         }
     }

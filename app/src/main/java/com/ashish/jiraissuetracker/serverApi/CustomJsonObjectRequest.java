@@ -1,18 +1,28 @@
 package com.ashish.jiraissuetracker.serverApi;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
+import com.android.volley.ParseError;
+import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.HttpHeaderParser;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.ashish.jiraissuetracker.utils.DebugUtils;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Created by Ashish on 11/06/16.
+ */
+public class CustomJsonObjectRequest extends JsonObjectRequest {
 
-public class CustomStringRequest extends StringRequest {
-
-    AppRequestListener appRequestListener;
+    AppRequestListenerJsonObject appRequestListener;
     HashMap<String, String> params;
     HashMap<String, String> headers;
     String tag;
@@ -20,10 +30,10 @@ public class CustomStringRequest extends StringRequest {
 
     long requestStartTime;
 
-    public CustomStringRequest(int method, String url, String tag,
-                               AppRequestListener appRequestListener,
-                               HashMap<String, String> params, HashMap<String, String> headers) {
-        super(method, url, null, null);
+    public CustomJsonObjectRequest(int method, String url, JSONObject jsonObject, String tag,
+                                   AppRequestListenerJsonObject appRequestListener,
+                                   HashMap<String, String> params, HashMap<String, String> headers) {
+        super(method, url, jsonObject, null, null);
         this.appRequestListener = appRequestListener;
         this.tag = tag;
         this.params = params;
@@ -40,7 +50,22 @@ public class CustomStringRequest extends StringRequest {
     }
 
     @Override
-    protected void deliverResponse(String response) {
+    protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
+        try {
+            String jsonString = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
+            if (jsonString.length() == 0) {
+                return Response.success(null, HttpHeaderParser.parseCacheHeaders(response));
+            }
+            return Response.success(new JSONObject(jsonString), HttpHeaderParser.parseCacheHeaders(response));
+        } catch (UnsupportedEncodingException e) {
+            return Response.error(new ParseError(e));
+        } catch (JSONException je) {
+            return Response.error(new ParseError(je));
+        }
+    }
+
+    @Override
+    protected void deliverResponse(JSONObject response) {
         if (DebugUtils.showTags) {
             long requestEndTime = System.currentTimeMillis();
             long difference = (requestEndTime - requestStartTime);
@@ -48,7 +73,11 @@ public class CustomStringRequest extends StringRequest {
         } else {
             DebugUtils.logRequests("Request Complete. URL = " + url);
         }
-        DebugUtils.printToSystem(response);
+        try {
+            DebugUtils.printToSystem(response.toString());
+        } catch (Exception e) {
+            DebugUtils.printToSystem("Empty Response Received");
+        }
         appRequestListener.onRequestCompleted(tag, response);
     }
 
