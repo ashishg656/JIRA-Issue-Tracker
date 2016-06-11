@@ -7,11 +7,23 @@ import android.util.Log;
  */
 public class DebugUtils {
 
-    static boolean showTags = true;
+    public static boolean showTags = true;
 
     public static void log(String message) {
         if (showTags) {
             Log.w("jiraissuetracker", message);
+        }
+    }
+
+    public static void logRequests(String message) {
+        if (showTags) {
+            Log.w("CustomStringRequest", message);
+        }
+    }
+
+    public static void printToSystem(String response) {
+        if (showTags) {
+            System.out.println(response);
         }
     }
 }

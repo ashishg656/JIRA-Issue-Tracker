@@ -12,10 +12,14 @@ public class AppUrls {
     public static final String SEARCH_ISSUES_URL = "rest/api/2/search?jql";
 
     public static String getAllStatusForProject(String projectId) {
-        return "/rest/api/2/project/" + projectId + "/statuses";
+        return "rest/api/2/project/" + projectId + "/statuses";
     }
 
     public static String getSearchIssuesUrl(String assignee, long startAt, int pageSize) {
         return AppUrls.SEARCH_ISSUES_URL + "=assignee=" + assignee + "&startAt=" + startAt + "&maxResults=" + pageSize;
+    }
+
+    public static String getIssueTransitions(String issueId) {
+        return "rest/api/2/issue/" + issueId + "/transitions?expand=transitions.fields";
     }
 }

@@ -33,4 +33,6 @@
 
     <color name="issue_type_text_color">#1b5e20</color>
     <color name="issue_priority_text_color">#1b5e20</color>
+
+    <color name="ripple_color">#42ffffff</color>
 </resources>

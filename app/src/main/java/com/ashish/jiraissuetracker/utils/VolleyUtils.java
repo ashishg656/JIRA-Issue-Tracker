@@ -23,7 +23,6 @@ public class VolleyUtils {
             return new Gson().fromJson(data,
                     objectClass);
         } catch (Exception e) {
-            e.printStackTrace();
             throw e;
         }
     }

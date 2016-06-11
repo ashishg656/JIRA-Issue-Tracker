@@ -1,6 +1,7 @@
 package com.ashish.jiraissuetracker.adapters;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,10 +9,18 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
 import com.ashish.jiraissuetracker.R;
+import com.ashish.jiraissuetracker.activities.BaseActivity;
+import com.ashish.jiraissuetracker.activities.HomeActivity;
 import com.ashish.jiraissuetracker.extras.AppConstants;
+import com.ashish.jiraissuetracker.extras.AppUrls;
+import com.ashish.jiraissuetracker.extras.RequestTags;
 import com.ashish.jiraissuetracker.objects.issues.Fields;
 import com.ashish.jiraissuetracker.objects.issues.Issue;
+import com.ashish.jiraissuetracker.preferences.ZPreferences;
+import com.ashish.jiraissuetracker.requests.AppRequests;
+import com.ashish.jiraissuetracker.serverApi.AppRequestListener;
 import com.ashish.jiraissuetracker.serverApi.ImageRequestManager;
 import com.ashish.jiraissuetracker.utils.UIUtils;
 
@@ -64,6 +73,7 @@ public class IssuesFragmentListAdapter extends RecyclerView.Adapter<RecyclerView
 
             holder.status.setText(issue.getFields().getStatus().getName());
             holder.status.setTag(R.integer.z_tag_position, position);
+            holder.status.setOnClickListener(clickListener);
         }
     }
 
@@ -118,7 +128,13 @@ public class IssuesFragmentListAdapter extends RecyclerView.Adapter<RecyclerView
     }
 
     private void fetchStatusesForProject(int position) {
-        
+        Bundle b = new Bundle();
+        b.putString("projectid", mData.get(position).getFields().getProject().getId());
+        b.putString("issuetype", mData.get(position).getFields().getIssuetype().getName());
+        b.putString("currentStatus", mData.get(position).getFields().getStatus().getName());
+        b.putString("issueid", mData.get(position).getId());
+
+        ((BaseActivity) context).changeFragmentToChangeIssueStatusFragment(b);
     }
 
     @Override

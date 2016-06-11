@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/change_issue_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:padding="@dimen/z_margin_medium"
+            android:text="Status"
+            android:textColor="@color/z_text_color_medium_dark"
+            android:textSize="@dimen/z_font_mini" />
+
+        <ImageView
+            android:id="@+id/change_issue_tick"
+            android:layout_width="@dimen/z_margin_large"
+            android:layout_height="@dimen/z_margin_large"
+            android:layout_marginRight="@dimen/z_margin_large"
+            android:src="@drawable/ic_tick" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/z_grey_shade_2" />
+</LinearLayout>

@@ -6,6 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
+import com.ashish.jiraissuetracker.R;
+import com.ashish.jiraissuetracker.fragments.ChangeIssueStatusFragment;
+
 /**
  * Created by Ashish on 04/06/16.
  */
@@ -26,5 +29,11 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    public void changeFragmentToChangeIssueStatusFragment(Bundle b) {
+        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, ChangeIssueStatusFragment.newInstance(b), "IssueChange")
+                .addToBackStack("IssueChange")
+                .commitAllowingStateLoss();
     }
 }
