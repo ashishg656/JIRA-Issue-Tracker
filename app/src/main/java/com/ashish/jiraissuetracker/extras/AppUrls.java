@@ -26,4 +26,8 @@ public class AppUrls {
     public static String getIssueTransitionsPost(String issueId) {
         return "rest/api/2/issue/" + issueId + "/transitions";
     }
+
+    public static String getActivityStreamUrl(long startAt, int pageSize) {
+        return "activity/?startAt=" + startAt + "&maxResults=" + pageSize;
+    }
 }
