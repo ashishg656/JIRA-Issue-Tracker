@@ -28,6 +28,6 @@ public class AppUrls {
     }
 
     public static String getActivityStreamUrl(long startAt, int pageSize) {
-        return "activity/?startAt=" + startAt + "&maxResults=" + pageSize;
+        return "activity?startAt=" + startAt + "&maxResults=" + pageSize;
     }
 }

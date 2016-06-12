@@ -98,6 +98,13 @@ public class IssuesFragmentListAdapter extends RecyclerView.Adapter<RecyclerView
         }
     }
 
+    public void addData(List<Issue> issues, boolean isMoreAllowed) {
+        this.isMoreAllowed = isMoreAllowed;
+        mData.addAll(issues);
+
+        notifyDataSetChanged();
+    }
+
     class IssueHolder extends RecyclerView.ViewHolder {
 
         TextView key, summary, type, priority, status;

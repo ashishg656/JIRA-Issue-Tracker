@@ -23,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ashish.jiraissuetracker.R;
+import com.ashish.jiraissuetracker.fragments.ActivityStreamFragment;
 import com.ashish.jiraissuetracker.fragments.IssuesFragment;
 import com.ashish.jiraissuetracker.preferences.ZPreferences;
 import com.ashish.jiraissuetracker.serverApi.ImageRequestManager;
@@ -167,8 +168,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
             if (pos == 0)
                 fragment = IssuesFragment.newInstance(bundle);
             else if (pos == 1)
-                fragment = IssuesFragment.newInstance(bundle);
-            else if (pos == 3)
+                fragment = ActivityStreamFragment.newInstance(bundle);
+            else if (pos == 2)
                 fragment = IssuesFragment.newInstance(bundle);
             else
                 fragment = IssuesFragment.newInstance(bundle);
@@ -179,7 +180,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
 
         @Override
         public int getCount() {
-            return 1;
+            return 2;
         }
 
         @Override

@@ -26,4 +26,10 @@ public class DebugUtils {
             System.out.println(response);
         }
     }
+
+    public static void log(String tag, String message) {
+        if (showTags && message != null && tag != null) {
+            Log.w(tag, message);
+        }
+    }
 }

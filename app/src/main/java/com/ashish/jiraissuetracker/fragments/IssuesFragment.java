@@ -135,7 +135,7 @@ public class IssuesFragment extends BaseFragment implements AppRequestListener, 
                 adapter = new IssuesFragmentListAdapter(issuesData.getIssues(), getActivity(), isMoreAllowed);
                 recyclerView.setAdapter(adapter);
             } else {
-
+                adapter.addData(issuesData.getIssues(), isMoreAllowed);
             }
         } catch (Exception e) {
             e.printStackTrace();
