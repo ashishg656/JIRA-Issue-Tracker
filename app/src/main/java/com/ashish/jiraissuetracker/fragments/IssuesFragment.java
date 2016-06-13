@@ -36,6 +36,7 @@ public class IssuesFragment extends BaseFragment implements AppRequestListener, 
     int startAt = 0;
     int pageSize = 20;
     boolean isMoreAllowed = true;
+    boolean isRequestRunning;
     IssuesFragmentListAdapter adapter;
 
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
@@ -72,6 +73,21 @@ public class IssuesFragment extends BaseFragment implements AppRequestListener, 
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (layoutManager != null && adapter != null && isMoreAllowed) {
+                    int lastitem = layoutManager.findLastVisibleItemPosition();
+                    int totalitems = adapter.getItemCount();
+                    int diff = totalitems - lastitem;
+                    if (diff < 5 && !isRequestRunning && isMoreAllowed) {
+                        loadData();
+                    }
+                }
+            }
+        });
+
         setProgressAndErrorLayoutVariables();
 
         loadData();
@@ -88,6 +104,7 @@ public class IssuesFragment extends BaseFragment implements AppRequestListener, 
     @Override
     public void onRequestStarted(String requestTag) {
         if (requestTag.equalsIgnoreCase(ISSUES_REQUEST)) {
+            isRequestRunning = true;
             hideErrorLayout();
             showProgressLayout();
         }
@@ -96,6 +113,7 @@ public class IssuesFragment extends BaseFragment implements AppRequestListener, 
     @Override
     public void onRequestFailed(String requestTag, VolleyError error) {
         if (requestTag.equalsIgnoreCase(ISSUES_REQUEST)) {
+            isRequestRunning = false;
             showErrorLayout();
             hideProgressLayout();
 
@@ -111,6 +129,7 @@ public class IssuesFragment extends BaseFragment implements AppRequestListener, 
     @Override
     public void onRequestCompleted(String requestTag, String response) {
         if (requestTag.equalsIgnoreCase(ISSUES_REQUEST)) {
+            isRequestRunning = false;
             SearchListingResponseObject issuesData = (SearchListingResponseObject) VolleyUtils.getResponseObject(response, SearchListingResponseObject.class);
 
             setAdapterData(issuesData);

@@ -27,7 +27,22 @@ public class AppUrls {
         return "rest/api/2/issue/" + issueId + "/transitions";
     }
 
-    public static String getActivityStreamUrl(long startAt, int pageSize) {
-        return "activity?startAt=" + startAt + "&maxResults=" + pageSize;
+    public static String getActivityStreamUrl(long startAt, int pageSize, String lastUpdated) {
+        if (lastUpdated == null) {
+            return "activity?startAt=" + startAt + "&maxResults=" + pageSize;
+        }
+        return "activity?startAt=" + startAt + "&maxResults=" + pageSize + "&streams=update-date+BEFORE+" + lastUpdated;
+    }
+
+    public static String getActivityStreamForUserUrl(long startAt, int pageSize, String userName) {
+        return "activity?" + "streams=user+IS+" + userName + "&startAt=" + startAt + "&maxResults=" + pageSize;
+    }
+
+    public static String getUserProfileUrl(String userName) {
+        return "rest/api/2/user?username=" + userName;
+    }
+
+    public static String getUserProfileUrl() {
+        return LOGIN_URL;
     }
 }

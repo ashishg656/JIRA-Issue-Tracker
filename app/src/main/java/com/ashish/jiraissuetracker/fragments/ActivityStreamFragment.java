@@ -3,7 +3,6 @@ package com.ashish.jiraissuetracker.fragments;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,6 @@ import android.view.ViewGroup;
 import com.android.volley.VolleyError;
 import com.ashish.jiraissuetracker.R;
 import com.ashish.jiraissuetracker.adapters.ActivityStreamFragmentListAdapter;
-import com.ashish.jiraissuetracker.adapters.IssuesFragmentListAdapter;
 import com.ashish.jiraissuetracker.extras.AppUrls;
 import com.ashish.jiraissuetracker.extras.RequestTags;
 import com.ashish.jiraissuetracker.objects.activityStream.ActivityStreamObject;
@@ -21,6 +19,7 @@ import com.ashish.jiraissuetracker.preferences.ZPreferences;
 import com.ashish.jiraissuetracker.requests.AppRequests;
 import com.ashish.jiraissuetracker.serverApi.AppRequestListener;
 import com.ashish.jiraissuetracker.utils.DebugUtils;
+import com.ashish.jiraissuetracker.utils.TimeUtils;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -42,6 +41,8 @@ public class ActivityStreamFragment extends BaseFragment implements AppRequestLi
     int startAt = 0;
     int pageSize = 20;
     boolean isMoreAllowed = true;
+    boolean isRequestRunning = false;
+    private String lastUpdated = null;
 
     public static ActivityStreamFragment newInstance(Bundle e) {
         ActivityStreamFragment frg = new ActivityStreamFragment();
@@ -65,6 +66,21 @@ public class ActivityStreamFragment extends BaseFragment implements AppRequestLi
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (layoutManager != null && adapter != null && isMoreAllowed) {
+                    int lastitem = layoutManager.findLastVisibleItemPosition();
+                    int totalitems = adapter.getItemCount();
+                    int diff = totalitems - lastitem;
+                    if (diff < 5 && !isRequestRunning && isMoreAllowed) {
+                        loadData();
+                    }
+                }
+            }
+        });
+
         setProgressAndErrorLayoutVariables();
 
         loadData();
@@ -72,7 +88,7 @@ public class ActivityStreamFragment extends BaseFragment implements AppRequestLi
 
     void loadData() {
         if (isMoreAllowed) {
-            requestUrl = ZPreferences.getBaseUrl(getActivity()) + AppUrls.getActivityStreamUrl(startAt, pageSize);
+            requestUrl = ZPreferences.getBaseUrl(getActivity()) + AppUrls.getActivityStreamUrl(startAt, pageSize, lastUpdated);
 
             AppRequests.makeActivityStreamRequest(requestUrl, this, getActivity());
         }
@@ -81,6 +97,7 @@ public class ActivityStreamFragment extends BaseFragment implements AppRequestLi
     @Override
     public void onRequestStarted(String requestTag) {
         if (requestTag.equalsIgnoreCase(RequestTags.ACTIVITY_STREAM)) {
+            isRequestRunning = true;
             hideErrorLayout();
             showProgressLayout();
         }
@@ -89,6 +106,7 @@ public class ActivityStreamFragment extends BaseFragment implements AppRequestLi
     @Override
     public void onRequestFailed(String requestTag, VolleyError error) {
         if (requestTag.equalsIgnoreCase(RequestTags.ACTIVITY_STREAM)) {
+            isRequestRunning = false;
             hideProgressLayout();
             showErrorLayout();
         }
@@ -97,6 +115,7 @@ public class ActivityStreamFragment extends BaseFragment implements AppRequestLi
     @Override
     public void onRequestCompleted(String requestTag, String response) {
         if (requestTag.equalsIgnoreCase(RequestTags.ACTIVITY_STREAM)) {
+            isRequestRunning = false;
             getDataFromXml(response);
         }
     }
@@ -110,9 +129,10 @@ public class ActivityStreamFragment extends BaseFragment implements AppRequestLi
                 ActivityStreamObject object = new Gson().fromJson(String.valueOf(jsonObj), ActivityStreamObject.class);
                 setAdapterData(object);
             } catch (Exception e) {
+                e.printStackTrace();
                 try {
                     ActivityStreamObjectNonArray object = new Gson().fromJson(String.valueOf(jsonObj), ActivityStreamObjectNonArray.class);
-                    DebugUtils.log("Got Data from single XML ActivityStreamObjectNonArray");
+                    DebugUtils.log("Got Data from single XML ActivityStreamObjectNonArray and StartAt = " + startAt);
                     setAdapterData(object);
                 } catch (Exception e1) {
                     e1.printStackTrace();
@@ -146,6 +166,11 @@ public class ActivityStreamFragment extends BaseFragment implements AppRequestLi
                 isMoreAllowed = false;
             } else {
                 isMoreAllowed = true;
+
+                Entry lastEntry = object.getFeed().getEntry().get(object.getFeed().getEntry().size() - 1);
+                lastUpdated = TimeUtils.getTimeInMillisFromStringForActivityStreamGMT(lastEntry.getUpdated());
+                startAt = startAt + pageSize;
+                DebugUtils.log("StartAt for Activity Stream Fragment = " + startAt);
             }
         }
 

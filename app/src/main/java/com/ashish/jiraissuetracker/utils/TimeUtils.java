@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
@@ -13,234 +14,272 @@ import android.text.style.StyleSpan;
 
 public class TimeUtils {
 
-	public static final String PARSER_FORMAT_FOR_DATES = "yyyy-MM-dd'T'HH:mm:ss";
+    public static final String PARSER_FORMAT_FOR_DATES = "yyyy-MM-dd'T'HH:mm:ss";
 
-	public static String getCurrentTimeString() {
-		Date date = new Date();
-		SimpleDateFormat sdf = new SimpleDateFormat(PARSER_FORMAT_FOR_DATES);
-		return sdf.format(date);
-	}
+    public static String getCurrentTimeString() {
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat(PARSER_FORMAT_FOR_DATES);
+        return sdf.format(date);
+    }
 
-	public static CharSequence getPostTime(String timestamp) {
-		try {
-			SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
-					PARSER_FORMAT_FOR_DATES, Locale.US);
-			Date date = simpleDateFormat.parse(timestamp);
+    public static String getTimeInMillisFromStringForActivityStreamGMT(String updated) {
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
+                    PARSER_FORMAT_FOR_DATES);
 
-			Calendar calendar = Calendar.getInstance();
-			calendar.setTimeInMillis(date.getTime());
+            simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+            Date date = simpleDateFormat.parse(updated);
+//
+            return Long.toString(date.getTime());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
-			CharSequence simpleDate = DateUtils.getRelativeTimeSpanString(
-					date.getTime(), Calendar.getInstance().getTimeInMillis(),
-					DateUtils.MINUTE_IN_MILLIS);
+    public static CharSequence getPostTimeGMTActivityStream(String timestamp) {
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
+                    PARSER_FORMAT_FOR_DATES);
+            simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+            Date date = simpleDateFormat.parse(timestamp);
 
-			if (simpleDate.equals("0 minutes ago"))
-				simpleDate = "Just Now";
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(date.getTime());
 
-			return simpleDate;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return "Just Now";
-	}
+            CharSequence simpleDate = DateUtils.getRelativeTimeSpanString(
+                    date.getTime(), Calendar.getInstance().getTimeInMillis(),
+                    DateUtils.MINUTE_IN_MILLIS);
 
-	public static String getSimpleDate(String timestamp) {
-		try {
-			SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
-					PARSER_FORMAT_FOR_DATES, Locale.US);
-			Date date = simpleDateFormat.parse(timestamp);
+            if (simpleDate.equals("0 minutes ago"))
+                simpleDate = "Just Now";
 
-			Calendar calendar = Calendar.getInstance();
-			calendar.setTimeInMillis(date.getTime());
-			String simpleDate = Integer.toString(calendar
-					.get(Calendar.DAY_OF_MONTH))
-					+ Integer.toString(calendar.get(Calendar.MONTH))
-					+ Integer.toString(calendar.get(Calendar.YEAR)) + "";
-			return simpleDate;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return "";
-	}
+            return simpleDate;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "Just Now";
+    }
 
-	public static String getChatTime(String timestamp) {
-		try {
-			SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
-					PARSER_FORMAT_FOR_DATES, Locale.US);
-			Date date = simpleDateFormat.parse(timestamp);
+    public static CharSequence getPostTime(String timestamp) {
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
+                    PARSER_FORMAT_FOR_DATES, Locale.US);
+            Date date = simpleDateFormat.parse(timestamp);
 
-			Calendar calendar = Calendar.getInstance();
-			calendar.setTimeInMillis(date.getTime());
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(date.getTime());
 
-			String am_or_pm = calendar.get(Calendar.AM_PM) == Calendar.AM ? " AM"
-					: " PM";
+            CharSequence simpleDate = DateUtils.getRelativeTimeSpanString(
+                    date.getTime(), Calendar.getInstance().getTimeInMillis(),
+                    DateUtils.MINUTE_IN_MILLIS);
 
-			String minutes = Integer.toString(calendar.get(Calendar.MINUTE));
+            if (simpleDate.equals("0 minutes ago"))
+                simpleDate = "Just Now";
 
-			if (calendar.get(Calendar.MINUTE) < 10) {
-				minutes = "0" + Integer.toString(calendar.get(Calendar.MINUTE));
-			}
+            return simpleDate;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "Just Now";
+    }
 
-			String hour = Integer.toString(calendar.get(Calendar.HOUR));
-			if (hour.equals("0"))
-				hour = "12";
+    public static String getSimpleDate(String timestamp) {
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
+                    PARSER_FORMAT_FOR_DATES, Locale.US);
+            Date date = simpleDateFormat.parse(timestamp);
 
-			String simpleDate = hour + ":" + minutes + am_or_pm;
-			return simpleDate;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return "Just Now";
-	}
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(date.getTime());
+            String simpleDate = Integer.toString(calendar
+                    .get(Calendar.DAY_OF_MONTH))
+                    + Integer.toString(calendar.get(Calendar.MONTH))
+                    + Integer.toString(calendar.get(Calendar.YEAR)) + "";
+            return simpleDate;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
 
-	public static String getChatDateDisplayed(String timestamp) {
-		try {
-			SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
-					PARSER_FORMAT_FOR_DATES, Locale.US);
-			Date dateObj = simpleDateFormat.parse(timestamp);
+    public static String getChatTime(String timestamp) {
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
+                    PARSER_FORMAT_FOR_DATES, Locale.US);
+            Date date = simpleDateFormat.parse(timestamp);
 
-			Calendar calendar = Calendar.getInstance();
-			calendar.setTimeInMillis(dateObj.getTime());
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(date.getTime());
 
-			SpannableStringBuilder builder1 = new SpannableStringBuilder();
+            String am_or_pm = calendar.get(Calendar.AM_PM) == Calendar.AM ? " AM"
+                    : " PM";
 
-			int day = calendar.get(Calendar.DAY_OF_MONTH);
+            String minutes = Integer.toString(calendar.get(Calendar.MINUTE));
 
-			String dayName = getDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK));
-			builder1.append(dayName + ", ");
+            if (calendar.get(Calendar.MINUTE) < 10) {
+                minutes = "0" + Integer.toString(calendar.get(Calendar.MINUTE));
+            }
 
-			String date = getMonth(calendar.get(Calendar.MONTH)) + " "
-					+ String.format("%02d", day);
+            String hour = Integer.toString(calendar.get(Calendar.HOUR));
+            if (hour.equals("0"))
+                hour = "12";
 
-			SpannableString dateSpannable = new SpannableString(date);
-			dateSpannable.setSpan(
-					new StyleSpan(android.graphics.Typeface.BOLD), 0,
-					date.length(), 0);
-			builder1.append(dateSpannable);
+            String simpleDate = hour + ":" + minutes + am_or_pm;
+            return simpleDate;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "Just Now";
+    }
 
-			String year = " " + calendar.get(Calendar.YEAR);
-			SpannableString yearSpannable = new SpannableString(year);
-			yearSpannable.setSpan(
-					new StyleSpan(android.graphics.Typeface.BOLD), 0,
-					year.length(), 0);
-			yearSpannable.setSpan(new RelativeSizeSpan(1.5f), 0, year.length(),
-					0);
-			builder1.append(yearSpannable);
+    public static String getChatDateDisplayed(String timestamp) {
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
+                    PARSER_FORMAT_FOR_DATES, Locale.US);
+            Date dateObj = simpleDateFormat.parse(timestamp);
 
-			return builder1.toString();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return "";
-	}
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(dateObj.getTime());
 
-	private static String getDayOfWeek(int dayOfWeek) {
-		String result = "";
-		switch (dayOfWeek) {
-		case Calendar.MONDAY:
-			result = "MONDAY";
-			break;
-		case Calendar.TUESDAY:
-			result = "TUESDAY";
-			break;
-		case Calendar.WEDNESDAY:
-			result = "WEDNESDAY";
-			break;
-		case Calendar.THURSDAY:
-			result = "THURSDAY";
-			break;
-		case Calendar.FRIDAY:
-			result = "FRIDAY";
-			break;
-		case Calendar.SATURDAY:
-			result = "SATURDAY";
-			break;
-		case Calendar.SUNDAY:
-			result = "SUNDAY";
-			break;
-		}
-		return result;
-	}
+            SpannableStringBuilder builder1 = new SpannableStringBuilder();
 
-	public static String getMonth(int month) {
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-		String result = "";
-		switch (month) {
+            String dayName = getDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK));
+            builder1.append(dayName + ", ");
 
-		case Calendar.JANUARY:
-			result = "JANUARY";
-			break;
+            String date = getMonth(calendar.get(Calendar.MONTH)) + " "
+                    + String.format("%02d", day);
 
-		case Calendar.FEBRUARY:
-			result = "FEBRUARY";
-			break;
+            SpannableString dateSpannable = new SpannableString(date);
+            dateSpannable.setSpan(
+                    new StyleSpan(android.graphics.Typeface.BOLD), 0,
+                    date.length(), 0);
+            builder1.append(dateSpannable);
 
-		case Calendar.MARCH:
-			result = "MARCH";
-			break;
+            String year = " " + calendar.get(Calendar.YEAR);
+            SpannableString yearSpannable = new SpannableString(year);
+            yearSpannable.setSpan(
+                    new StyleSpan(android.graphics.Typeface.BOLD), 0,
+                    year.length(), 0);
+            yearSpannable.setSpan(new RelativeSizeSpan(1.5f), 0, year.length(),
+                    0);
+            builder1.append(yearSpannable);
 
-		case Calendar.APRIL:
-			result = "APRIL";
-			break;
+            return builder1.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
 
-		case Calendar.MAY:
-			result = "MAY";
-			break;
+    private static String getDayOfWeek(int dayOfWeek) {
+        String result = "";
+        switch (dayOfWeek) {
+            case Calendar.MONDAY:
+                result = "MONDAY";
+                break;
+            case Calendar.TUESDAY:
+                result = "TUESDAY";
+                break;
+            case Calendar.WEDNESDAY:
+                result = "WEDNESDAY";
+                break;
+            case Calendar.THURSDAY:
+                result = "THURSDAY";
+                break;
+            case Calendar.FRIDAY:
+                result = "FRIDAY";
+                break;
+            case Calendar.SATURDAY:
+                result = "SATURDAY";
+                break;
+            case Calendar.SUNDAY:
+                result = "SUNDAY";
+                break;
+        }
+        return result;
+    }
 
-		case Calendar.JUNE:
-			result = "JUNE";
-			break;
+    public static String getMonth(int month) {
 
-		case Calendar.JULY:
-			result = "JULY";
-			break;
+        String result = "";
+        switch (month) {
 
-		case Calendar.AUGUST:
-			result = "AUGUST";
-			break;
+            case Calendar.JANUARY:
+                result = "JANUARY";
+                break;
 
-		case Calendar.SEPTEMBER:
-			result = "SEPTEMBER";
-			break;
+            case Calendar.FEBRUARY:
+                result = "FEBRUARY";
+                break;
 
-		case Calendar.OCTOBER:
-			result = "OCTOBER";
-			break;
+            case Calendar.MARCH:
+                result = "MARCH";
+                break;
 
-		case Calendar.NOVEMBER:
-			result = "NOVEMBER";
-			break;
+            case Calendar.APRIL:
+                result = "APRIL";
+                break;
 
-		case Calendar.DECEMBER:
-			result = "DECEMBER";
-			break;
-		}
-		return result;
-	}
+            case Calendar.MAY:
+                result = "MAY";
+                break;
 
-	public static CharSequence getNormalisedDateFromDatePicker(int year,
-			int monthOfYear, int dayOfMonth) {
-		return dayOfMonth + " " + getMonth(monthOfYear) + " " + year;
-	}
+            case Calendar.JUNE:
+                result = "JUNE";
+                break;
 
-	public static CharSequence getNormalisedTimeFromTimePicker(int hourOfDay,
-			int minute) {
-		String am_or_pm = hourOfDay >= 12 ? " PM" : " AM";
+            case Calendar.JULY:
+                result = "JULY";
+                break;
 
-		String minutes = Integer.toString(minute);
-		if (minute < 10) {
-			minutes = "0" + Integer.toString(minute);
-		}
+            case Calendar.AUGUST:
+                result = "AUGUST";
+                break;
 
-		if (hourOfDay == 0)
-			hourOfDay = 12;
+            case Calendar.SEPTEMBER:
+                result = "SEPTEMBER";
+                break;
 
-		if (hourOfDay > 12) {
-			hourOfDay = hourOfDay - 12;
-		}
+            case Calendar.OCTOBER:
+                result = "OCTOBER";
+                break;
 
-		String simpleDate = hourOfDay + ":" + minutes + am_or_pm;
-		return simpleDate;
-	}
+            case Calendar.NOVEMBER:
+                result = "NOVEMBER";
+                break;
 
+            case Calendar.DECEMBER:
+                result = "DECEMBER";
+                break;
+        }
+        return result;
+    }
+
+    public static CharSequence getNormalisedDateFromDatePicker(int year,
+                                                               int monthOfYear, int dayOfMonth) {
+        return dayOfMonth + " " + getMonth(monthOfYear) + " " + year;
+    }
+
+    public static CharSequence getNormalisedTimeFromTimePicker(int hourOfDay,
+                                                               int minute) {
+        String am_or_pm = hourOfDay >= 12 ? " PM" : " AM";
+
+        String minutes = Integer.toString(minute);
+        if (minute < 10) {
+            minutes = "0" + Integer.toString(minute);
+        }
+
+        if (hourOfDay == 0)
+            hourOfDay = 12;
+
+        if (hourOfDay > 12) {
+            hourOfDay = hourOfDay - 12;
+        }
+
+        String simpleDate = hourOfDay + ":" + minutes + am_or_pm;
+        return simpleDate;
+    }
 }

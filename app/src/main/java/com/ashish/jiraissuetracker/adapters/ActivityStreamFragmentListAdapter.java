@@ -23,8 +23,10 @@ import com.ashish.jiraissuetracker.extras.AppConstants;
 import com.ashish.jiraissuetracker.objects.activityStream.Entry;
 import com.ashish.jiraissuetracker.objects.issues.Issue;
 import com.ashish.jiraissuetracker.utils.DebugUtils;
+import com.ashish.jiraissuetracker.utils.TimeUtils;
 import com.ashish.jiraissuetracker.utils.UIUtils;
 
+import java.sql.Time;
 import java.util.List;
 
 /**
@@ -66,6 +68,8 @@ public class ActivityStreamFragmentListAdapter extends RecyclerView.Adapter<Recy
 
             Entry entry = mData.get(position);
             setTextViewHTML(holder.text, entry.getTitle().getContent(), entry.getAuthor().getUsrUsername());
+
+            holder.time.setText(TimeUtils.getPostTimeGMTActivityStream(entry.getUpdated()));
         }
     }
 
@@ -111,11 +115,12 @@ public class ActivityStreamFragmentListAdapter extends RecyclerView.Adapter<Recy
 
     class IssueHolder extends RecyclerView.ViewHolder {
 
-        TextView text;
+        TextView text, time;
 
         public IssueHolder(View v) {
             super(v);
             text = (TextView) v.findViewById(R.id.activity_stream_text);
+            time = (TextView) v.findViewById(R.id.activity_stream_time);
         }
     }
 
