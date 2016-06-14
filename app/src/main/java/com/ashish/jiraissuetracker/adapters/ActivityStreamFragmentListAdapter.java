@@ -1,6 +1,7 @@
 package com.ashish.jiraissuetracker.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 
 import com.ashish.jiraissuetracker.R;
 import com.ashish.jiraissuetracker.activities.BaseActivity;
+import com.ashish.jiraissuetracker.activities.UserProfileActivity;
 import com.ashish.jiraissuetracker.extras.AppConstants;
 import com.ashish.jiraissuetracker.objects.activityStream.Entry;
 import com.ashish.jiraissuetracker.objects.issues.Issue;
@@ -80,6 +82,9 @@ public class ActivityStreamFragmentListAdapter extends RecyclerView.Adapter<Recy
         ClickableSpan clickable = new ClickableSpan() {
             public void onClick(View view) {
                 DebugUtils.log("URL clicked", span.getURL() + " User : " + userName);
+                Intent intent = new Intent(context, UserProfileActivity.class);
+                intent.putExtra("username", userName);
+                context.startActivity(intent);
             }
         };
         strBuilder.setSpan(clickable, start, end, flags);
@@ -113,7 +118,7 @@ public class ActivityStreamFragmentListAdapter extends RecyclerView.Adapter<Recy
         notifyDataSetChanged();
     }
 
-    class IssueHolder extends RecyclerView.ViewHolder {
+    private class IssueHolder extends RecyclerView.ViewHolder {
 
         TextView text, time;
 
@@ -124,7 +129,7 @@ public class ActivityStreamFragmentListAdapter extends RecyclerView.Adapter<Recy
         }
     }
 
-    class LoadingHolder extends RecyclerView.ViewHolder {
+    private class LoadingHolder extends RecyclerView.ViewHolder {
 
         public LoadingHolder(View v) {
             super(v);

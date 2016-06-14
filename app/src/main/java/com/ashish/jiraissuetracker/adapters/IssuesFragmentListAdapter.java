@@ -22,6 +22,7 @@ import com.ashish.jiraissuetracker.preferences.ZPreferences;
 import com.ashish.jiraissuetracker.requests.AppRequests;
 import com.ashish.jiraissuetracker.serverApi.AppRequestListener;
 import com.ashish.jiraissuetracker.serverApi.ImageRequestManager;
+import com.ashish.jiraissuetracker.utils.TimeUtils;
 import com.ashish.jiraissuetracker.utils.UIUtils;
 
 import java.util.List;
@@ -74,6 +75,13 @@ public class IssuesFragmentListAdapter extends RecyclerView.Adapter<RecyclerView
             holder.status.setText(issue.getFields().getStatus().getName());
             holder.status.setTag(R.integer.z_tag_position, position);
             holder.status.setOnClickListener(clickListener);
+
+            if (issue.getFields().getUpdated() == null) {
+                holder.updateTime.setVisibility(View.GONE);
+            } else {
+                holder.updateTime.setVisibility(View.VISIBLE);
+                holder.updateTime.setText("Last updated " + TimeUtils.getPostTimeGMTActivityStream(issue.getFields().getUpdated()));
+            }
         }
     }
 
@@ -105,9 +113,9 @@ public class IssuesFragmentListAdapter extends RecyclerView.Adapter<RecyclerView
         notifyDataSetChanged();
     }
 
-    class IssueHolder extends RecyclerView.ViewHolder {
+    private class IssueHolder extends RecyclerView.ViewHolder {
 
-        TextView key, summary, type, priority, status;
+        TextView key, summary, type, priority, status, updateTime;
         ImageView typeImage, priorityImage;
 
         public IssueHolder(View v) {
@@ -119,10 +127,11 @@ public class IssuesFragmentListAdapter extends RecyclerView.Adapter<RecyclerView
             status = (TextView) v.findViewById(R.id.issue_status);
             typeImage = (ImageView) v.findViewById(R.id.issue_type_image);
             priorityImage = (ImageView) v.findViewById(R.id.issue_priority_image);
+            updateTime = (TextView) v.findViewById(R.id.issue_update_time);
         }
     }
 
-    class LoadingHolder extends RecyclerView.ViewHolder {
+    private class LoadingHolder extends RecyclerView.ViewHolder {
 
         public LoadingHolder(View v) {
             super(v);

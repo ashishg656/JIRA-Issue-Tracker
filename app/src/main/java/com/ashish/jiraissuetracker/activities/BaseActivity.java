@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.ashish.jiraissuetracker.R;
@@ -40,5 +41,32 @@ public class BaseActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, ChangeIssueStatusFragment.newInstance(b), "IssueChange")
                 .addToBackStack("IssueChange")
                 .commitAllowingStateLoss();
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void setProgressAndErrorLayoutVariables() {
+
+    }
+
+    public void showProgressLayout() {
+
+    }
+
+    public void hideProgressLayout() {
+
+    }
+
+    public void showErrorLayout() {
+
+    }
+
+    public void hideErrorLayout() {
+
     }
 }

@@ -16,7 +16,7 @@
     <color name="z_grey_shade_9">#212121</color>
 
     <!-- text color -->
-    <color name="z_text_color_dark">#212121</color>
+    <color name="z_text_color_dark">@color/z_grey_shade_9</color>
     <color name="z_text_color_medium_dark">@color/z_grey_shade_8</color>
     <color name="z_text_color_light">@color/z_grey_shade_6</color>
     <color name="z_black_50_alpha">#80000000</color>

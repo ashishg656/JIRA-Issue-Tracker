@@ -16,7 +16,7 @@ public class AppUrls {
     }
 
     public static String getSearchIssuesUrl(String assignee, long startAt, int pageSize) {
-        return AppUrls.SEARCH_ISSUES_URL + "=assignee=" + assignee + "&startAt=" + startAt + "&maxResults=" + pageSize;
+        return AppUrls.SEARCH_ISSUES_URL + "=assignee=" + assignee + "+order+by+updatedDate&startAt=" + startAt + "&maxResults=" + pageSize;
     }
 
     public static String getIssueTransitions(String issueId) {
@@ -34,8 +34,12 @@ public class AppUrls {
         return "activity?startAt=" + startAt + "&maxResults=" + pageSize + "&streams=update-date+BEFORE+" + lastUpdated;
     }
 
-    public static String getActivityStreamForUserUrl(long startAt, int pageSize, String userName) {
-        return "activity?" + "streams=user+IS+" + userName + "&startAt=" + startAt + "&maxResults=" + pageSize;
+    public static String getActivityStreamForUserUrl(long startAt, int pageSize, String userName, String lastUpdated) {
+        if (lastUpdated == null) {
+            return "activity?" + "streams=user+IS+" + userName + "&startAt=" + startAt + "&maxResults=" + pageSize;
+        }
+        return "activity?" + "streams=user+IS+" + userName + "&startAt=" + startAt + "&maxResults=" + pageSize
+                + "&streams=update-date+BEFORE+" + lastUpdated;
     }
 
     public static String getUserProfileUrl(String userName) {

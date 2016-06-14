@@ -137,7 +137,7 @@ public class ActivityStreamFragment extends BaseFragment implements AppRequestLi
                 } catch (Exception e1) {
                     e1.printStackTrace();
 
-                    hideErrorLayout();
+                    showErrorLayout();
                     hideProgressLayout();
                 }
             }

@@ -25,4 +25,5 @@
     <dimen name="z_drawer_profile_image_height">64dp</dimen>
 
     <dimen name="issue_list_issue_type_image_height">14dp</dimen>
+    <dimen name="z_user_profile_image_radius">60dp</dimen>
 </resources>

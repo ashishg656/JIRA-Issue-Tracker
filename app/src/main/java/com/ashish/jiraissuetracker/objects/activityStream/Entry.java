@@ -21,6 +21,17 @@ public class Entry {
     @SerializedName("updated")
     @Expose
     private String updated;
+    @SerializedName("activity:target")
+    @Expose
+    private ActivityTarget activityTarget;
+
+    public ActivityTarget getActivityTarget() {
+        return activityTarget;
+    }
+
+    public void setActivityTarget(ActivityTarget activityTarget) {
+        this.activityTarget = activityTarget;
+    }
 
     public Title getTitle() {
         return title;

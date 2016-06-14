@@ -127,10 +127,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         try {
             LoginObjectResponse loginObject = (LoginObjectResponse) VolleyUtils.getResponseObject(response, LoginObjectResponse.class);
 
-            String profileImage = loginObject.getAvatarUrls().get48x48();
-            if (profileImage != null) {
-                profileImage = profileImage.substring(0, profileImage.length() - 2);
-                profileImage = profileImage + "400";
+            String profileImage = null;
+            try {
+                profileImage = loginObject.getAvatarUrls().get48x48();
+                if (profileImage != null) {
+                    profileImage = profileImage.substring(0, profileImage.length() - 2);
+                    profileImage = profileImage + "400";
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
 
             ZPreferences.setUserEmail(this, loginObject.getEmailAddress());
