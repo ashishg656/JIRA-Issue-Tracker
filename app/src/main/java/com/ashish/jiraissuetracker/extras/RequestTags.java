@@ -12,4 +12,5 @@ public interface RequestTags {
     public String POST_TRANSITIONS_FOR_ISSUE = "Post Transitions For Issue";
     public String ACTIVITY_STREAM = "Activity Stream";
     public String USER_PROFILE = "User Profile";
+    public String GET_ALL_PROJECTS = "Get All Projects";
 }

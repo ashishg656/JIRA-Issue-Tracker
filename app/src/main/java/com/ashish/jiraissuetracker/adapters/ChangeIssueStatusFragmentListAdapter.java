@@ -2,7 +2,6 @@ package com.ashish.jiraissuetracker.adapters;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,17 +13,12 @@ import com.android.volley.VolleyError;
 import com.ashish.jiraissuetracker.R;
 import com.ashish.jiraissuetracker.activities.BaseActivity;
 import com.ashish.jiraissuetracker.broadcasts.LocalBroadcastMaker;
-import com.ashish.jiraissuetracker.extras.AppUrls;
+import com.ashish.jiraissuetracker.requests.AppUrls;
 import com.ashish.jiraissuetracker.extras.RequestTags;
-import com.ashish.jiraissuetracker.objects.getAllStatusForProject.Status;
-import com.ashish.jiraissuetracker.objects.getIssueTransitions.ChangeIssueStatusPayloadObject;
-import com.ashish.jiraissuetracker.objects.getIssueTransitions.GetIssueTransitionObject;
 import com.ashish.jiraissuetracker.objects.getIssueTransitions.Transition;
 import com.ashish.jiraissuetracker.preferences.ZPreferences;
 import com.ashish.jiraissuetracker.requests.AppRequests;
-import com.ashish.jiraissuetracker.serverApi.AppRequestListener;
 import com.ashish.jiraissuetracker.serverApi.AppRequestListenerJsonObject;
-import com.ashish.jiraissuetracker.utils.VolleyUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;

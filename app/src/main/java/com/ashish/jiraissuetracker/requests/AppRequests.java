@@ -5,7 +5,6 @@ import android.util.Base64;
 
 import com.android.volley.Request;
 import com.ashish.jiraissuetracker.application.AppApplication;
-import com.ashish.jiraissuetracker.extras.AppUrls;
 import com.ashish.jiraissuetracker.extras.RequestTags;
 import com.ashish.jiraissuetracker.preferences.ZPreferences;
 import com.ashish.jiraissuetracker.serverApi.AppRequestListener;
@@ -73,6 +72,12 @@ public class AppRequests implements RequestTags {
         CustomStringRequest request = new CustomStringRequest(Request.Method.GET, url,
                 USER_PROFILE, requestListener, null, getHeader(context));
         AppApplication.getInstance().addToRequestQueue(request, USER_PROFILE);
+    }
+
+    public static void makeGetAllProjectsUrl(String url, AppRequestListener requestListener, Context context) {
+        CustomStringRequest request = new CustomStringRequest(Request.Method.GET, url,
+                GET_ALL_PROJECTS, requestListener, null, getHeader(context));
+        AppApplication.getInstance().addToRequestQueue(request, GET_ALL_PROJECTS);
     }
 
     public static HashMap<String, String> getHeader(Context context) {

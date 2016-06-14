@@ -9,19 +9,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.VolleyError;
 import com.ashish.jiraissuetracker.R;
 import com.ashish.jiraissuetracker.activities.BaseActivity;
-import com.ashish.jiraissuetracker.activities.HomeActivity;
 import com.ashish.jiraissuetracker.extras.AppConstants;
-import com.ashish.jiraissuetracker.extras.AppUrls;
-import com.ashish.jiraissuetracker.extras.RequestTags;
-import com.ashish.jiraissuetracker.objects.issues.Fields;
 import com.ashish.jiraissuetracker.objects.issues.Issue;
-import com.ashish.jiraissuetracker.preferences.ZPreferences;
-import com.ashish.jiraissuetracker.requests.AppRequests;
-import com.ashish.jiraissuetracker.serverApi.AppRequestListener;
-import com.ashish.jiraissuetracker.serverApi.ImageRequestManager;
 import com.ashish.jiraissuetracker.utils.TimeUtils;
 import com.ashish.jiraissuetracker.utils.UIUtils;
 

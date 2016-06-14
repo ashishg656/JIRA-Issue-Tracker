@@ -16,7 +16,7 @@ import com.android.volley.VolleyError;
 import com.ashish.jiraissuetracker.R;
 import com.ashish.jiraissuetracker.adapters.IssuesFragmentListAdapter;
 import com.ashish.jiraissuetracker.broadcasts.LocalBroadcastMaker;
-import com.ashish.jiraissuetracker.extras.AppUrls;
+import com.ashish.jiraissuetracker.requests.AppUrls;
 import com.ashish.jiraissuetracker.extras.LocalBroadcastTypes;
 import com.ashish.jiraissuetracker.extras.RequestTags;
 import com.ashish.jiraissuetracker.objects.issues.SearchListingResponseObject;

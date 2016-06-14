@@ -1,6 +1,4 @@
-package com.ashish.jiraissuetracker.extras;
-
-import com.ashish.jiraissuetracker.preferences.ZPreferences;
+package com.ashish.jiraissuetracker.requests;
 
 /**
  * Created by Ashish on 10/05/16.
@@ -44,6 +42,10 @@ public class AppUrls {
 
     public static String getUserProfileUrl(String userName) {
         return "rest/api/2/user?username=" + userName;
+    }
+
+    public static String getAllProjectsUrl() {
+        return "rest/api/2/project?expand=description,lead,url,projectKeys";
     }
 
     public static String getUserProfileUrl() {

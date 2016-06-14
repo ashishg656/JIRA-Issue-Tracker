@@ -1,11 +1,6 @@
 package com.ashish.jiraissuetracker.fragments;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,18 +10,13 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.ashish.jiraissuetracker.R;
 import com.ashish.jiraissuetracker.adapters.ChangeIssueStatusFragmentListAdapter;
-import com.ashish.jiraissuetracker.extras.AppUrls;
-import com.ashish.jiraissuetracker.extras.LocalBroadcastTypes;
+import com.ashish.jiraissuetracker.requests.AppUrls;
 import com.ashish.jiraissuetracker.extras.RequestTags;
-import com.ashish.jiraissuetracker.objects.getAllStatusForProject.GetAllStatusForProjectObject;
 import com.ashish.jiraissuetracker.objects.getIssueTransitions.GetIssueTransitionObject;
 import com.ashish.jiraissuetracker.preferences.ZPreferences;
 import com.ashish.jiraissuetracker.requests.AppRequests;
 import com.ashish.jiraissuetracker.serverApi.AppRequestListener;
 import com.ashish.jiraissuetracker.utils.VolleyUtils;
-import com.google.gson.Gson;
-
-import java.security.spec.ECField;
 
 /**
  * Created by Ashish on 11/06/16.
