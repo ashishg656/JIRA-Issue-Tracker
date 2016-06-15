@@ -2,6 +2,8 @@ package com.ashish.jiraissuetracker.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.PictureDrawable;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
@@ -12,17 +14,29 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ashish.jiraissuetracker.R;
 import com.ashish.jiraissuetracker.activities.UserProfileActivity;
 import com.ashish.jiraissuetracker.extras.AppConstants;
+import com.ashish.jiraissuetracker.glideImageRequest.GlideRequestManager;
+import com.ashish.jiraissuetracker.glideImageRequest.SvgDecoder;
+import com.ashish.jiraissuetracker.glideImageRequest.SvgDrawableTranscoder;
+import com.ashish.jiraissuetracker.glideImageRequest.SvgSoftwareLayerSetter;
 import com.ashish.jiraissuetracker.objects.activityStream.Entry;
 import com.ashish.jiraissuetracker.objects.login.LoginObjectResponse;
 import com.ashish.jiraissuetracker.serverApi.ImageRequestManager;
 import com.ashish.jiraissuetracker.utils.DebugUtils;
 import com.ashish.jiraissuetracker.utils.TimeUtils;
+import com.bumptech.glide.GenericRequestBuilder;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.model.StreamEncoder;
+import com.bumptech.glide.load.resource.file.FileToStreamDecoder;
+import com.caverock.androidsvg.SVG;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,10 +54,14 @@ public class UserProfileListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     boolean isMoreAllowed;
 
+    private GenericRequestBuilder<Uri, InputStream, SVG, PictureDrawable> requestBuilder;
+
     public UserProfileListAdapter(Context context, LoginObjectResponse mData, String userName) {
         this.context = context;
         this.userName = userName;
         this.profileDetails = mData;
+
+        requestBuilder = GlideRequestManager.getRequestBuilder(context);
     }
 
     @Override
@@ -81,14 +99,14 @@ public class UserProfileListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     private class HeaderHolder extends RecyclerView.ViewHolder {
 
         TextView displayName, email, userName;
-        WebView imageView;
+        CircleImageView imageView;
 
         public HeaderHolder(View v) {
             super(v);
             displayName = (TextView) v.findViewById(R.id.display_name);
             email = (TextView) v.findViewById(R.id.email);
             userName = (TextView) v.findViewById(R.id.username);
-            imageView = (WebView) v.findViewById(R.id.userimagewebview);
+            imageView = (CircleImageView) v.findViewById(R.id.userimagewebview);
         }
     }
 
@@ -163,7 +181,10 @@ public class UserProfileListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 //                url = url.substring(0, url.length() - 2);
 //                url = url + "250";
 
-                holder.imageView.loadUrl(url);
+                Uri uri = Uri.parse(url);
+                requestBuilder.diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                        .load(uri)
+                        .into(holder.imageView);
             } catch (Exception e) {
                 e.printStackTrace();
             }

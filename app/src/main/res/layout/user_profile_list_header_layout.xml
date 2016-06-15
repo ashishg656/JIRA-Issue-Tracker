@@ -13,7 +13,7 @@
         android:paddingBottom="@dimen/z_user_profile_image_radius"
         android:paddingTop="@dimen/z_user_profile_image_radius">
 
-        <WebView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/userimagewebview"
             android:layout_width="@dimen/z_user_profile_image_radius"
             android:layout_height="@dimen/z_user_profile_image_radius"
