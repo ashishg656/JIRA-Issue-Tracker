@@ -188,7 +188,7 @@ public class ProjectDetailListAdapter extends RecyclerView.Adapter<RecyclerView.
             for (int i = 0; 1 < issuesList.size(); i++) {
                 if (issuesList.get(i).getId().equalsIgnoreCase(issueid)) {
                     issuesList.get(i).getFields().getStatus().setName(newstatus);
-                    notifyItemChanged(i);
+                    notifyItemChanged(i + 1);
                     return;
                 }
             }

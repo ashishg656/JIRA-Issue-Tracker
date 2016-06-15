@@ -1,5 +1,6 @@
 package com.ashish.jiraissuetracker.fragments;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -162,24 +163,24 @@ public class IssuesFragment extends BaseFragment implements AppRequestListener, 
     }
 
     @Override
-    public void onStart() {
+    public void onAttach(Context context) {
         try {
-            LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver,
+            LocalBroadcastManager.getInstance(context).registerReceiver(broadcastReceiver,
                     new IntentFilter(LocalBroadcastMaker.BROADCAST_INTENT_FILTER_EVENT));
         } catch (Exception e) {
             e.printStackTrace();
         }
-        super.onStart();
+        super.onAttach(context);
     }
 
     @Override
-    public void onStop() {
+    public void onDestroy() {
         try {
             LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        super.onStop();
+        super.onDestroy();
     }
 
     // broadcasts

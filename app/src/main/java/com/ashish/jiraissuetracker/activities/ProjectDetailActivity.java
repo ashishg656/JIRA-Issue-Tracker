@@ -73,6 +73,13 @@ public class ProjectDetailActivity extends BaseActivity implements AppRequestLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_profile_activity_layout);
 
+        try {
+            LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver,
+                    new IntentFilter(LocalBroadcastMaker.BROADCAST_INTENT_FILTER_EVENT));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -189,24 +196,13 @@ public class ProjectDetailActivity extends BaseActivity implements AppRequestLis
     }
 
     @Override
-    public void onStart() {
-        try {
-            LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver,
-                    new IntentFilter(LocalBroadcastMaker.BROADCAST_INTENT_FILTER_EVENT));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        super.onStart();
-    }
-
-    @Override
-    public void onStop() {
+    public void onDestroy() {
         try {
             LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        super.onStop();
+        super.onDestroy();
     }
 
 
