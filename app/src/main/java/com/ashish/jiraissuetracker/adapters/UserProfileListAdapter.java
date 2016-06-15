@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ashish.jiraissuetracker.R;
+import com.ashish.jiraissuetracker.activities.BaseActivity;
 import com.ashish.jiraissuetracker.activities.UserProfileActivity;
 import com.ashish.jiraissuetracker.extras.AppConstants;
 import com.ashish.jiraissuetracker.glideImageRequest.GlideRequestManager;
@@ -121,9 +122,7 @@ public class UserProfileListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     if (userName.equals(UserProfileListAdapter.this.userName)) {
                         ((UserProfileActivity) context).scrollRecyclerViewToPosition0();
                     } else {
-                        Intent intent = new Intent(context, UserProfileActivity.class);
-                        intent.putExtra("username", userName);
-                        context.startActivity(intent);
+                        ((BaseActivity) context).openUserProfileActivity(userName);
                     }
                 } else if (span.getURL().toLowerCase().contains("browse")) {
 

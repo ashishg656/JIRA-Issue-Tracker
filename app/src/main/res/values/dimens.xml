@@ -26,4 +26,6 @@
 
     <dimen name="issue_list_issue_type_image_height">14dp</dimen>
     <dimen name="z_user_profile_image_radius">60dp</dimen>
+    <dimen name="project_litsing_image_radius">60dp</dimen>
+    <dimen name="z_recycler_padding_top">104dp</dimen>
 </resources>

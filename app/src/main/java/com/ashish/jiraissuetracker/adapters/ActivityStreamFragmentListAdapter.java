@@ -82,9 +82,12 @@ public class ActivityStreamFragmentListAdapter extends RecyclerView.Adapter<Recy
         ClickableSpan clickable = new ClickableSpan() {
             public void onClick(View view) {
                 DebugUtils.log("URL clicked", span.getURL() + " User : " + userName);
-                Intent intent = new Intent(context, UserProfileActivity.class);
-                intent.putExtra("username", userName);
-                context.startActivity(intent);
+
+                if (span.getURL().toLowerCase().contains("viewprofile")) {
+                    ((BaseActivity) context).openUserProfileActivity(userName);
+                } else if (span.getURL().toLowerCase().contains("browse")) {
+
+                }
             }
         };
         strBuilder.setSpan(clickable, start, end, flags);

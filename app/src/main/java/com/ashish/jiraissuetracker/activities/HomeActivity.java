@@ -25,6 +25,7 @@ import android.widget.TextView;
 import com.ashish.jiraissuetracker.R;
 import com.ashish.jiraissuetracker.fragments.ActivityStreamFragment;
 import com.ashish.jiraissuetracker.fragments.IssuesFragment;
+import com.ashish.jiraissuetracker.fragments.ProjectListingFragment;
 import com.ashish.jiraissuetracker.preferences.ZPreferences;
 import com.ashish.jiraissuetracker.serverApi.ImageRequestManager;
 
@@ -170,7 +171,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
             else if (pos == 1)
                 fragment = ActivityStreamFragment.newInstance(bundle);
             else if (pos == 2)
-                fragment = IssuesFragment.newInstance(bundle);
+                fragment = ProjectListingFragment.newInstance(bundle);
             else
                 fragment = IssuesFragment.newInstance(bundle);
 
@@ -180,7 +181,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
 
         @Override
         public int getCount() {
-            return 2;
+            return 3;
         }
 
         @Override
@@ -189,8 +190,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
                 return "My Issues";
             } else if (position == 1) {
                 return "Activity Stream";
-            } else if (position == 3) {
-                return "Boards";
+            } else if (position == 2) {
+                return "Projects";
             } else {
                 return "Dashboards";
             }

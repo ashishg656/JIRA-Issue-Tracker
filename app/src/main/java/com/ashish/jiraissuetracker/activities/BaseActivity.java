@@ -69,4 +69,14 @@ public class BaseActivity extends AppCompatActivity {
     public void hideErrorLayout() {
 
     }
+
+    public void openUserProfileActivity(String userName) {
+        Intent intent = new Intent(this, UserProfileActivity.class);
+        intent.putExtra("username", userName);
+        startActivity(intent);
+    }
+
+    public void openProjectDetailActivity(String projectKey) {
+        
+    }
 }

@@ -74,7 +74,7 @@ public class AppRequests implements RequestTags {
         AppApplication.getInstance().addToRequestQueue(request, USER_PROFILE);
     }
 
-    public static void makeGetAllProjectsUrl(String url, AppRequestListener requestListener, Context context) {
+    public static void makeGetAllProjectsRequest(String url, AppRequestListener requestListener, Context context) {
         CustomStringRequest request = new CustomStringRequest(Request.Method.GET, url,
                 GET_ALL_PROJECTS, requestListener, null, getHeader(context));
         AppApplication.getInstance().addToRequestQueue(request, GET_ALL_PROJECTS);
