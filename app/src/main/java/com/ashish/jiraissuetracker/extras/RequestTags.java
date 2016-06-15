@@ -13,4 +13,5 @@ public interface RequestTags {
     public String ACTIVITY_STREAM = "Activity Stream";
     public String USER_PROFILE = "User Profile";
     public String GET_ALL_PROJECTS = "Get All Projects";
+    public String GET_PROJECT_DETAILS = "Get Project Details";
 }

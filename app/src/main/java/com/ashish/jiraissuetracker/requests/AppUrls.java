@@ -40,12 +40,24 @@ public class AppUrls {
                 + "&streams=update-date+BEFORE+" + lastUpdated;
     }
 
+    public static String getActivityStreamForProject(long startAt, int pageSize, String projectId, String lastUpdated) {
+        if (lastUpdated == null) {
+            return "activity?" + "streams=Project+IS+" + projectId + "&startAt=" + startAt + "&maxResults=" + pageSize;
+        }
+        return "activity?" + "streams=Project+IS+" + projectId + "&startAt=" + startAt + "&maxResults=" + pageSize
+                + "&streams=update-date+BEFORE+" + lastUpdated;
+    }
+
     public static String getUserProfileUrl(String userName) {
         return "rest/api/2/user?username=" + userName;
     }
 
     public static String getAllProjectsUrl() {
         return "rest/api/2/project?expand=description,lead,url,projectKeys";
+    }
+
+    public static String getProjectDetailsUrl(String projectid) {
+        return "rest/api/2/project/" + projectid + "?expand=description,lead,url,projectKeys";
     }
 
     public static String getUserProfileUrl() {

@@ -80,6 +80,12 @@ public class AppRequests implements RequestTags {
         AppApplication.getInstance().addToRequestQueue(request, GET_ALL_PROJECTS);
     }
 
+    public static void makeGetProjectDetailsRequest(String url, AppRequestListener requestListener, Context context) {
+        CustomStringRequest request = new CustomStringRequest(Request.Method.GET, url,
+                GET_PROJECT_DETAILS, requestListener, null, getHeader(context));
+        AppApplication.getInstance().addToRequestQueue(request, GET_PROJECT_DETAILS);
+    }
+
     public static HashMap<String, String> getHeader(Context context) {
         HashMap<String, String> headers = new HashMap<>();
         headers.put("Authorization", ZPreferences.getHeaderTokenAuth(context));

@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.ashish.jiraissuetracker.R;
 import com.ashish.jiraissuetracker.extras.LocalBroadcastTypes;
 import com.ashish.jiraissuetracker.fragments.ChangeIssueStatusFragment;
+import com.ashish.jiraissuetracker.objects.projectListing.ProjectListingObject;
 
 /**
  * Created by Ashish on 04/06/16.
@@ -76,7 +77,9 @@ public class BaseActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void openProjectDetailActivity(String projectKey) {
-        
+    public void openProjectDetailActivity(ProjectListingObject projectKey) {
+        Intent intent = new Intent(this, ProjectDetailActivity.class);
+        intent.putExtra("projectobj", projectKey);
+        startActivity(intent);
     }
 }

@@ -7,15 +7,17 @@ import android.support.v7.widget.Toolbar;
 
 import com.android.volley.VolleyError;
 import com.ashish.jiraissuetracker.R;
+import com.ashish.jiraissuetracker.adapters.ProjectDetailListAdapter;
 import com.ashish.jiraissuetracker.adapters.UserProfileListAdapter;
-import com.ashish.jiraissuetracker.requests.AppUrls;
 import com.ashish.jiraissuetracker.extras.RequestTags;
 import com.ashish.jiraissuetracker.objects.activityStream.ActivityStreamObject;
 import com.ashish.jiraissuetracker.objects.activityStream.ActivityStreamObjectNonArray;
 import com.ashish.jiraissuetracker.objects.activityStream.Entry;
 import com.ashish.jiraissuetracker.objects.login.LoginObjectResponse;
+import com.ashish.jiraissuetracker.objects.projectListing.ProjectListingObject;
 import com.ashish.jiraissuetracker.preferences.ZPreferences;
 import com.ashish.jiraissuetracker.requests.AppRequests;
+import com.ashish.jiraissuetracker.requests.AppUrls;
 import com.ashish.jiraissuetracker.serverApi.AppRequestListener;
 import com.ashish.jiraissuetracker.utils.DebugUtils;
 import com.ashish.jiraissuetracker.utils.TimeUtils;
@@ -30,15 +32,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Ashish on 13/06/16.
+ * Created by Ashish on 15/06/16.
  */
-public class UserProfileActivity extends BaseActivity implements AppRequestListener {
+public class ProjectDetailActivity extends BaseActivity implements AppRequestListener {
 
-    String userName;
+    ProjectListingObject projectListingObject;
 
     RecyclerView recyclerView;
     LinearLayoutManager layoutManager;
-    UserProfileListAdapter adapter;
+    ProjectDetailListAdapter adapter;
 
     int startAt = 0;
     int pageSize = 20;
@@ -46,7 +48,7 @@ public class UserProfileActivity extends BaseActivity implements AppRequestListe
     boolean isRequestRunning = false;
     private String lastUpdated = null;
     String requestUrl;
-    boolean isUserProfileRequestComplete = false;
+    boolean isProjectDetailRequestComplete = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +60,9 @@ public class UserProfileActivity extends BaseActivity implements AppRequestListe
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        userName = getIntent().getExtras().getString("username");
+        if (getIntent().hasExtra("projectobj")) {
+            projectListingObject = getIntent().getExtras().getParcelable("projectobj");
+        }
 
         recyclerView = (RecyclerView) findViewById(R.id.userprofilerecycler);
 
@@ -73,25 +77,30 @@ public class UserProfileActivity extends BaseActivity implements AppRequestListe
                     int lastitem = layoutManager.findLastVisibleItemPosition();
                     int totalitems = adapter.getItemCount();
                     int diff = totalitems - lastitem;
-                    if (diff < 5 && !isRequestRunning && isMoreAllowed && isUserProfileRequestComplete) {
+                    if (diff < 5 && !isRequestRunning && isMoreAllowed && isProjectDetailRequestComplete) {
                         loadActivityStreamData();
                     }
                 }
             }
         });
 
-        loadUserProfileData();
+        loadProjectDetailData();
     }
 
-    private void loadUserProfileData() {
-        requestUrl = ZPreferences.getBaseUrl(this) + AppUrls.getUserProfileUrl(userName);
+    private void loadProjectDetailData() {
+        if (projectListingObject != null) {
+            fillDataForProjectDetailInList(projectListingObject);
+        } else {
+            requestUrl = ZPreferences.getBaseUrl(this) + AppUrls.getProjectDetailsUrl(projectListingObject.getKey());
 
-        AppRequests.makeGetUserProfileRequest(requestUrl, this, this);
+            AppRequests.makeGetProjectDetailsRequest(requestUrl, this, this);
+        }
     }
 
     private void loadActivityStreamData() {
-        if (isMoreAllowed && isUserProfileRequestComplete) {
-            requestUrl = ZPreferences.getBaseUrl(this) + AppUrls.getActivityStreamForUserUrl(startAt, pageSize, userName, lastUpdated);
+        if (isMoreAllowed && isProjectDetailRequestComplete) {
+            requestUrl = ZPreferences.getBaseUrl(this) + AppUrls.getActivityStreamForProject(startAt, pageSize,
+                    projectListingObject.getKey(), lastUpdated);
 
             AppRequests.makeActivityStreamRequest(requestUrl, this, this);
         }
@@ -101,7 +110,7 @@ public class UserProfileActivity extends BaseActivity implements AppRequestListe
     public void onRequestStarted(String requestTag) {
         if (requestTag.equalsIgnoreCase(RequestTags.ACTIVITY_STREAM)) {
             isRequestRunning = true;
-        } else if (requestTag.equalsIgnoreCase(RequestTags.USER_PROFILE)) {
+        } else if (requestTag.equalsIgnoreCase(RequestTags.GET_PROJECT_DETAILS)) {
             hideErrorLayout();
             showProgressLayout();
         }
@@ -111,7 +120,7 @@ public class UserProfileActivity extends BaseActivity implements AppRequestListe
     public void onRequestFailed(String requestTag, VolleyError error) {
         if (requestTag.equalsIgnoreCase(RequestTags.ACTIVITY_STREAM)) {
             isRequestRunning = false;
-        } else if (requestTag.equalsIgnoreCase(RequestTags.USER_PROFILE)) {
+        } else if (requestTag.equalsIgnoreCase(RequestTags.GET_PROJECT_DETAILS)) {
             hideProgressLayout();
             showErrorLayout();
         }
@@ -122,19 +131,20 @@ public class UserProfileActivity extends BaseActivity implements AppRequestListe
         if (requestTag.equalsIgnoreCase(RequestTags.ACTIVITY_STREAM)) {
             isRequestRunning = false;
             getDataFromXml(response);
-        } else if (requestTag.equalsIgnoreCase(RequestTags.USER_PROFILE)) {
+        } else if (requestTag.equalsIgnoreCase(RequestTags.GET_PROJECT_DETAILS)) {
             hideProgressLayout();
             hideErrorLayout();
 
-            LoginObjectResponse mData = (LoginObjectResponse) VolleyUtils.getResponseObject(response, LoginObjectResponse.class);
+            ProjectListingObject mData = (ProjectListingObject) VolleyUtils.getResponseObject(response, ProjectListingObject.class);
 
-            fillDataForUserProfileInRecyclerView(mData);
+            fillDataForProjectDetailInList(mData);
         }
     }
 
-    private void fillDataForUserProfileInRecyclerView(LoginObjectResponse mData) {
-        isUserProfileRequestComplete = true;
-        adapter = new UserProfileListAdapter(this, mData, userName);
+    private void fillDataForProjectDetailInList(ProjectListingObject mData) {
+        this.projectListingObject = mData;
+        isProjectDetailRequestComplete = true;
+        adapter = new ProjectDetailListAdapter(this, mData);
         recyclerView.setAdapter(adapter);
 
         loadActivityStreamData();
@@ -190,12 +200,6 @@ public class UserProfileActivity extends BaseActivity implements AppRequestListe
 
         if (adapter != null && object != null && object.getFeed() != null) {
             adapter.addData(object.getFeed().getEntry(), isMoreAllowed);
-        }
-    }
-
-    public void scrollRecyclerViewToPosition0() {
-        if (recyclerView != null && layoutManager != null) {
-            recyclerView.smoothScrollToPosition(0);
         }
     }
 }

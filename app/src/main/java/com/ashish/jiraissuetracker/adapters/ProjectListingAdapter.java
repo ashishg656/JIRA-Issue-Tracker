@@ -88,7 +88,7 @@ public class ProjectListingAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         holder.lead.setTag(object.getLead().getName());
         holder.lead.setOnClickListener(clickListener);
 
-        holder.container.setTag(object.getKey());
+        holder.container.setTag(position);
         holder.container.setOnClickListener(clickListener);
     }
 
@@ -102,8 +102,8 @@ public class ProjectListingAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     ((BaseActivity) context).openUserProfileActivity(userName);
                     break;
                 case R.id.project_container:
-                    String projectKey = (String) view.getTag();
-                    ((BaseActivity) context).openProjectDetailActivity(projectKey);
+                    int position = (int) view.getTag();
+                    ((BaseActivity) context).openProjectDetailActivity(mData.get(position));
                     break;
             }
         }
