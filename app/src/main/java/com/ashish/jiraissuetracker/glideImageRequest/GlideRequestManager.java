@@ -32,7 +32,8 @@ public class GlideRequestManager {
                 .sourceEncoder(new StreamEncoder())
                 .cacheDecoder(new FileToStreamDecoder<SVG>(new SvgDecoder()))
                 .decoder(new SvgDecoder())
-                .placeholder(R.drawable.symphony)
+                .placeholder(R.drawable.test_user)
+                .error(R.drawable.test_user)
                 .animate(android.R.anim.fade_in)
                 .listener(new SvgSoftwareLayerSetter<Uri>());
         return requestBuilder;

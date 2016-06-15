@@ -1,19 +1,26 @@
 package com.ashish.jiraissuetracker.activities;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
 import com.android.volley.VolleyError;
 import com.ashish.jiraissuetracker.R;
+import com.ashish.jiraissuetracker.adapters.IssuesFragmentListAdapter;
 import com.ashish.jiraissuetracker.adapters.ProjectDetailListAdapter;
-import com.ashish.jiraissuetracker.adapters.UserProfileListAdapter;
+import com.ashish.jiraissuetracker.broadcasts.LocalBroadcastMaker;
+import com.ashish.jiraissuetracker.extras.LocalBroadcastTypes;
 import com.ashish.jiraissuetracker.extras.RequestTags;
 import com.ashish.jiraissuetracker.objects.activityStream.ActivityStreamObject;
 import com.ashish.jiraissuetracker.objects.activityStream.ActivityStreamObjectNonArray;
 import com.ashish.jiraissuetracker.objects.activityStream.Entry;
-import com.ashish.jiraissuetracker.objects.login.LoginObjectResponse;
+import com.ashish.jiraissuetracker.objects.issues.SearchListingResponseObject;
 import com.ashish.jiraissuetracker.objects.projectListing.ProjectListingObject;
 import com.ashish.jiraissuetracker.preferences.ZPreferences;
 import com.ashish.jiraissuetracker.requests.AppRequests;
@@ -46,9 +53,20 @@ public class ProjectDetailActivity extends BaseActivity implements AppRequestLis
     int pageSize = 20;
     boolean isMoreAllowed = true;
     boolean isRequestRunning = false;
-    private String lastUpdated = null;
     String requestUrl;
     boolean isProjectDetailRequestComplete = false;
+
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent != null) {
+                int type = intent.getIntExtra("type", -1);
+                if (type == LocalBroadcastTypes.TYPE_ISSUE_STATUS_CHANGE) {
+                    broadcastForIssueStatusChangeReceived(intent);
+                }
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +96,7 @@ public class ProjectDetailActivity extends BaseActivity implements AppRequestLis
                     int totalitems = adapter.getItemCount();
                     int diff = totalitems - lastitem;
                     if (diff < 5 && !isRequestRunning && isMoreAllowed && isProjectDetailRequestComplete) {
-                        loadActivityStreamData();
+                        loadIssuesForProject();
                     }
                 }
             }
@@ -97,18 +115,17 @@ public class ProjectDetailActivity extends BaseActivity implements AppRequestLis
         }
     }
 
-    private void loadActivityStreamData() {
+    private void loadIssuesForProject() {
         if (isMoreAllowed && isProjectDetailRequestComplete) {
-            requestUrl = ZPreferences.getBaseUrl(this) + AppUrls.getActivityStreamForProject(startAt, pageSize,
-                    projectListingObject.getKey(), lastUpdated);
+            requestUrl = ZPreferences.getBaseUrl(this) + AppUrls.getIssuesForProjectUrl(projectListingObject.getKey(), startAt, pageSize);
 
-            AppRequests.makeActivityStreamRequest(requestUrl, this, this);
+            AppRequests.makeGetIssuesForProjectRequest(requestUrl, this, this);
         }
     }
 
     @Override
     public void onRequestStarted(String requestTag) {
-        if (requestTag.equalsIgnoreCase(RequestTags.ACTIVITY_STREAM)) {
+        if (requestTag.equalsIgnoreCase(RequestTags.ISSUES_REQUEST_FOR_PROJECT)) {
             isRequestRunning = true;
         } else if (requestTag.equalsIgnoreCase(RequestTags.GET_PROJECT_DETAILS)) {
             hideErrorLayout();
@@ -118,7 +135,7 @@ public class ProjectDetailActivity extends BaseActivity implements AppRequestLis
 
     @Override
     public void onRequestFailed(String requestTag, VolleyError error) {
-        if (requestTag.equalsIgnoreCase(RequestTags.ACTIVITY_STREAM)) {
+        if (requestTag.equalsIgnoreCase(RequestTags.ISSUES_REQUEST_FOR_PROJECT)) {
             isRequestRunning = false;
         } else if (requestTag.equalsIgnoreCase(RequestTags.GET_PROJECT_DETAILS)) {
             hideProgressLayout();
@@ -128,9 +145,11 @@ public class ProjectDetailActivity extends BaseActivity implements AppRequestLis
 
     @Override
     public void onRequestCompleted(String requestTag, String response) {
-        if (requestTag.equalsIgnoreCase(RequestTags.ACTIVITY_STREAM)) {
+        if (requestTag.equalsIgnoreCase(RequestTags.ISSUES_REQUEST_FOR_PROJECT)) {
             isRequestRunning = false;
-            getDataFromXml(response);
+
+            SearchListingResponseObject issuesData = (SearchListingResponseObject) VolleyUtils.getResponseObject(response, SearchListingResponseObject.class);
+            addIssuesInList(issuesData);
         } else if (requestTag.equalsIgnoreCase(RequestTags.GET_PROJECT_DETAILS)) {
             hideProgressLayout();
             hideErrorLayout();
@@ -141,65 +160,67 @@ public class ProjectDetailActivity extends BaseActivity implements AppRequestLis
         }
     }
 
+    private void addIssuesInList(SearchListingResponseObject issuesData) {
+        try {
+            if (issuesData.getIssues() != null) {
+                if (issuesData.getIssues().size() < pageSize) {
+                    isMoreAllowed = false;
+                } else {
+                    isMoreAllowed = true;
+                    startAt = startAt + pageSize;
+                }
+            }
+
+            if (adapter != null) {
+                adapter.addData(issuesData.getIssues(), isMoreAllowed);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private void fillDataForProjectDetailInList(ProjectListingObject mData) {
         this.projectListingObject = mData;
         isProjectDetailRequestComplete = true;
         adapter = new ProjectDetailListAdapter(this, mData);
         recyclerView.setAdapter(adapter);
 
-        loadActivityStreamData();
+        loadIssuesForProject();
     }
 
-    private void getDataFromXml(String response) {
-        JSONObject jsonObj = null;
+    @Override
+    public void onStart() {
         try {
-            DebugUtils.log("Starting XML to Json Process");
-            jsonObj = XML.toJSONObject(response);
-            try {
-                ActivityStreamObject object = new Gson().fromJson(String.valueOf(jsonObj), ActivityStreamObject.class);
-                addActivityStreamData(object);
-            } catch (Exception e) {
-                e.printStackTrace();
-                try {
-                    ActivityStreamObjectNonArray object = new Gson().fromJson(String.valueOf(jsonObj), ActivityStreamObjectNonArray.class);
-                    DebugUtils.log("Got Data from single XML ActivityStreamObjectNonArray and StartAt = " + startAt);
-                    addActivityStreamData(object);
-                } catch (Exception e1) {
-                    e1.printStackTrace();
-                }
-            }
-            DebugUtils.log("Finished XML to Json Conversion and mapped Json to ActivityStreamObject");
-        } catch (JSONException e) {
+            LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver,
+                    new IntentFilter(LocalBroadcastMaker.BROADCAST_INTENT_FILTER_EVENT));
+        } catch (Exception e) {
             e.printStackTrace();
         }
+        super.onStart();
     }
 
-    private void addActivityStreamData(ActivityStreamObjectNonArray object) {
-        isMoreAllowed = false;
-
-        List<Entry> listEntry = new ArrayList<>();
-        listEntry.add(object.getFeed().getEntry());
-        if (adapter != null) {
-            adapter.addData(listEntry, isMoreAllowed);
+    @Override
+    public void onStop() {
+        try {
+            LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        super.onStop();
     }
 
-    private void addActivityStreamData(ActivityStreamObject object) {
-        if (object != null && object.getFeed() != null && object.getFeed().getEntry() != null) {
-            if (object.getFeed().getEntry().size() < pageSize) {
-                isMoreAllowed = false;
-            } else {
-                isMoreAllowed = true;
 
-                Entry lastEntry = object.getFeed().getEntry().get(object.getFeed().getEntry().size() - 1);
-                lastUpdated = TimeUtils.getTimeInMillisFromStringForActivityStreamGMT(lastEntry.getUpdated());
-                startAt = startAt + pageSize;
-                DebugUtils.log("StartAt for User Profile Activity = " + startAt);
+    // broadcasts
+    void broadcastForIssueStatusChangeReceived(Intent intent) {
+        try {
+            String issueid = intent.getStringExtra("issueid");
+            String newstatus = intent.getStringExtra("newstatus");
+
+            if (adapter != null) {
+                adapter.changeIssueStatus(issueid, newstatus);
             }
-        }
-
-        if (adapter != null && object != null && object.getFeed() != null) {
-            adapter.addData(object.getFeed().getEntry(), isMoreAllowed);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

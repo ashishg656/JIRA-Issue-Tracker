@@ -42,9 +42,9 @@ public class AppUrls {
 
     public static String getActivityStreamForProject(long startAt, int pageSize, String projectId, String lastUpdated) {
         if (lastUpdated == null) {
-            return "activity?" + "streams=Project+IS+" + projectId + "&startAt=" + startAt + "&maxResults=" + pageSize;
+            return "activity?" + "streams=key+IS+" + projectId + "&startAt=" + startAt + "&maxResults=" + pageSize;
         }
-        return "activity?" + "streams=Project+IS+" + projectId + "&startAt=" + startAt + "&maxResults=" + pageSize
+        return "activity?" + "streams=key+IS+" + projectId + "&startAt=" + startAt + "&maxResults=" + pageSize
                 + "&streams=update-date+BEFORE+" + lastUpdated;
     }
 
@@ -58,6 +58,10 @@ public class AppUrls {
 
     public static String getProjectDetailsUrl(String projectid) {
         return "rest/api/2/project/" + projectid + "?expand=description,lead,url,projectKeys";
+    }
+
+    public static String getIssuesForProjectUrl(String projectKey, long startAt, int pageSize) {
+        return AppUrls.SEARCH_ISSUES_URL + "=project='" + projectKey + "'+order+by+updatedDate&startAt=" + startAt + "&maxResults=" + pageSize;
     }
 
     public static String getUserProfileUrl() {

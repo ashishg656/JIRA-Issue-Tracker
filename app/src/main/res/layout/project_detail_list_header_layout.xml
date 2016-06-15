@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/z_user_profile_image_radius"
+        android:paddingTop="@dimen/z_user_profile_image_radius">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/project_image"
+            android:layout_width="@dimen/z_user_profile_image_radius"
+            android:layout_height="@dimen/z_user_profile_image_radius"
+            android:layout_gravity="center_horizontal" />
+
+        <TextView
+            android:id="@+id/project_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/z_margin_small"
+            android:text="User Display Name"
+            android:textColor="@color/white"
+            android:textSize="@dimen/z_font_small"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shadow_toolbar"
+        android:orientation="vertical"
+        android:padding="@dimen/z_margin_large">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Key : "
+                android:textColor="@color/z_text_color_light" />
+
+            <TextView
+                android:id="@+id/project_key"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="email@host.com"
+                android:textColor="@color/z_text_color_medium_dark"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/z_margin_small"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Project Type : "
+                android:textColor="@color/z_text_color_light" />
+
+            <TextView
+                android:id="@+id/project_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="user"
+                android:textColor="@color/z_text_color_medium_dark"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/z_margin_mini"
+        android:background="@drawable/shadow_toolbar">
+
+        <FrameLayout
+            android:id="@+id/project_lead_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:foreground="?attr/selectableItemBackground">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/z_margin_medium"
+                android:paddingLeft="@dimen/z_margin_large"
+                android:paddingRight="@dimen/z_margin_large"
+                android:paddingTop="@dimen/z_margin_medium">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Project Lead : "
+                    android:textColor="@color/z_text_color_light" />
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/project_lead_image"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="@dimen/z_margin_mini" />
+
+                <TextView
+                    android:id="@+id/project_lead"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/z_margin_small"
+                    android:text="email@host.com"
+                    android:textColor="@color/z_text_color_medium_dark"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </FrameLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/z_margin_mini"
+        android:background="@drawable/shadow_toolbar"
+        android:orientation="vertical"
+        android:padding="@dimen/z_margin_large">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Project Description"
+            android:textColor="@color/z_text_color_light" />
+
+        <TextView
+            android:id="@+id/project_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/z_margin_medium"
+            android:text="email@host.com"
+            android:textColor="@color/z_text_color_medium_dark"
+            android:textStyle="normal" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:padding="@dimen/z_margin_large"
+        android:text="ISSUES"
+        android:textColor="@color/message_count_color_3"
+        android:textStyle="bold" />
+
+</LinearLayout>

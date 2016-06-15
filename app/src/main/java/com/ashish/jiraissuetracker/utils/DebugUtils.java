@@ -23,7 +23,7 @@ public class DebugUtils {
 
     public static void printToSystem(String response) {
         if (showTags && response != null) {
-            System.out.println(response);
+//            System.out.println(response);
         }
     }
 

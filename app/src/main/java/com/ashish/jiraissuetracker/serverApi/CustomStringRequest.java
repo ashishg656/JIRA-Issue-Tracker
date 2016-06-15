@@ -1,10 +1,14 @@
 package com.ashish.jiraissuetracker.serverApi;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
+import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.ashish.jiraissuetracker.utils.DebugUtils;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -72,5 +76,16 @@ public class CustomStringRequest extends StringRequest {
     @Override
     public Map<String, String> getHeaders() throws AuthFailureError {
         return headers != null ? headers : Collections.<String, String>emptyMap();
+    }
+
+    protected Response<String> parseNetworkResponse(NetworkResponse response) {
+        String parsed;
+        try {
+            parsed = new String(response.data, HttpHeaderParserCustom.parseCharset(response.headers));
+        } catch (UnsupportedEncodingException var4) {
+            parsed = new String(response.data);
+        }
+
+        return Response.success(parsed, HttpHeaderParserCustom.parseCacheHeaders(response));
     }
 }

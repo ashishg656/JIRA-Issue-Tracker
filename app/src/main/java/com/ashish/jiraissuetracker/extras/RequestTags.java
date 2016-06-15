@@ -14,4 +14,5 @@ public interface RequestTags {
     public String USER_PROFILE = "User Profile";
     public String GET_ALL_PROJECTS = "Get All Projects";
     public String GET_PROJECT_DETAILS = "Get Project Details";
+    public String ISSUES_REQUEST_FOR_PROJECT = "Issues Request For Project";
 }
