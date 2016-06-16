@@ -1,7 +1,6 @@
 package com.ashish.jiraissuetracker.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.drawable.PictureDrawable;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
@@ -13,8 +12,6 @@ import android.text.style.URLSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ashish.jiraissuetracker.R;
@@ -22,19 +19,12 @@ import com.ashish.jiraissuetracker.activities.BaseActivity;
 import com.ashish.jiraissuetracker.activities.UserProfileActivity;
 import com.ashish.jiraissuetracker.extras.AppConstants;
 import com.ashish.jiraissuetracker.glideImageRequest.GlideRequestManager;
-import com.ashish.jiraissuetracker.glideImageRequest.SvgDecoder;
-import com.ashish.jiraissuetracker.glideImageRequest.SvgDrawableTranscoder;
-import com.ashish.jiraissuetracker.glideImageRequest.SvgSoftwareLayerSetter;
 import com.ashish.jiraissuetracker.objects.activityStream.Entry;
 import com.ashish.jiraissuetracker.objects.login.LoginObjectResponse;
-import com.ashish.jiraissuetracker.serverApi.ImageRequestManager;
 import com.ashish.jiraissuetracker.utils.DebugUtils;
 import com.ashish.jiraissuetracker.utils.TimeUtils;
 import com.bumptech.glide.GenericRequestBuilder;
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.model.StreamEncoder;
-import com.bumptech.glide.load.resource.file.FileToStreamDecoder;
 import com.caverock.androidsvg.SVG;
 
 import java.io.InputStream;

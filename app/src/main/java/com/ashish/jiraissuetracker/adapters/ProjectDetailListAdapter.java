@@ -42,14 +42,16 @@ public class ProjectDetailListAdapter extends RecyclerView.Adapter<RecyclerView.
     boolean isMoreAllowed;
     MyClickListener clickListener;
 
-    private GenericRequestBuilder<Uri, InputStream, SVG, PictureDrawable> requestBuilder;
+    private GenericRequestBuilder<Uri, InputStream, SVG, PictureDrawable> requestBuilder, requestBuilderIssueType, requestBuilderIssuePriority;
 
     public ProjectDetailListAdapter(Context context, ProjectListingObject mData) {
         this.context = context;
         this.projectListingObject = mData;
         clickListener = new MyClickListener();
 
-        requestBuilder = GlideRequestManager.getRequestBuilder(context);
+        requestBuilder = GlideRequestManager.getRequestBuilder(context, R.drawable.test_user);
+        requestBuilderIssuePriority = GlideRequestManager.getRequestBuilder(context, R.drawable.issue_priority_image);
+        requestBuilderIssueType = GlideRequestManager.getRequestBuilder(context, R.drawable.issue_priority_image);
     }
 
     @Override
@@ -143,6 +145,24 @@ public class ProjectDetailListAdapter extends RecyclerView.Adapter<RecyclerView.
             } else {
                 holder.updateTime.setVisibility(View.VISIBLE);
                 holder.updateTime.setText("Last updated " + TimeUtils.getPostTimeGMTActivityStream(issue.getFields().getUpdated()));
+            }
+
+            try {
+                Uri uri = Uri.parse(issue.getFields().getIssuetype().getIconUrl());
+                requestBuilderIssueType.diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                        .load(uri)
+                        .into(holder.typeImage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+                Uri uri = Uri.parse(issue.getFields().getPriority().getIconUrl());
+                requestBuilderIssuePriority.diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                        .load(uri)
+                        .into(holder.priorityImage);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         } else if (getItemViewType(position) == TYPE_RECYCLER_VIEW_HEADER) {
             HeaderHolder holder = (HeaderHolder) holderCom;

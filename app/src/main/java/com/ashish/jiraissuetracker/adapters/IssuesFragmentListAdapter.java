@@ -1,6 +1,8 @@
 package com.ashish.jiraissuetracker.adapters;
 
 import android.content.Context;
+import android.graphics.drawable.PictureDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,10 +14,14 @@ import android.widget.TextView;
 import com.ashish.jiraissuetracker.R;
 import com.ashish.jiraissuetracker.activities.BaseActivity;
 import com.ashish.jiraissuetracker.extras.AppConstants;
+import com.ashish.jiraissuetracker.glideImageRequest.GlideRequestManager;
 import com.ashish.jiraissuetracker.objects.issues.Issue;
 import com.ashish.jiraissuetracker.utils.TimeUtils;
-import com.ashish.jiraissuetracker.utils.UIUtils;
+import com.bumptech.glide.GenericRequestBuilder;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.caverock.androidsvg.SVG;
 
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -28,11 +34,16 @@ public class IssuesFragmentListAdapter extends RecyclerView.Adapter<RecyclerView
     boolean isMoreAllowed;
     MyClickListener clickListener;
 
+    private GenericRequestBuilder<Uri, InputStream, SVG, PictureDrawable> requestBuilderIssueType, requestBuilderIssuePriority;
+
     public IssuesFragmentListAdapter(List<Issue> mData, Context context, boolean isMoreAllowed) {
         this.mData = mData;
         this.context = context;
         this.isMoreAllowed = isMoreAllowed;
         clickListener = new MyClickListener();
+
+        requestBuilderIssuePriority = GlideRequestManager.getRequestBuilder(context, R.drawable.issue_priority_image);
+        requestBuilderIssueType = GlideRequestManager.getRequestBuilder(context, R.drawable.issue_priority_image);
     }
 
     @Override
@@ -60,8 +71,6 @@ public class IssuesFragmentListAdapter extends RecyclerView.Adapter<RecyclerView
             holder.summary.setText(issue.getFields().getSummary());
             holder.type.setText(issue.getFields().getIssuetype().getName());
             holder.priority.setText(issue.getFields().getPriority().getName());
-            holder.typeImage.setImageResource(UIUtils.loadIssueTypeImageFromIssueTypeString(issue.getFields().getIssuetype().getName(),
-                    issue.getFields().getIssuetype().getSubtask()));
 
             holder.status.setText(issue.getFields().getStatus().getName());
             holder.status.setTag(R.integer.z_tag_position, position);
@@ -72,6 +81,24 @@ public class IssuesFragmentListAdapter extends RecyclerView.Adapter<RecyclerView
             } else {
                 holder.updateTime.setVisibility(View.VISIBLE);
                 holder.updateTime.setText("Last updated " + TimeUtils.getPostTimeGMTActivityStream(issue.getFields().getUpdated()));
+            }
+
+            try {
+                Uri uri = Uri.parse(issue.getFields().getIssuetype().getIconUrl());
+                requestBuilderIssueType.diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                        .load(uri)
+                        .into(holder.typeImage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+                Uri uri = Uri.parse(issue.getFields().getPriority().getIconUrl());
+                requestBuilderIssuePriority.diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                        .load(uri)
+                        .into(holder.priorityImage);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }

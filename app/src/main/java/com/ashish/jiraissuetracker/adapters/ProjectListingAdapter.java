@@ -40,7 +40,7 @@ public class ProjectListingAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         this.mData = mData;
         clickListener = new MyClickListener();
 
-        requestBuilder = GlideRequestManager.getRequestBuilder(context);
+        requestBuilder = GlideRequestManager.getRequestBuilder(context, R.drawable.issue_priority_image);
     }
 
     private class ProjectHolder extends RecyclerView.ViewHolder {
