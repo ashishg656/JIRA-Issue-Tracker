@@ -140,6 +140,10 @@ public class ProjectDetailListAdapter extends RecyclerView.Adapter<RecyclerView.
             holder.status.setTag(R.integer.z_tag_position, position - 1);
             holder.status.setOnClickListener(clickListener);
 
+            holder.issueContainer.setTag(R.integer.z_tag_holder, issue.getKey());
+            holder.issueContainer.setTag(R.integer.z_tag_position, issue.getId());
+            holder.issueContainer.setOnClickListener(clickListener);
+
             if (issue.getFields().getUpdated() == null) {
                 holder.updateTime.setVisibility(View.GONE);
             } else {
@@ -219,6 +223,7 @@ public class ProjectDetailListAdapter extends RecyclerView.Adapter<RecyclerView.
 
         TextView key, summary, type, priority, status, updateTime;
         ImageView typeImage, priorityImage;
+        FrameLayout issueContainer;
 
         public IssueHolder(View v) {
             super(v);
@@ -230,6 +235,7 @@ public class ProjectDetailListAdapter extends RecyclerView.Adapter<RecyclerView.
             typeImage = (ImageView) v.findViewById(R.id.issue_type_image);
             priorityImage = (ImageView) v.findViewById(R.id.issue_priority_image);
             updateTime = (TextView) v.findViewById(R.id.issue_update_time);
+            issueContainer = (FrameLayout) v.findViewById(R.id.issue_container);
         }
     }
 
@@ -286,6 +292,11 @@ public class ProjectDetailListAdapter extends RecyclerView.Adapter<RecyclerView.
                 case R.id.project_lead_container:
                     String userName = (String) view.getTag();
                     ((BaseActivity) context).openUserProfileActivity(userName);
+                    break;
+                case R.id.issue_container:
+                    String issueId = (String) view.getTag(R.integer.z_tag_position);
+                    String issueKey = (String) view.getTag(R.integer.z_tag_holder);
+                    ((BaseActivity) context).openIssueDetailActivity(issueId, issueKey);
                     break;
             }
         }

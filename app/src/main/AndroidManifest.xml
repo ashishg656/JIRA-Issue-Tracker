@@ -38,6 +38,11 @@
             android:theme="@style/NoActionBarThemeTransparentStatusBar" />
 
         <activity
+            android:name=".activities.IssueDetailActivity"
+            android:label="@string/app_name"
+            android:theme="@style/NoActionBarThemeTransparentStatusBar" />
+
+        <activity
             android:name=".activities.UserProfileActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
