@@ -40,6 +40,8 @@ public class IssueDetailActivity extends BaseActivityNavigationDrawer {
 
     HashMap<Integer, Fragment> fragmentHashMap;
 
+    String issueId, issueKey;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +65,9 @@ public class IssueDetailActivity extends BaseActivityNavigationDrawer {
         setDrawerItemClickListener();
 
         viewPager.setOffscreenPageLimit(3);
+
+        issueId = getIntent().getExtras().getString("issueid");
+        issueKey = getIntent().getExtras().getString("issuekey");
 
         adapter = new MyPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
@@ -95,15 +100,15 @@ public class IssueDetailActivity extends BaseActivityNavigationDrawer {
 
         @Override
         public int getCount() {
-            return 3;
+            return 1;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
             if (position == 0) {
-                return "My Issues";
+                return "Issue";
             } else if (position == 1) {
-                return "Activity Stream";
+                return "Comments";
             } else if (position == 2) {
                 return "Projects";
             } else {
