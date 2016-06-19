@@ -314,14 +314,21 @@
 
                     <TextView
                         android:id="@+id/issue_detail_status"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:padding="@dimen/z_margin_mini"
                         android:text="sd"
                         android:textColor="@color/colorPrimaryDark"
                         android:textSize="@dimen/z_font_mini"
                         android:textStyle="bold" />
+
+                    <ImageView
+                        android:layout_marginRight="@dimen/z_margin_supermini"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:src="@drawable/ic_edit_pencil" />
                 </LinearLayout>
             </LinearLayout>
 
