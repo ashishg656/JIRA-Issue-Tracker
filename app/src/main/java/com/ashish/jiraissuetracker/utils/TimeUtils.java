@@ -174,7 +174,7 @@ public class TimeUtils {
         return "";
     }
 
-    private static String getDayOfWeek(int dayOfWeek) {
+    public static String getDayOfWeek(int dayOfWeek) {
         String result = "";
         switch (dayOfWeek) {
             case Calendar.MONDAY:

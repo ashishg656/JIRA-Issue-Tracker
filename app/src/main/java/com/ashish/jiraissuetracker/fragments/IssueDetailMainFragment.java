@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -15,13 +16,13 @@ import com.android.volley.VolleyError;
 import com.ashish.jiraissuetracker.R;
 import com.ashish.jiraissuetracker.extras.RequestTags;
 import com.ashish.jiraissuetracker.glideImageRequest.GlideRequestManager;
-import com.ashish.jiraissuetracker.objects.issueComments.IssueCommentsObject;
 import com.ashish.jiraissuetracker.objects.issueDetail.IssueDetailObject;
 import com.ashish.jiraissuetracker.preferences.ZPreferences;
 import com.ashish.jiraissuetracker.requests.AppRequests;
 import com.ashish.jiraissuetracker.requests.AppUrls;
 import com.ashish.jiraissuetracker.serverApi.AppRequestListener;
 import com.ashish.jiraissuetracker.utils.TimeUtils;
+import com.ashish.jiraissuetracker.utils.TimeUtilsGMT;
 import com.ashish.jiraissuetracker.utils.VolleyUtils;
 import com.bumptech.glide.GenericRequestBuilder;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -41,9 +42,13 @@ public class IssueDetailMainFragment extends BaseFragment implements AppRequestL
     ScrollView scrollView;
     String requestUrl;
 
-    TextView projectName, name, description, showMore, key, type, priority, sprint, status, resolution, assignee, reporter, votes, watches, dateCreated, dateUpdated, dateResolved;
+    TextView projectName, name, description, showMore, key, type, priority, sprint, status, resolution, assignee, reporter,
+            votes, watches, dateCreated, dateUpdated, dateResolved, voteButton, watchButton;
+    LinearLayout dateResolvedContainer;
     CircleImageView projectImage, reporterImage, assigneeImage;
-    ImageView typeImage, priorityImage;
+    ImageView typeImage, priorityImage, statusImage;
+
+    IssueDetailObject mData;
 
     private GenericRequestBuilder<Uri, InputStream, SVG, PictureDrawable> requestBuilder;
 
@@ -77,12 +82,16 @@ public class IssueDetailMainFragment extends BaseFragment implements AppRequestL
         dateCreated = (TextView) rootView.findViewById(R.id.issue_detail_dateCreated);
         dateUpdated = (TextView) rootView.findViewById(R.id.issue_detail_dateUpdated);
         dateResolved = (TextView) rootView.findViewById(R.id.issue_detail_dateResolved);
+        dateResolvedContainer = (LinearLayout) rootView.findViewById(R.id.issue_detail_dateResolvedContainer);
+        watchButton = (TextView) rootView.findViewById(R.id.issue_detail_watch_button);
+        voteButton = (TextView) rootView.findViewById(R.id.issue_detail_vote_button);
 
         projectImage = (CircleImageView) rootView.findViewById(R.id.issue_detail_projectImage);
         reporterImage = (CircleImageView) rootView.findViewById(R.id.issue_detail_reporterImage);
         assigneeImage = (CircleImageView) rootView.findViewById(R.id.issue_detail_assigneeImage);
         typeImage = (ImageView) rootView.findViewById(R.id.issue_detail_typeImage);
         priorityImage = (ImageView) rootView.findViewById(R.id.issue_detail_priorityIMage);
+        statusImage = (ImageView) rootView.findViewById(R.id.issue_detail_statusImage);
 
         return rootView;
     }
@@ -123,20 +132,20 @@ public class IssueDetailMainFragment extends BaseFragment implements AppRequestL
     @Override
     public void onRequestCompleted(String requestTag, String response) {
         if (requestTag.equalsIgnoreCase(RequestTags.ISSUE_DETAIL_REQUEST)) {
-            IssueDetailObject object = (IssueDetailObject) VolleyUtils.getResponseObject(response, IssueDetailObject.class);
-            setAdapterData(object);
+            mData = (IssueDetailObject) VolleyUtils.getResponseObject(response, IssueDetailObject.class);
+            fillScrollViewData();
         }
     }
 
-    private void setAdapterData(IssueDetailObject object) {
+    private void fillScrollViewData() {
         hideErrorLayout();
         hideProgressLayout();
 
         scrollView.setVisibility(View.VISIBLE);
 
-        key.setText(object.getKey());
-        name.setText(object.getFields().getSummary());
-        description.setText(object.getFields().getDescription());
+        key.setText(mData.getKey());
+        name.setText(mData.getFields().getSummary());
+        description.setText(mData.getFields().getDescription());
 
         description.post(new Runnable() {
             @Override
@@ -152,38 +161,53 @@ public class IssueDetailMainFragment extends BaseFragment implements AppRequestL
 
         showMore.setOnClickListener(this);
 
-        type.setText(object.getFields().getIssuetype().getName());
-        Uri uri = Uri.parse(object.getFields().getIssuetype().getIconUrl());
+        type.setText(mData.getFields().getIssuetype().getName());
+        Uri uri = Uri.parse(mData.getFields().getIssuetype().getIconUrl());
         requestBuilder.diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .load(uri)
                 .into(typeImage);
 
-        uri = Uri.parse(object.getFields().getPriority().getIconUrl());
+        uri = Uri.parse(mData.getFields().getPriority().getIconUrl());
         requestBuilder.diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .load(uri)
                 .into(priorityImage);
-        priority.setText(object.getFields().getPriority().getName());
+        priority.setText(mData.getFields().getPriority().getName());
 
-        projectName.setText("Project : " + object.getFields().getProject().getName());
-        uri = Uri.parse(object.getFields().getProject().getAvatarUrls().get48x48());
+        projectName.setText("Project : " + mData.getFields().getProject().getName());
+        uri = Uri.parse(mData.getFields().getProject().getAvatarUrls().get48x48());
         requestBuilder.diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .load(uri)
                 .into(projectImage);
 
-        status.setText(object.getFields().getStatus().getName());
-        if (object.getFields().getResolution() != null && object.getFields().getResolution().getName() != null) {
-            resolution.setText(object.getFields().getResolution().getName());
-            dateResolved.setText(TimeUtils.getPostTimeGMTActivityStream(object.getFields().getResolutiondate()));
+        status.setText(mData.getFields().getStatus().getName());
+        if (mData.getFields().getStatus().getIconUrl() != null && mData.getFields().getStatus().getIconUrl().length() > 0) {
+            statusImage.setVisibility(View.VISIBLE);
+            uri = Uri.parse(mData.getFields().getStatus().getIconUrl());
+            requestBuilder.diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .load(uri)
+                    .into(statusImage);
         } else {
-            resolution.setText("Unresolved");
+            statusImage.setVisibility(View.GONE);
         }
 
-        watches.setText(object.getFields().getWatches().getWatchCount() + "");
-        votes.setText(object.getFields().getVotes().getVotes() + "");
+        if (mData.getFields().getResolution() != null && mData.getFields().getResolution().getName() != null) {
+            resolution.setText(mData.getFields().getResolution().getName());
+            dateResolved.setText(TimeUtilsGMT.getIssueDetailTime(mData.getFields().getResolutiondate()));
+            dateResolvedContainer.setVisibility(View.VISIBLE);
+        } else {
+            resolution.setText("Unresolved");
+            dateResolvedContainer.setVisibility(View.GONE);
+        }
+
+        dateCreated.setText(TimeUtilsGMT.getIssueDetailTime(mData.getFields().getCreated()));
+        dateUpdated.setText(TimeUtilsGMT.getIssueDetailTime(mData.getFields().getUpdated()));
+
+        watches.setText(mData.getFields().getWatches().getWatchCount() + "");
+        votes.setText(mData.getFields().getVotes().getVotes() + "");
 
         try {
-            assignee.setText(object.getFields().getAssignee().getDisplayName());
-            uri = Uri.parse(object.getFields().getAssignee().getAvatarUrls().get48x48());
+            assignee.setText(mData.getFields().getAssignee().getDisplayName());
+            uri = Uri.parse(mData.getFields().getAssignee().getAvatarUrls().get48x48());
             requestBuilder.diskCacheStrategy(DiskCacheStrategy.SOURCE).load(uri)
                     .into(assigneeImage);
         } catch (Exception e) {
@@ -191,12 +215,32 @@ public class IssueDetailMainFragment extends BaseFragment implements AppRequestL
         }
 
         try {
-            reporter.setText(object.getFields().getReporter().getDisplayName());
-            uri = Uri.parse(object.getFields().getReporter().getAvatarUrls().get48x48());
+            reporter.setText(mData.getFields().getReporter().getDisplayName());
+            uri = Uri.parse(mData.getFields().getReporter().getAvatarUrls().get48x48());
             requestBuilder.diskCacheStrategy(DiskCacheStrategy.SOURCE).load(uri)
                     .into(reporterImage);
         } catch (Exception e) {
             reporter.setText("Unassigned");
+        }
+
+        setDataForWatchAndVoteButtons();
+    }
+
+    private void setDataForWatchAndVoteButtons() {
+        if (mData.getFields().getVotes().getHasVoted()) {
+            voteButton.setText(getActivity().getResources().getString(R.string.issue_detail_unvote_issue));
+            voteButton.setTextColor(getActivity().getResources().getColor(R.color.red_color_primary));
+        } else {
+            voteButton.setText(getActivity().getResources().getString(R.string.issue_detail_vote_issue));
+            voteButton.setTextColor(getActivity().getResources().getColor(R.color.green_color_primary));
+        }
+
+        if (mData.getFields().getWatches().getIsWatching()) {
+            watchButton.setText(getActivity().getResources().getString(R.string.issue_detail_unwatch_issue));
+            watchButton.setTextColor(getActivity().getResources().getColor(R.color.red_color_primary));
+        } else {
+            watchButton.setText(getActivity().getResources().getString(R.string.issue_detail_watch_issue));
+            watchButton.setTextColor(getActivity().getResources().getColor(R.color.green_color_primary));
         }
     }
 
