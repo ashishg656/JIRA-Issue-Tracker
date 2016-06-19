@@ -569,13 +569,13 @@
                         android:textSize="@dimen/z_font_supermini" />
 
                     <TextView
-                        android:clickable="true"
                         android:id="@+id/issue_detail_vote_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="right"
                         android:layout_marginLeft="@dimen/z_margin_mini"
                         android:background="?attr/selectableItemBackgroundBorderless"
+                        android:clickable="true"
                         android:includeFontPadding="false"
                         android:padding="@dimen/z_margin_small"
                         android:text="VOTE"

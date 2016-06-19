@@ -92,6 +92,12 @@ public class BaseActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void openProjectDetailActivity(String projectKey) {
+        Intent intent = new Intent(this, ProjectDetailActivity.class);
+        intent.putExtra("projectid", projectKey);
+        startActivity(intent);
+    }
+
     public void openIssueDetailActivity(String issueId, String issueKey) {
         Intent intent = new Intent(this, IssueDetailActivity.class);
         intent.putExtra("issueid", issueId);

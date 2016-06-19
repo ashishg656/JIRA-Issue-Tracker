@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.ashish.jiraissuetracker.R;
+import com.ashish.jiraissuetracker.activities.BaseActivity;
 import com.ashish.jiraissuetracker.extras.RequestTags;
 import com.ashish.jiraissuetracker.glideImageRequest.GlideRequestManager;
 import com.ashish.jiraissuetracker.objects.issueDetail.IssueDetailObject;
@@ -141,6 +142,9 @@ public class IssueDetailMainFragment extends BaseFragment implements AppRequestL
         hideErrorLayout();
         hideProgressLayout();
 
+        projectImage.setOnClickListener(this);
+        projectName.setOnClickListener(this);
+
         scrollView.setVisibility(View.VISIBLE);
 
         key.setText(mData.getKey());
@@ -255,6 +259,12 @@ public class IssueDetailMainFragment extends BaseFragment implements AppRequestL
                     description.setMaxLines(4);
                     showMore.setText("Show more");
                 }
+                break;
+            case R.id.issue_detail_projectImage:
+                ((BaseActivity) getActivity()).openProjectDetailActivity(mData.getFields().getProject().getKey());
+                break;
+            case R.id.issue_detail_projectName:
+                ((BaseActivity) getActivity()).openProjectDetailActivity(mData.getFields().getProject().getKey());
                 break;
         }
     }

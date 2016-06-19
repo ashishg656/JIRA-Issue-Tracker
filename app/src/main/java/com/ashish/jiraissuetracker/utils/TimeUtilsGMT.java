@@ -18,7 +18,7 @@ public class TimeUtilsGMT extends TimeUtils {
 
     public static String getIssueDetailTime(String timeStamp) {
         try {
-            return getChatDateDisplayed(timeStamp) + " " + getChatTime(timeStamp);
+            return getChatTime(timeStamp) + "\n" + getChatDateDisplayed(timeStamp);
         } catch (Exception e) {
             e.printStackTrace();
             return "Moments ago";

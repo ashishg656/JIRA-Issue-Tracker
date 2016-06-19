@@ -44,6 +44,7 @@ import java.util.List;
 public class ProjectDetailActivity extends BaseActivity implements AppRequestListener {
 
     ProjectListingObject projectListingObject;
+    String projectId;
 
     RecyclerView recyclerView;
     LinearLayoutManager layoutManager;
@@ -87,6 +88,8 @@ public class ProjectDetailActivity extends BaseActivity implements AppRequestLis
 
         if (getIntent().hasExtra("projectobj")) {
             projectListingObject = getIntent().getExtras().getParcelable("projectobj");
+        } else if (getIntent().hasExtra("projectid")) {
+            projectId = getIntent().getExtras().getString("projectid");
         }
 
         recyclerView = (RecyclerView) findViewById(R.id.userprofilerecycler);
@@ -114,9 +117,9 @@ public class ProjectDetailActivity extends BaseActivity implements AppRequestLis
 
     private void loadProjectDetailData() {
         if (projectListingObject != null) {
-            fillDataForProjectDetailInList(projectListingObject);
+            fillDataForProjectDetailInList();
         } else {
-            requestUrl = ZPreferences.getBaseUrl(this) + AppUrls.getProjectDetailsUrl(projectListingObject.getKey());
+            requestUrl = ZPreferences.getBaseUrl(this) + AppUrls.getProjectDetailsUrl(projectId);
 
             AppRequests.makeGetProjectDetailsRequest(requestUrl, this, this);
         }
@@ -161,9 +164,9 @@ public class ProjectDetailActivity extends BaseActivity implements AppRequestLis
             hideProgressLayout();
             hideErrorLayout();
 
-            ProjectListingObject mData = (ProjectListingObject) VolleyUtils.getResponseObject(response, ProjectListingObject.class);
+            projectListingObject = (ProjectListingObject) VolleyUtils.getResponseObject(response, ProjectListingObject.class);
 
-            fillDataForProjectDetailInList(mData);
+            fillDataForProjectDetailInList();
         }
     }
 
@@ -186,10 +189,9 @@ public class ProjectDetailActivity extends BaseActivity implements AppRequestLis
         }
     }
 
-    private void fillDataForProjectDetailInList(ProjectListingObject mData) {
-        this.projectListingObject = mData;
+    private void fillDataForProjectDetailInList() {
         isProjectDetailRequestComplete = true;
-        adapter = new ProjectDetailListAdapter(this, mData);
+        adapter = new ProjectDetailListAdapter(this, projectListingObject);
         recyclerView.setAdapter(adapter);
 
         loadIssuesForProject();
