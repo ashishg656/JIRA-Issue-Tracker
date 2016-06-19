@@ -28,4 +28,8 @@
     <dimen name="z_user_profile_image_radius">60dp</dimen>
     <dimen name="project_litsing_image_radius">60dp</dimen>
     <dimen name="z_recycler_padding_top">104dp</dimen>
+    <dimen name="issue_detail_project_image_radius">60dp</dimen>
+    <dimen name="z_margin_6dp">6dp</dimen>
+
+    <dimen name="issue_detail_assignee_image_radius">25dp</dimen>
 </resources>

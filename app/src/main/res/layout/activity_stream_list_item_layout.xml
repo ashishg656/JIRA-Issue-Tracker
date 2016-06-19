@@ -17,6 +17,17 @@
         android:textColor="@color/z_text_color_dark" />
 
     <TextView
+        android:id="@+id/activity_stream_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autoLink="web|email|phone"
+        android:clickable="true"
+        android:paddingLeft="@dimen/z_margin_medium"
+        android:paddingRight="@dimen/z_margin_medium"
+        android:text="Set me"
+        android:textColor="@color/z_text_color_light" />
+
+    <TextView
         android:id="@+id/activity_stream_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

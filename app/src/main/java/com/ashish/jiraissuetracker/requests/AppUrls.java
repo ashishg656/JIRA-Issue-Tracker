@@ -64,6 +64,10 @@ public class AppUrls {
         return AppUrls.SEARCH_ISSUES_URL + "=project='" + projectKey + "'+order+by+updatedDate&startAt=" + startAt + "&maxResults=" + pageSize;
     }
 
+    public static String getIssueDetailUrl(String issueId) {
+        return "rest/api/2/issue/" + issueId + "?fields=*all,-comment&expand=transitions";
+    }
+
     public static String getUserProfileUrl() {
         return LOGIN_URL;
     }

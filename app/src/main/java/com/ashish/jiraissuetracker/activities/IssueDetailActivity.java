@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.ashish.jiraissuetracker.R;
 import com.ashish.jiraissuetracker.fragments.ActivityStreamFragment;
+import com.ashish.jiraissuetracker.fragments.IssueDetailMainFragment;
 import com.ashish.jiraissuetracker.fragments.IssuesFragment;
 import com.ashish.jiraissuetracker.fragments.ProjectListingFragment;
 
@@ -84,9 +85,11 @@ public class IssueDetailActivity extends BaseActivityNavigationDrawer {
         public Fragment getItem(int pos) {
             Bundle bundle = new Bundle();
 
+            bundle.putString("issueid", issueId);
+
             Fragment fragment = null;
             if (pos == 0)
-                fragment = IssuesFragment.newInstance(bundle);
+                fragment = IssueDetailMainFragment.newInstance(bundle);
             else if (pos == 1)
                 fragment = ActivityStreamFragment.newInstance(bundle);
             else if (pos == 2)
@@ -106,7 +109,7 @@ public class IssueDetailActivity extends BaseActivityNavigationDrawer {
         @Override
         public CharSequence getPageTitle(int position) {
             if (position == 0) {
-                return "Issue";
+                return "Issue Details";
             } else if (position == 1) {
                 return "Comments";
             } else if (position == 2) {

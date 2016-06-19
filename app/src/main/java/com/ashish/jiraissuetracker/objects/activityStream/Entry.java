@@ -24,6 +24,28 @@ public class Entry {
     @SerializedName("activity:target")
     @Expose
     private ActivityTarget activityTarget;
+    @SerializedName("summary")
+    @Expose
+    private Title summary;
+    @SerializedName("content")
+    @Expose
+    private Title content;
+
+    public Title getContent() {
+        return content;
+    }
+
+    public void setContent(Title content) {
+        this.content = content;
+    }
+
+    public Title getSummary() {
+        return summary;
+    }
+
+    public void setSummary(Title summary) {
+        this.summary = summary;
+    }
 
     public ActivityTarget getActivityTarget() {
         return activityTarget;

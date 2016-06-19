@@ -72,6 +72,18 @@ public class ActivityStreamFragmentListAdapter extends RecyclerView.Adapter<Recy
             setTextViewHTML(holder.text, entry.getTitle().getContent(), entry.getAuthor().getUsrUsername());
 
             holder.time.setText(TimeUtils.getPostTimeGMTActivityStream(entry.getUpdated()));
+
+            if (entry.getSummary() != null && entry.getSummary().getContent() != null && entry.getSummary().getContent().length() > 0) {
+                holder.description.setVisibility(View.VISIBLE);
+                String text = entry.getSummary().getContent();
+                holder.description.setText(Html.fromHtml(text));
+            } else if (entry.getContent() != null && entry.getContent().getContent() != null && entry.getContent().getContent().length() > 0) {
+                holder.description.setVisibility(View.VISIBLE);
+                String text = entry.getContent().getContent();
+                holder.description.setText(Html.fromHtml(text));
+            } else {
+                holder.description.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -123,12 +135,13 @@ public class ActivityStreamFragmentListAdapter extends RecyclerView.Adapter<Recy
 
     private class IssueHolder extends RecyclerView.ViewHolder {
 
-        TextView text, time;
+        TextView text, time, description;
 
         public IssueHolder(View v) {
             super(v);
             text = (TextView) v.findViewById(R.id.activity_stream_text);
             time = (TextView) v.findViewById(R.id.activity_stream_time);
+            description = (TextView) v.findViewById(R.id.activity_stream_description);
         }
     }
 

@@ -92,6 +92,12 @@ public class AppRequests implements RequestTags {
         AppApplication.getInstance().addToRequestQueue(request, ISSUES_REQUEST_FOR_PROJECT);
     }
 
+    public static void makeGetIssueDetailRequest(String url, AppRequestListener requestListener, Context context) {
+        CustomStringRequest request = new CustomStringRequest(Request.Method.GET, url,
+                ISSUE_DETAIL_REQUEST, requestListener, null, getHeader(context));
+        AppApplication.getInstance().addToRequestQueue(request, ISSUE_DETAIL_REQUEST);
+    }
+
     public static HashMap<String, String> getHeader(Context context) {
         HashMap<String, String> headers = new HashMap<>();
         headers.put("Authorization", ZPreferences.getHeaderTokenAuth(context));
