@@ -16,4 +16,8 @@ public interface RequestTags {
     public String GET_PROJECT_DETAILS = "Get Project Details";
     public String ISSUES_REQUEST_FOR_PROJECT = "Issues Request For Project";
     public String ISSUE_DETAIL_REQUEST = "Issues Detail";
+    public String REMOVE_VOTE_FROM_ISSUE = "Remove Vote From Issue";
+    public String ADD_VOTE_TO_ISSUE = "Add Vote To Issue";
+    public String REMOVE_WATCH_FROM_ISSUE = "Stop Watching Issue";
+    public String ADD_WATCH_TO_ISSUE = "Watch Issue";
 }

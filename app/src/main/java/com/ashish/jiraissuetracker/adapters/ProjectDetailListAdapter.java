@@ -303,13 +303,10 @@ public class ProjectDetailListAdapter extends RecyclerView.Adapter<RecyclerView.
     }
 
     private void fetchStatusesForProject(int position) {
-        Bundle b = new Bundle();
-        b.putString("projectid", issuesList.get(position).getFields().getProject().getId());
-        b.putString("issuetype", issuesList.get(position).getFields().getIssuetype().getName());
-        b.putString("currentStatus", issuesList.get(position).getFields().getStatus().getName());
-        b.putString("issueid", issuesList.get(position).getId());
-
-        ((BaseActivity) context).changeFragmentToChangeIssueStatusFragment(b);
+        ((BaseActivity) context).changeFragmentToChangeIssueStatusFragment(issuesList.get(position).getFields().getProject().getId(),
+                issuesList.get(position).getFields().getIssuetype().getName(),
+                issuesList.get(position).getFields().getStatus().getName(),
+                issuesList.get(position).getId());
     }
 
 }

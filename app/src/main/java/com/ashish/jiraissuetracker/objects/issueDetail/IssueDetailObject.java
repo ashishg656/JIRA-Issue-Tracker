@@ -3,6 +3,8 @@ package com.ashish.jiraissuetracker.objects.issueDetail;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.ashish.jiraissuetracker.objects.getIssueTransitions.Transition;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -28,108 +30,84 @@ public class IssueDetailObject {
     private List<Transition> transitions = new ArrayList<Transition>();
 
     /**
-     * 
-     * @return
-     *     The expand
+     * @return The expand
      */
     public String getExpand() {
         return expand;
     }
 
     /**
-     * 
-     * @param expand
-     *     The expand
+     * @param expand The expand
      */
     public void setExpand(String expand) {
         this.expand = expand;
     }
 
     /**
-     * 
-     * @return
-     *     The id
+     * @return The id
      */
     public String getId() {
         return id;
     }
 
     /**
-     * 
-     * @param id
-     *     The id
+     * @param id The id
      */
     public void setId(String id) {
         this.id = id;
     }
 
     /**
-     * 
-     * @return
-     *     The self
+     * @return The self
      */
     public String getSelf() {
         return self;
     }
 
     /**
-     * 
-     * @param self
-     *     The self
+     * @param self The self
      */
     public void setSelf(String self) {
         this.self = self;
     }
 
     /**
-     * 
-     * @return
-     *     The key
+     * @return The key
      */
     public String getKey() {
         return key;
     }
 
     /**
-     * 
-     * @param key
-     *     The key
+     * @param key The key
      */
     public void setKey(String key) {
         this.key = key;
     }
 
     /**
-     * 
-     * @return
-     *     The fields
+     * @return The fields
      */
     public Fields getFields() {
         return fields;
     }
 
     /**
-     * 
-     * @param fields
-     *     The fields
+     * @param fields The fields
      */
     public void setFields(Fields fields) {
         this.fields = fields;
     }
 
     /**
-     * 
-     * @return
-     *     The transitions
+     * @return The transitions
      */
     public List<Transition> getTransitions() {
         return transitions;
     }
 
     /**
-     * 
-     * @param transitions
-     *     The transitions
+     * @param transitions The transitions
      */
     public void setTransitions(List<Transition> transitions) {
         this.transitions = transitions;

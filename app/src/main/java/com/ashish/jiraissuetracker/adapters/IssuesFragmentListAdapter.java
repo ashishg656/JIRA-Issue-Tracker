@@ -186,13 +186,10 @@ public class IssuesFragmentListAdapter extends RecyclerView.Adapter<RecyclerView
     }
 
     private void fetchStatusesForProject(int position) {
-        Bundle b = new Bundle();
-        b.putString("projectid", mData.get(position).getFields().getProject().getId());
-        b.putString("issuetype", mData.get(position).getFields().getIssuetype().getName());
-        b.putString("currentStatus", mData.get(position).getFields().getStatus().getName());
-        b.putString("issueid", mData.get(position).getId());
-
-        ((BaseActivity) context).changeFragmentToChangeIssueStatusFragment(b);
+        ((BaseActivity) context).changeFragmentToChangeIssueStatusFragment(mData.get(position).getFields().getProject().getId(),
+                mData.get(position).getFields().getIssuetype().getName(),
+                mData.get(position).getFields().getStatus().getName(),
+                mData.get(position).getId());
     }
 
     @Override

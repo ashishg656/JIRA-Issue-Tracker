@@ -98,9 +98,40 @@ public class AppRequests implements RequestTags {
         AppApplication.getInstance().addToRequestQueue(request, ISSUE_DETAIL_REQUEST);
     }
 
+    public static void makeRemoveVoteFromIssueRequest(String url, AppRequestListener requestListener, Context context) {
+        CustomStringRequest request = new CustomStringRequest(Request.Method.DELETE, url,
+                REMOVE_VOTE_FROM_ISSUE, requestListener, null, getHeaderWithContentType(context));
+        AppApplication.getInstance().addToRequestQueue(request, REMOVE_VOTE_FROM_ISSUE);
+    }
+
+    public static void makeAddVoteToIssueRequest(String url, AppRequestListener requestListener, Context context) {
+        CustomStringRequest request = new CustomStringRequest(Request.Method.POST, url,
+                ADD_VOTE_TO_ISSUE, requestListener, null, getHeaderWithContentType(context));
+        AppApplication.getInstance().addToRequestQueue(request, ADD_VOTE_TO_ISSUE);
+    }
+
+    public static void makeRemoveWatchingFromIssueRequest(String url, AppRequestListener requestListener, Context context) {
+        CustomStringRequest request = new CustomStringRequest(Request.Method.DELETE, url,
+                REMOVE_WATCH_FROM_ISSUE, requestListener, null, getHeaderWithContentType(context));
+        AppApplication.getInstance().addToRequestQueue(request, REMOVE_WATCH_FROM_ISSUE);
+    }
+
+    public static void makeAddWatchingToIssueRequest(String url, AppRequestListener requestListener, Context context) {
+        CustomStringRequest request = new CustomStringRequest(Request.Method.POST, url,
+                ADD_WATCH_TO_ISSUE, requestListener, null, getHeaderWithContentType(context));
+        AppApplication.getInstance().addToRequestQueue(request, ADD_WATCH_TO_ISSUE);
+    }
+
     public static HashMap<String, String> getHeader(Context context) {
         HashMap<String, String> headers = new HashMap<>();
         headers.put("Authorization", ZPreferences.getHeaderTokenAuth(context));
+        return headers;
+    }
+
+    public static HashMap<String, String> getHeaderWithContentType(Context context) {
+        HashMap<String, String> headers = new HashMap<>();
+        headers.put("Authorization", ZPreferences.getHeaderTokenAuth(context));
+        headers.put("Content-Type", "application/json");
         return headers;
     }
 }

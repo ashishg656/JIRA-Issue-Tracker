@@ -280,12 +280,17 @@
                 android:background="@color/z_grey_shade_1" />
 
             <LinearLayout
+                android:id="@+id/issue_detail_statusContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/z_margin_small"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:padding="@dimen/z_margin_small"
+                android:paddingBottom="@dimen/z_margin_small"
+                android:paddingLeft="@dimen/z_margin_large"
+                android:paddingRight="@dimen/z_margin_small"
+                android:paddingTop="@dimen/z_margin_small"
                 android:weightSum="2.5">
 
                 <TextView
@@ -298,7 +303,8 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1.5">
+                    android:layout_weight="1.5"
+                    android:gravity="center_vertical">
 
                     <ImageView
                         android:id="@+id/issue_detail_statusImage"
@@ -310,8 +316,12 @@
                         android:id="@+id/issue_detail_status"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/z_text_color_medium_dark"
-                        android:textSize="@dimen/z_font_supermini" />
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:padding="@dimen/z_margin_mini"
+                        android:text="sd"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textSize="@dimen/z_font_mini"
+                        android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -323,10 +333,12 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/z_margin_small"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:padding="@dimen/z_margin_small"
+                android:paddingBottom="@dimen/z_margin_small"
+                android:paddingLeft="@dimen/z_margin_large"
+                android:paddingRight="@dimen/z_margin_small"
+                android:paddingTop="@dimen/z_margin_small"
                 android:weightSum="2.5">
 
                 <TextView
@@ -452,9 +464,12 @@
                 android:background="@color/z_grey_shade_3" />
 
             <LinearLayout
+                android:id="@+id/issue_detail_assigneeContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/z_margin_small"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:padding="@dimen/z_margin_small"
@@ -495,9 +510,12 @@
                 android:background="@color/z_grey_shade_1" />
 
             <LinearLayout
+                android:id="@+id/issue_detail_reporterContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/z_margin_small"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:padding="@dimen/z_margin_small"

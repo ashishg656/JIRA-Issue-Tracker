@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.ashish.jiraissuetracker.R;
 import com.ashish.jiraissuetracker.adapters.ChangeIssueStatusFragmentListAdapter;
+import com.ashish.jiraissuetracker.objects.getIssueTransitions.Transition;
 import com.ashish.jiraissuetracker.requests.AppUrls;
 import com.ashish.jiraissuetracker.extras.RequestTags;
 import com.ashish.jiraissuetracker.objects.getIssueTransitions.GetIssueTransitionObject;
@@ -17,6 +18,8 @@ import com.ashish.jiraissuetracker.preferences.ZPreferences;
 import com.ashish.jiraissuetracker.requests.AppRequests;
 import com.ashish.jiraissuetracker.serverApi.AppRequestListener;
 import com.ashish.jiraissuetracker.utils.VolleyUtils;
+
+import java.util.List;
 
 /**
  * Created by Ashish on 11/06/16.
@@ -50,12 +53,25 @@ public class ChangeIssueStatusFragment extends BaseFragment implements AppReques
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        projectid = getArguments().getString("projectid");
-        issuetype = getArguments().getString("issuetype");
-        currentStatus = getArguments().getString("currentStatus");
-        issueid = getArguments().getString("issueid");
-
         cancelButton.setOnClickListener(this);
+
+        try {
+            projectid = getArguments().getString("projectid", "");
+            issuetype = getArguments().getString("issuetype", "");
+            currentStatus = getArguments().getString("currentStatus", "");
+            issueid = getArguments().getString("issueid", "");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            List<Transition> transitions = getArguments().getParcelableArrayList("transitionslist");
+            if (transitions != null && transitions.size() > 0 && issueid != null && issueid.length() > 0) {
+                setAdapterData(transitions);
+                return;
+            }
+        } catch (Exception e) {
+        }
 
         loadData();
     }
@@ -95,6 +111,11 @@ public class ChangeIssueStatusFragment extends BaseFragment implements AppReques
 
     private void setAdapterData(GetIssueTransitionObject mData) {
         adapter = new ChangeIssueStatusFragmentListAdapter(issueid, mData.getTransitions(), currentStatus, getActivity());
+        listView.setAdapter(adapter);
+    }
+
+    private void setAdapterData(List<Transition> transitions) {
+        adapter = new ChangeIssueStatusFragmentListAdapter(issueid, transitions, currentStatus, getActivity());
         listView.setAdapter(adapter);
     }
 

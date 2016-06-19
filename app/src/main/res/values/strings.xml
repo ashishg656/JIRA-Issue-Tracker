@@ -13,4 +13,6 @@
     <string name="issue_detail_vote_issue">VOTE</string>
     <string name="issue_detail_watch_issue">WATCH</string>
     <string name="issue_detail_unwatch_issue">UNWATCH</string>
+    <string name="failed_to_vote_issue">Failed to vote/unvote issue. Please check internet settings and make sure that you have required permissions to vote on this issue.</string>
+    <string name="failed_to_watch_issue">Failed to watch/unwatch issue. Please check internet settings and make sure that you have required permissions to vote on this issue.</string>
 </resources>

@@ -68,6 +68,14 @@ public class AppUrls {
         return "rest/api/2/issue/" + issueId + "?fields=*all,-comment&expand=transitions";
     }
 
+    public static String getVoteIssueUrl(String issueId) {
+        return "rest/api/2/issue/" + issueId + "/votes";
+    }
+
+    public static String getWatchIssueUrl(String username, String issueId) {
+        return "rest/api/2/issue/" + issueId + "/watchers?username=" + username;
+    }
+
     public static String getUserProfileUrl() {
         return LOGIN_URL;
     }

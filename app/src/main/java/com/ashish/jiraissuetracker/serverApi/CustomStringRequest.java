@@ -88,4 +88,9 @@ public class CustomStringRequest extends StringRequest {
 
         return Response.success(parsed, HttpHeaderParserCustom.parseCacheHeaders(response));
     }
+
+    @Override
+    public String getBodyContentType() {
+        return "application/json";
+    }
 }

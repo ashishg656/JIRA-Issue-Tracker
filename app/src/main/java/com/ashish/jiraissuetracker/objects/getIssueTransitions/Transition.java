@@ -1,10 +1,13 @@
 
 package com.ashish.jiraissuetracker.objects.getIssueTransitions;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Transition {
+public class Transition implements Parcelable {
 
     @SerializedName("id")
     @Expose
@@ -18,9 +21,38 @@ public class Transition {
     @SerializedName("hasScreen")
     @Expose
     private Boolean hasScreen;
-    @SerializedName("fields")
-    @Expose
-    private Fields fields;
+
+    protected Transition(Parcel in) {
+        id = in.readString();
+        name = in.readString();
+        hasScreen = in.readByte() != 0;
+        to = in.readParcelable(To.class.getClassLoader());
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(name);
+        dest.writeByte((byte) (hasScreen ? 1 : 0));
+        dest.writeParcelable(to, flags);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<Transition> CREATOR = new Creator<Transition>() {
+        @Override
+        public Transition createFromParcel(Parcel in) {
+            return new Transition(in);
+        }
+
+        @Override
+        public Transition[] newArray(int size) {
+            return new Transition[size];
+        }
+    };
 
     /**
      * @return The id
@@ -78,18 +110,5 @@ public class Transition {
         this.hasScreen = hasScreen;
     }
 
-    /**
-     * @return The fields
-     */
-    public Fields getFields() {
-        return fields;
-    }
-
-    /**
-     * @param fields The fields
-     */
-    public void setFields(Fields fields) {
-        this.fields = fields;
-    }
 
 }
