@@ -1,9 +1,14 @@
 package com.ashish.jiraissuetracker.fragments;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.drawable.PictureDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.TextViewCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,8 +21,11 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.ashish.jiraissuetracker.R;
 import com.ashish.jiraissuetracker.activities.BaseActivity;
+import com.ashish.jiraissuetracker.broadcasts.LocalBroadcastMaker;
+import com.ashish.jiraissuetracker.extras.LocalBroadcastTypes;
 import com.ashish.jiraissuetracker.extras.RequestTags;
 import com.ashish.jiraissuetracker.glideImageRequest.GlideRequestManager;
+import com.ashish.jiraissuetracker.objects.issueDetail.FixVersion;
 import com.ashish.jiraissuetracker.objects.issueDetail.IssueDetailObject;
 import com.ashish.jiraissuetracker.preferences.ZPreferences;
 import com.ashish.jiraissuetracker.requests.AppRequests;
@@ -29,6 +37,8 @@ import com.ashish.jiraissuetracker.utils.VolleyUtils;
 import com.bumptech.glide.GenericRequestBuilder;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.caverock.androidsvg.SVG;
+
+import org.apmem.tools.layouts.FlowLayout;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -50,12 +60,25 @@ public class IssueDetailMainFragment extends BaseFragment implements AppRequestL
     LinearLayout dateResolvedContainer, assigneeContainer, reporterContainer, statusContainer;
     CircleImageView projectImage, reporterImage, assigneeImage;
     ImageView typeImage, priorityImage, statusImage;
+    FlowLayout fixVersionsFlowLayout;
 
     IssueDetailObject mData;
 
     boolean isVoteRequestRunning, isWatchRequestRunning;
 
     private GenericRequestBuilder<Uri, InputStream, SVG, PictureDrawable> requestBuilder;
+
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent != null) {
+                int type = intent.getIntExtra("type", -1);
+                if (type == LocalBroadcastTypes.TYPE_ISSUE_STATUS_CHANGE) {
+                    broadcastForIssueStatusChangeReceived(intent);
+                }
+            }
+        }
+    };
 
     public static IssueDetailMainFragment newInstance(Bundle b) {
         IssueDetailMainFragment frg = new IssueDetailMainFragment();
@@ -94,6 +117,8 @@ public class IssueDetailMainFragment extends BaseFragment implements AppRequestL
         voteButton = (TextView) rootView.findViewById(R.id.issue_detail_vote_button);
         statusContainer = (LinearLayout) rootView.findViewById(R.id.issue_detail_statusContainer);
 
+        fixVersionsFlowLayout = (FlowLayout) rootView.findViewById(R.id.issue_detail_fixversionslayout);
+
         projectImage = (CircleImageView) rootView.findViewById(R.id.issue_detail_projectImage);
         reporterImage = (CircleImageView) rootView.findViewById(R.id.issue_detail_reporterImage);
         assigneeImage = (CircleImageView) rootView.findViewById(R.id.issue_detail_assigneeImage);
@@ -112,6 +137,27 @@ public class IssueDetailMainFragment extends BaseFragment implements AppRequestL
         requestBuilder = GlideRequestManager.getRequestBuilder(getActivity(), R.drawable.test_user);
 
         loadData();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        try {
+            LocalBroadcastManager.getInstance(context).registerReceiver(broadcastReceiver,
+                    new IntentFilter(LocalBroadcastMaker.BROADCAST_INTENT_FILTER_EVENT));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        super.onAttach(context);
+    }
+
+    @Override
+    public void onDestroy() {
+        try {
+            LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        super.onDestroy();
     }
 
     void loadData() {
@@ -184,6 +230,16 @@ public class IssueDetailMainFragment extends BaseFragment implements AppRequestL
     private void fillScrollViewData() {
         hideErrorLayout();
         hideProgressLayout();
+
+        if (mData.getFields().getFixVersions() != null && mData.getFields().getFixVersions().size() > 0) {
+            fixVersionsFlowLayout.removeAllViews();
+            LayoutInflater inflater = LayoutInflater.from(getActivity());
+            for (FixVersion version : mData.getFields().getFixVersions()) {
+                TextView textView = (TextView) inflater.inflate(R.layout.textview_roundedbg_green, fixVersionsFlowLayout, false);
+                textView.setText(version.getName());
+                fixVersionsFlowLayout.addView(textView);
+            }
+        }
 
         projectImage.setOnClickListener(this);
         projectName.setOnClickListener(this);
@@ -374,6 +430,25 @@ public class IssueDetailMainFragment extends BaseFragment implements AppRequestL
             case R.id.issue_detail_statusContainer:
                 ((BaseActivity) getActivity()).changeFragmentToChangeIssueStatusFragment(mData.getTransitions(), mData.getFields().getStatus().getName(), issueId);
                 break;
+        }
+    }
+
+    // broadcasts
+    void broadcastForIssueStatusChangeReceived(Intent intent) {
+        try {
+            String issueid = intent.getStringExtra("issueid");
+            String newstatus = intent.getStringExtra("newstatus");
+
+            if (issueid != null && this.issueId != null && issueid.equals(this.issueId) && status != null && mData != null) {
+                try {
+                    mData.getFields().getStatus().setName(newstatus);
+                    status.setText(newstatus);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
