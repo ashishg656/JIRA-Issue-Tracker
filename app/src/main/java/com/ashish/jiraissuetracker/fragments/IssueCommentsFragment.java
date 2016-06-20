@@ -151,6 +151,12 @@ public class IssueCommentsFragment extends BaseFragment implements AppRequestLis
                 ((BaseActivity) getActivity()).makeToast("Successfully posted comment");
                 UIUtils.hideSoftKeyboard(getActivity());
             }
+
+            Comment comment = (Comment) VolleyUtils.getResponseObject(response, Comment.class);
+            if (adapter != null && comment != null) {
+                adapter.addToTop(comment);
+                recyclerView.scrollToPosition(0);
+            }
         }
     }
 

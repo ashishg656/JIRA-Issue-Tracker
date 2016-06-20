@@ -2,6 +2,7 @@ package com.ashish.jiraissuetracker.utils;
 
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
+import android.text.format.DateUtils;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 
@@ -16,6 +17,31 @@ import java.util.TimeZone;
  */
 public class TimeUtilsGMT extends TimeUtils {
 
+
+    public static CharSequence getPostTimeGMTActivityStream(String timestamp) {
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
+                    PARSER_FORMAT_FOR_DATES);
+            simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+            Date date = simpleDateFormat.parse(timestamp);
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(date.getTime());
+
+            CharSequence simpleDate = DateUtils.getRelativeTimeSpanString(
+                    date.getTime(), Calendar.getInstance().getTimeInMillis(),
+                    DateUtils.MINUTE_IN_MILLIS);
+
+            if (simpleDate.equals("0 minutes ago"))
+                simpleDate = "Just Now";
+
+            return simpleDate;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "Just Now";
+    }
+
     public static String getIssueDetailTime(String timeStamp) {
         try {
             return getChatTime(timeStamp) + "\n" + getChatDateDisplayed(timeStamp);
@@ -29,7 +55,7 @@ public class TimeUtilsGMT extends TimeUtils {
         try {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
                     PARSER_FORMAT_FOR_DATES);
-            simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+            simpleDateFormat.setTimeZone(TimeZone.getDefault());
             Date date = simpleDateFormat.parse(timestamp);
 
             Calendar calendar = Calendar.getInstance();
@@ -60,7 +86,7 @@ public class TimeUtilsGMT extends TimeUtils {
         try {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
                     PARSER_FORMAT_FOR_DATES);
-            simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+            simpleDateFormat.setTimeZone(TimeZone.getDefault());
             Date dateObj = simpleDateFormat.parse(timestamp);
 
             Calendar calendar = Calendar.getInstance();

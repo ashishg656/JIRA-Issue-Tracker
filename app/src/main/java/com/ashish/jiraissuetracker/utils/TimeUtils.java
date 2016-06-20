@@ -27,7 +27,7 @@ public class TimeUtils {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
                     PARSER_FORMAT_FOR_DATES);
 
-            simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+            simpleDateFormat.setTimeZone(TimeZone.getDefault());
             Date date = simpleDateFormat.parse(updated);
 //
             return Long.toString(date.getTime());
@@ -41,7 +41,7 @@ public class TimeUtils {
         try {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
                     PARSER_FORMAT_FOR_DATES);
-            simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+            simpleDateFormat.setTimeZone(TimeZone.getDefault());
             Date date = simpleDateFormat.parse(timestamp);
 
             Calendar calendar = Calendar.getInstance();

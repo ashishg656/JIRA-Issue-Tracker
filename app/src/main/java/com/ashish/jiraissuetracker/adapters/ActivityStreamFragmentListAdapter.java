@@ -26,6 +26,7 @@ import com.ashish.jiraissuetracker.objects.activityStream.Entry;
 import com.ashish.jiraissuetracker.objects.issues.Issue;
 import com.ashish.jiraissuetracker.utils.DebugUtils;
 import com.ashish.jiraissuetracker.utils.TimeUtils;
+import com.ashish.jiraissuetracker.utils.TimeUtilsGMT;
 import com.ashish.jiraissuetracker.utils.UIUtils;
 
 import java.sql.Time;
@@ -71,7 +72,7 @@ public class ActivityStreamFragmentListAdapter extends RecyclerView.Adapter<Recy
             Entry entry = mData.get(position);
             setTextViewHTML(holder.text, entry.getTitle().getContent(), entry.getAuthor().getUsrUsername());
 
-            holder.time.setText(TimeUtils.getPostTimeGMTActivityStream(entry.getUpdated()));
+            holder.time.setText(TimeUtilsGMT.getPostTimeGMTActivityStream(entry.getUpdated()));
 
             if (entry.getSummary() != null && entry.getSummary().getContent() != null && entry.getSummary().getContent().length() > 0) {
                 holder.description.setVisibility(View.VISIBLE);

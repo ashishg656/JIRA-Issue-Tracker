@@ -77,7 +77,7 @@ public class AppUrls {
     }
 
     public static String getIssueCommentsUrl(String issueId, long startAt, int pageSize) {
-        return "rest/api/2/issue/" + issueId + "/comment?startAt=" + startAt + "&maxResults=" + pageSize;
+        return "rest/api/2/issue/" + issueId + "/comment?startAt=" + startAt + "&maxResults=" + pageSize + "&orderBy=-created";
     }
 
     public static String getAddCommentOnIssuePostUrl(String issueId) {

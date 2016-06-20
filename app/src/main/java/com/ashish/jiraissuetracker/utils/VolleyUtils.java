@@ -4,6 +4,8 @@ import com.android.volley.Cache;
 import com.ashish.jiraissuetracker.application.AppApplication;
 import com.google.gson.Gson;
 
+import org.json.JSONObject;
+
 import java.io.UnsupportedEncodingException;
 
 /**
@@ -13,6 +15,10 @@ public class VolleyUtils {
 
     public static Object getResponseObject(String response, Class objectClass) {
         return new Gson().fromJson(response, objectClass);
+    }
+
+    public static Object getResponseObject(JSONObject response, Class objectClass) {
+        return new Gson().fromJson(response.toString(), objectClass);
     }
 
     public static Object getResponseFromCache(Class objectClass, String url) throws Exception {

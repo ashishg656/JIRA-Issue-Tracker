@@ -108,6 +108,13 @@ public class IssuesCommentsListAdapter extends RecyclerView.Adapter<RecyclerView
         notifyDataSetChanged();
     }
 
+    public void addToTop(Comment comment) {
+        if (mData != null) {
+            mData.add(0, comment);
+            notifyItemInserted(0);
+        }
+    }
+
     private class CommentHolder extends RecyclerView.ViewHolder {
 
         TextView name, time, comment;

@@ -23,6 +23,7 @@ import com.ashish.jiraissuetracker.objects.activityStream.Entry;
 import com.ashish.jiraissuetracker.objects.login.LoginObjectResponse;
 import com.ashish.jiraissuetracker.utils.DebugUtils;
 import com.ashish.jiraissuetracker.utils.TimeUtils;
+import com.ashish.jiraissuetracker.utils.TimeUtilsGMT;
 import com.bumptech.glide.GenericRequestBuilder;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.caverock.androidsvg.SVG;
@@ -162,7 +163,7 @@ public class UserProfileListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             Entry entry = activityEntries.get(position - 1);
             setTextViewHTML(holder.text, entry.getTitle().getContent(), entry.getAuthor().getUsrUsername());
 
-            holder.time.setText(TimeUtils.getPostTimeGMTActivityStream(entry.getUpdated()));
+            holder.time.setText(TimeUtilsGMT.getPostTimeGMTActivityStream(entry.getUpdated()));
 
             if (entry.getSummary() != null && entry.getSummary().getContent() != null && entry.getSummary().getContent().length() > 0) {
                 holder.description.setVisibility(View.VISIBLE);
