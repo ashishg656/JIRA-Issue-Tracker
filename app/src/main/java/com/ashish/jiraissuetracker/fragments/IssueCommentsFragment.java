@@ -184,7 +184,7 @@ public class IssueCommentsFragment extends BaseFragment implements AppRequestLis
             }
 
             if (adapter == null) {
-                adapter = new IssuesCommentsListAdapter(issuesData.getComments(), getActivity(), isMoreAllowed);
+                adapter = new IssuesCommentsListAdapter(issuesData.getComments(), getActivity(), isMoreAllowed, issueId);
                 recyclerView.setAdapter(adapter);
             } else {
                 adapter.addData(issuesData.getComments(), isMoreAllowed);

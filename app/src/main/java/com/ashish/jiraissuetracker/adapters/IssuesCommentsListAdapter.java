@@ -1,9 +1,10 @@
 package com.ashish.jiraissuetracker.adapters;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
-import android.graphics.drawable.PictureDrawable;
-import android.net.Uri;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,20 +14,19 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
 import com.ashish.jiraissuetracker.R;
 import com.ashish.jiraissuetracker.activities.BaseActivity;
 import com.ashish.jiraissuetracker.extras.AppConstants;
-import com.ashish.jiraissuetracker.glideImageRequest.GlideRequestManager;
+import com.ashish.jiraissuetracker.extras.RequestTags;
 import com.ashish.jiraissuetracker.objects.issueComments.Comment;
-import com.ashish.jiraissuetracker.objects.issues.Issue;
 import com.ashish.jiraissuetracker.preferences.ZPreferences;
+import com.ashish.jiraissuetracker.requests.AppRequests;
+import com.ashish.jiraissuetracker.requests.AppUrls;
+import com.ashish.jiraissuetracker.serverApi.AppRequestListener;
 import com.ashish.jiraissuetracker.serverApi.ImageRequestManager;
 import com.ashish.jiraissuetracker.utils.TimeUtils;
-import com.bumptech.glide.GenericRequestBuilder;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.caverock.androidsvg.SVG;
 
-import java.io.InputStream;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -34,19 +34,24 @@ import de.hdodenhof.circleimageview.CircleImageView;
 /**
  * Created by Ashish on 10/06/16.
  */
-public class IssuesCommentsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements AppConstants {
+public class IssuesCommentsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements AppConstants, AppRequestListener {
 
     List<Comment> mData;
     Context context;
     boolean isMoreAllowed;
     MyClickListener clickListener;
     int greenColor, redColor;
+    String issueId;
 
-    public IssuesCommentsListAdapter(List<Comment> mData, Context context, boolean isMoreAllowed) {
+    CommentHolder deleteCurrentHolder;
+    ProgressDialog progressDialog;
+
+    public IssuesCommentsListAdapter(List<Comment> mData, Context context, boolean isMoreAllowed, String issueId) {
         this.mData = mData;
         this.context = context;
         this.isMoreAllowed = isMoreAllowed;
         clickListener = new MyClickListener();
+        this.issueId = issueId;
 
         //noinspection ResourceType
         greenColor = Color.parseColor(context.getResources().getString(R.color.green_color_primary));
@@ -89,6 +94,9 @@ public class IssuesCommentsListAdapter extends RecyclerView.Adapter<RecyclerView
             } else {
                 holder.actionButtonsLayout.setVisibility(View.GONE);
             }
+
+            holder.delete.setTag(holder);
+            holder.delete.setOnClickListener(clickListener);
         }
     }
 
@@ -150,8 +158,64 @@ public class IssuesCommentsListAdapter extends RecyclerView.Adapter<RecyclerView
         @Override
         public void onClick(View view) {
             switch (view.getId()) {
+                case R.id.delete_comment:
+                    CommentHolder holder = (CommentHolder) view.getTag();
+                    showAlertDialogForDeleteComment(holder);
+                    break;
+            }
+        }
+    }
+
+    private void showAlertDialogForDeleteComment(final CommentHolder position) {
+        deleteCurrentHolder = position;
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context).setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                String url = ZPreferences.getBaseUrl(context) + AppUrls.getDeleteCommentUrl(issueId, mData.get(deleteCurrentHolder.getAdapterPosition()).getId());
+                AppRequests.makeDeleteCommentRequest(url, IssuesCommentsListAdapter.this, context);
+            }
+        }).setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
 
             }
+        }).setMessage("Are you sure you want to delete this comment?")
+                .setTitle("Delete comment");
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    @Override
+    public void onRequestStarted(String requestTag) {
+        if (requestTag.equalsIgnoreCase(RequestTags.DELETE_COMMENT_FROM_ISSUE)) {
+            if (progressDialog != null)
+                progressDialog.dismiss();
+
+            progressDialog = ProgressDialog.show(context, "Deleting comment", "Please wait while deleting comment", true, false);
+        }
+    }
+
+    @Override
+    public void onRequestFailed(String requestTag, VolleyError error) {
+        if (requestTag.equalsIgnoreCase(RequestTags.DELETE_COMMENT_FROM_ISSUE)) {
+            if (progressDialog != null)
+                progressDialog.dismiss();
+
+            ((BaseActivity) context).makeToast("Unable to delete comment. Please check internet settings and try again.");
+        }
+    }
+
+    @Override
+    public void onRequestCompleted(String requestTag, String response) {
+        if (requestTag.equalsIgnoreCase(RequestTags.DELETE_COMMENT_FROM_ISSUE)) {
+            if (progressDialog != null)
+                progressDialog.dismiss();
+
+            ((BaseActivity) context).makeToast("Successfully deleted comment.");
+            mData.remove(deleteCurrentHolder.getAdapterPosition());
+            notifyItemRemoved(deleteCurrentHolder.getAdapterPosition());
         }
     }
 

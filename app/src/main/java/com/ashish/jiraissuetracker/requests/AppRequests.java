@@ -134,6 +134,12 @@ public class AppRequests implements RequestTags {
         AppApplication.getInstance().addToRequestQueue(request, ADD_COMMENT_ON_ISSUE);
     }
 
+    public static void makeDeleteCommentRequest(String url, AppRequestListener requestListener, Context context) {
+        CustomStringRequest request = new CustomStringRequest(Request.Method.DELETE, url,
+                DELETE_COMMENT_FROM_ISSUE, requestListener, null, getHeaderWithContentType(context));
+        AppApplication.getInstance().addToRequestQueue(request, DELETE_COMMENT_FROM_ISSUE);
+    }
+
     public static HashMap<String, String> getHeader(Context context) {
         HashMap<String, String> headers = new HashMap<>();
         headers.put("Authorization", ZPreferences.getHeaderTokenAuth(context));

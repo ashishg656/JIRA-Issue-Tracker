@@ -81,7 +81,11 @@ public class AppUrls {
     }
 
     public static String getAddCommentOnIssuePostUrl(String issueId) {
-        return "/rest/api/2/issue/" + issueId + "/comment";
+        return "rest/api/2/issue/" + issueId + "/comment";
+    }
+
+    public static String getDeleteCommentUrl(String issueId, String commentId) {
+        return "rest/api/2/issue/" + issueId + "/comment/" + commentId;
     }
 
     public static String getUserProfileUrl() {

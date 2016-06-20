@@ -22,4 +22,5 @@ public interface RequestTags {
     public String ADD_WATCH_TO_ISSUE = "Watch Issue";
     public String GET_COMMENTS_FOR_ISSUE = "Get Comments For Issue";
     public String ADD_COMMENT_ON_ISSUE = "Add Comment On Issue";
+    public String DELETE_COMMENT_FROM_ISSUE = "Delete Comment From Issue";
 }
