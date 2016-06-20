@@ -76,6 +76,14 @@ public class AppUrls {
         return "rest/api/2/issue/" + issueId + "/watchers?username=" + username;
     }
 
+    public static String getIssueCommentsUrl(String issueId, long startAt, int pageSize) {
+        return "rest/api/2/issue/" + issueId + "/comment?startAt=" + startAt + "&maxResults=" + pageSize;
+    }
+
+    public static String getAddCommentOnIssuePostUrl(String issueId) {
+        return "/rest/api/2/issue/" + issueId + "/comment";
+    }
+
     public static String getUserProfileUrl() {
         return LOGIN_URL;
     }

@@ -20,4 +20,6 @@ public interface RequestTags {
     public String ADD_VOTE_TO_ISSUE = "Add Vote To Issue";
     public String REMOVE_WATCH_FROM_ISSUE = "Stop Watching Issue";
     public String ADD_WATCH_TO_ISSUE = "Watch Issue";
+    public String GET_COMMENTS_FOR_ISSUE = "Get Comments For Issue";
+    public String ADD_COMMENT_ON_ISSUE = "Add Comment On Issue";
 }

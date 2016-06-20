@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.ashish.jiraissuetracker.R;
 import com.ashish.jiraissuetracker.extras.LocalBroadcastTypes;
 import com.ashish.jiraissuetracker.fragments.ChangeIssueStatusFragment;
+import com.ashish.jiraissuetracker.fragments.IssueCommentsFragment;
 import com.ashish.jiraissuetracker.objects.getIssueTransitions.Transition;
 import com.ashish.jiraissuetracker.objects.projectListing.ProjectListingObject;
 import com.ashish.jiraissuetracker.preferences.ZPreferences;
@@ -103,16 +104,15 @@ public class BaseActivity extends AppCompatActivity {
                 .commitAllowingStateLoss();
     }
 
-    public void changeFragmentToChangeIssueStatusFragment(List<Transition> transitions, String currentStatus, String issueId, FragmentManager fragmentManager) {
+    public void changeFragmentToIssueCommentsFragment(String issueId) {
         Bundle bundle = new Bundle();
-        bundle.putString("currentStatus", currentStatus);
         bundle.putString("issueid", issueId);
-        bundle.putParcelableArrayList("transitionslist", new ArrayList<Parcelable>(transitions));
 
-        fragmentManager.beginTransaction().add(R.id.fragment_container, ChangeIssueStatusFragment.newInstance(bundle), "IssueChange")
-                .addToBackStack("IssueChange")
+        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, IssueCommentsFragment.newInstance(bundle), "IssueComments")
+                .addToBackStack("IssueComments")
                 .commitAllowingStateLoss();
     }
+
 
     public void openUserProfileActivity(String userName) {
         Intent intent = new Intent(this, UserProfileActivity.class);

@@ -133,8 +133,6 @@ public class ProjectDetailListAdapter extends RecyclerView.Adapter<RecyclerView.
             holder.summary.setText(issue.getFields().getSummary());
             holder.type.setText(issue.getFields().getIssuetype().getName());
             holder.priority.setText(issue.getFields().getPriority().getName());
-            holder.typeImage.setImageResource(UIUtils.loadIssueTypeImageFromIssueTypeString(issue.getFields().getIssuetype().getName(),
-                    issue.getFields().getIssuetype().getSubtask()));
 
             holder.status.setText(issue.getFields().getStatus().getName());
             holder.status.setTag(R.integer.z_tag_position, position - 1);

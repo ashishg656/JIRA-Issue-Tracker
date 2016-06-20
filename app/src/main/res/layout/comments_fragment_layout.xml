@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/z_grey_shade_2"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingBottom="@dimen/material_button_height"
+        android:paddingTop="@dimen/z_recycler_padding_top" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/colorPrimary"
+        android:gravity="center">
+
+        <EditText
+            android:id="@+id/comment_box"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/z_margin_mini"
+            android:layout_marginLeft="@dimen/z_margin_large"
+            android:layout_marginRight="@dimen/z_margin_small"
+            android:layout_marginTop="@dimen/z_margin_mini"
+            android:layout_weight="1"
+            android:background="@null"
+            android:hint="Write a comment"
+            android:maxLines="4"
+            android:textColor="@color/white"
+            android:textColorHint="@color/z_grey_shade_3"
+            android:textSize="@dimen/z_font_mini" />
+
+        <LinearLayout
+            android:id="@+id/send_comment_to_server"
+            android:layout_width="@dimen/material_button_height"
+            android:layout_height="@dimen/material_button_height"
+            android:layout_marginRight="@dimen/z_margin_mini"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="@dimen/z_margin_xlarge"
+                android:layout_height="@dimen/z_margin_xlarge"
+                android:src="@drawable/ic_send" />
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

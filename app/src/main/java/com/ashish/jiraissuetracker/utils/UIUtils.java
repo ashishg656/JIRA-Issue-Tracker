@@ -1,10 +1,14 @@
 package com.ashish.jiraissuetracker.utils;
 
+import android.app.Activity;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.media.Image;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 
 import com.ashish.jiraissuetracker.R;
@@ -42,6 +46,14 @@ public class UIUtils {
             } else {
                 return R.drawable.issue_type_bug;
             }
+        }
+    }
+
+    public static void hideSoftKeyboard(Activity context) {
+        View v = context.getWindow().getCurrentFocus();
+        if (v != null) {
+            InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
         }
     }
 }

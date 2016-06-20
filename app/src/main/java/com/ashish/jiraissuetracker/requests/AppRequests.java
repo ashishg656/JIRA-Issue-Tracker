@@ -122,6 +122,18 @@ public class AppRequests implements RequestTags {
         AppApplication.getInstance().addToRequestQueue(request, ADD_WATCH_TO_ISSUE);
     }
 
+    public static void makeGetAllIssueCommentsRequest(String url, AppRequestListener requestListener, Context context) {
+        CustomStringRequest request = new CustomStringRequest(Request.Method.GET, url,
+                GET_COMMENTS_FOR_ISSUE, requestListener, null, getHeader(context));
+        AppApplication.getInstance().addToRequestQueue(request, GET_COMMENTS_FOR_ISSUE);
+    }
+
+    public static void makeAddCommentOnIssueRequest(String url, AppRequestListenerJsonObject requestListener, Context context, JSONObject jsonObject) {
+        CustomJsonObjectRequest request = new CustomJsonObjectRequest(Request.Method.POST, url, jsonObject,
+                ADD_COMMENT_ON_ISSUE, requestListener, null, getHeader(context));
+        AppApplication.getInstance().addToRequestQueue(request, ADD_COMMENT_ON_ISSUE);
+    }
+
     public static HashMap<String, String> getHeader(Context context) {
         HashMap<String, String> headers = new HashMap<>();
         headers.put("Authorization", ZPreferences.getHeaderTokenAuth(context));
