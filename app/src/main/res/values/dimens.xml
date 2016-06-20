@@ -32,4 +32,5 @@
     <dimen name="z_margin_6dp">6dp</dimen>
 
     <dimen name="issue_detail_assignee_image_radius">25dp</dimen>
+    <dimen name="issue_detail_attachment_image_height">80dp</dimen>
 </resources>

@@ -1,5 +1,6 @@
 package com.ashish.jiraissuetracker.fragments;
 
+import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -7,7 +8,7 @@ import android.content.IntentFilter;
 import android.graphics.drawable.PictureDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcelable;
+import android.os.Environment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.TextViewCompat;
 import android.view.LayoutInflater;
@@ -25,13 +26,14 @@ import com.ashish.jiraissuetracker.broadcasts.LocalBroadcastMaker;
 import com.ashish.jiraissuetracker.extras.LocalBroadcastTypes;
 import com.ashish.jiraissuetracker.extras.RequestTags;
 import com.ashish.jiraissuetracker.glideImageRequest.GlideRequestManager;
+import com.ashish.jiraissuetracker.objects.issueDetail.Attachment;
 import com.ashish.jiraissuetracker.objects.issueDetail.FixVersion;
 import com.ashish.jiraissuetracker.objects.issueDetail.IssueDetailObject;
 import com.ashish.jiraissuetracker.preferences.ZPreferences;
 import com.ashish.jiraissuetracker.requests.AppRequests;
 import com.ashish.jiraissuetracker.requests.AppUrls;
 import com.ashish.jiraissuetracker.serverApi.AppRequestListener;
-import com.ashish.jiraissuetracker.utils.TimeUtils;
+import com.ashish.jiraissuetracker.serverApi.ImageRequestManager;
 import com.ashish.jiraissuetracker.utils.TimeUtilsGMT;
 import com.ashish.jiraissuetracker.utils.VolleyUtils;
 import com.bumptech.glide.GenericRequestBuilder;
@@ -41,7 +43,6 @@ import com.caverock.androidsvg.SVG;
 import org.apmem.tools.layouts.FlowLayout;
 
 import java.io.InputStream;
-import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -57,10 +58,10 @@ public class IssueDetailMainFragment extends BaseFragment implements AppRequestL
 
     TextView projectName, name, description, showMore, key, type, priority, sprint, status, resolution, assignee, reporter,
             votes, watches, dateCreated, dateUpdated, dateResolved, voteButton, watchButton;
-    LinearLayout dateResolvedContainer, assigneeContainer, reporterContainer, statusContainer;
+    LinearLayout dateResolvedContainer, assigneeContainer, reporterContainer, statusContainer, attachmentsContainer;
     CircleImageView projectImage, reporterImage, assigneeImage;
     ImageView typeImage, priorityImage, statusImage;
-    FlowLayout fixVersionsFlowLayout;
+    FlowLayout fixVersionsFlowLayout, labelsFlowLayout, attachmentsFlowLayout, affectsVerionsFlowLayout;
 
     IssueDetailObject mData;
 
@@ -116,8 +117,12 @@ public class IssueDetailMainFragment extends BaseFragment implements AppRequestL
         watchButton = (TextView) rootView.findViewById(R.id.issue_detail_watch_button);
         voteButton = (TextView) rootView.findViewById(R.id.issue_detail_vote_button);
         statusContainer = (LinearLayout) rootView.findViewById(R.id.issue_detail_statusContainer);
+        attachmentsContainer = (LinearLayout) rootView.findViewById(R.id.issue_detail_attachments_container);
 
         fixVersionsFlowLayout = (FlowLayout) rootView.findViewById(R.id.issue_detail_fixversionslayout);
+        labelsFlowLayout = (FlowLayout) rootView.findViewById(R.id.issue_detail_labelsFlowlayout);
+        attachmentsFlowLayout = (FlowLayout) rootView.findViewById(R.id.issue_detail_attachments_flowlayout);
+        affectsVerionsFlowLayout = (FlowLayout) rootView.findViewById(R.id.issue_detail_affectsversionslayout);
 
         projectImage = (CircleImageView) rootView.findViewById(R.id.issue_detail_projectImage);
         reporterImage = (CircleImageView) rootView.findViewById(R.id.issue_detail_reporterImage);
@@ -231,15 +236,7 @@ public class IssueDetailMainFragment extends BaseFragment implements AppRequestL
         hideErrorLayout();
         hideProgressLayout();
 
-        if (mData.getFields().getFixVersions() != null && mData.getFields().getFixVersions().size() > 0) {
-            fixVersionsFlowLayout.removeAllViews();
-            LayoutInflater inflater = LayoutInflater.from(getActivity());
-            for (FixVersion version : mData.getFields().getFixVersions()) {
-                TextView textView = (TextView) inflater.inflate(R.layout.textview_roundedbg_green, fixVersionsFlowLayout, false);
-                textView.setText(version.getName());
-                fixVersionsFlowLayout.addView(textView);
-            }
-        }
+        LayoutInflater inflater = LayoutInflater.from(getActivity());
 
         projectImage.setOnClickListener(this);
         projectName.setOnClickListener(this);
@@ -250,6 +247,62 @@ public class IssueDetailMainFragment extends BaseFragment implements AppRequestL
         statusContainer.setOnClickListener(this);
 
         scrollView.setVisibility(View.VISIBLE);
+
+        if (mData.getFields().getVersions() != null && mData.getFields().getVersions().size() > 0) {
+            affectsVerionsFlowLayout.removeAllViews();
+            for (FixVersion version : mData.getFields().getVersions()) {
+                TextView textView = (TextView) inflater.inflate(R.layout.textview_roundedbg_green, affectsVerionsFlowLayout, false);
+                textView.setText(version.getName());
+                affectsVerionsFlowLayout.addView(textView);
+            }
+        }
+
+        if (mData.getFields().getFixVersions() != null && mData.getFields().getFixVersions().size() > 0) {
+            fixVersionsFlowLayout.removeAllViews();
+            for (FixVersion version : mData.getFields().getFixVersions()) {
+                TextView textView = (TextView) inflater.inflate(R.layout.textview_roundedbg_green, fixVersionsFlowLayout, false);
+                textView.setText(version.getName());
+                fixVersionsFlowLayout.addView(textView);
+            }
+        }
+
+        if (mData.getFields().getLabels() != null && mData.getFields().getLabels().size() > 0) {
+            labelsFlowLayout.removeAllViews();
+            for (String label : mData.getFields().getLabels()) {
+                TextView textView = (TextView) inflater.inflate(R.layout.textview_roundedbg_green, labelsFlowLayout, false);
+                textView.setText(label);
+                labelsFlowLayout.addView(textView);
+            }
+        }
+
+        if (mData.getFields().getAttachment() != null && mData.getFields().getAttachment().size() > 0) {
+            attachmentsContainer.setVisibility(View.VISIBLE);
+            attachmentsFlowLayout.removeAllViews();
+            for (Attachment attachment : mData.getFields().getAttachment()) {
+                LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.issue_detail_attachment_item_layout, attachmentsFlowLayout, false);
+                TextView name = (TextView) layout.findViewById(R.id.attachment_names);
+                ImageView imageView = (ImageView) layout.findViewById(R.id.attachment_image);
+
+                name.setText(attachment.getFilename());
+//                if (attachment.getMimeType().startsWith("image/svg")) {
+//
+//                } else if (attachment.getMimeType().startsWith("image")) {
+//                    if (attachment.getThumbnail() != null && attachment.getThumbnail().length() > 0) {
+//                        ImageRequestManager.requestImage(imageView, attachment.getThumbnail());
+//                    } else {
+//                        ImageRequestManager.requestImage(imageView, attachment.getContent());
+//                    }
+//                }
+
+                layout.setTag(R.integer.z_tag_position, attachment.getContent());
+                layout.setTag(R.integer.z_tag_holder, attachment.getFilename());
+                layout.setOnClickListener(this);
+
+                attachmentsFlowLayout.addView(layout);
+            }
+        } else {
+            attachmentsContainer.setVisibility(View.GONE);
+        }
 
         key.setText(mData.getKey());
         name.setText(mData.getFields().getSummary());
@@ -430,7 +483,18 @@ public class IssueDetailMainFragment extends BaseFragment implements AppRequestL
             case R.id.issue_detail_statusContainer:
                 ((BaseActivity) getActivity()).changeFragmentToChangeIssueStatusFragment(mData.getTransitions(), mData.getFields().getStatus().getName(), issueId);
                 break;
+            case R.id.attachment_layout_container:
+                String name = (String) view.getTag(R.integer.z_tag_holder);
+                String url = (String) view.getTag(R.integer.z_tag_position);
+                downloadAttachment(url, name);
+                break;
         }
+    }
+
+    void downloadAttachment(String url, String fileName) {
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setData(Uri.parse(url));
+        startActivity(i);
     }
 
     // broadcasts
