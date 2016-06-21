@@ -103,8 +103,11 @@ public class ActivityStreamFragment extends BaseFragment implements AppRequestLi
     public void onRequestStarted(String requestTag) {
         if (requestTag.equalsIgnoreCase(RequestTags.ACTIVITY_STREAM)) {
             isRequestRunning = true;
-            hideErrorLayout();
-            showProgressLayout();
+
+            if (adapter == null) {
+                hideErrorLayout();
+                showProgressLayout();
+            }
         }
     }
 
@@ -112,8 +115,11 @@ public class ActivityStreamFragment extends BaseFragment implements AppRequestLi
     public void onRequestFailed(String requestTag, VolleyError error) {
         if (requestTag.equalsIgnoreCase(RequestTags.ACTIVITY_STREAM)) {
             isRequestRunning = false;
-            hideProgressLayout();
-            showErrorLayout();
+
+            if (adapter == null) {
+                hideProgressLayout();
+                showErrorLayout();
+            }
         }
     }
 

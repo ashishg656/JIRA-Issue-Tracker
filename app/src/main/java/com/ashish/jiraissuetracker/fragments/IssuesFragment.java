@@ -105,8 +105,10 @@ public class IssuesFragment extends BaseFragment implements AppRequestListener, 
     public void onRequestStarted(String requestTag) {
         if (requestTag.equalsIgnoreCase(ISSUES_REQUEST)) {
             isRequestRunning = true;
-            hideErrorLayout();
-            showProgressLayout();
+            if (adapter == null) {
+                hideErrorLayout();
+                showProgressLayout();
+            }
         }
     }
 
@@ -114,8 +116,10 @@ public class IssuesFragment extends BaseFragment implements AppRequestListener, 
     public void onRequestFailed(String requestTag, VolleyError error) {
         if (requestTag.equalsIgnoreCase(ISSUES_REQUEST)) {
             isRequestRunning = false;
-            showErrorLayout();
-            hideProgressLayout();
+            if (adapter == null) {
+                showErrorLayout();
+                hideProgressLayout();
+            }
 
             try {
                 SearchListingResponseObject issuesData = (SearchListingResponseObject) VolleyUtils.getResponseFromCache(SearchListingResponseObject.class, requestUrl);

@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import com.android.volley.VolleyError;
 import com.ashish.jiraissuetracker.R;
@@ -33,6 +34,7 @@ public class ProjectListingFragment extends BaseFragment implements AppRequestLi
 
     RecyclerView recyclerView;
     LinearLayoutManager layoutManager;
+    FrameLayout recyclerViewContainer;
 
     ProjectListingAdapter adapter;
 
@@ -48,6 +50,7 @@ public class ProjectListingFragment extends BaseFragment implements AppRequestLi
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview);
         setProgressAndErrorLayoutVariables();
+        recyclerViewContainer = (FrameLayout) rootView.findViewById(R.id.recyclerview_container);
 
         return rootView;
     }
@@ -59,7 +62,7 @@ public class ProjectListingFragment extends BaseFragment implements AppRequestLi
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        recyclerView.setPadding(0, getActivity().getResources().getDimensionPixelSize(R.dimen.z_recycler_padding_top), 0, 0);
+        recyclerViewContainer.setPadding(0, getActivity().getResources().getDimensionPixelSize(R.dimen.z_recycler_padding_top), 0, 0);
 
         loadData();
     }

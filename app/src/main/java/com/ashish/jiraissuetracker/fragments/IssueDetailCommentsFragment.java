@@ -106,8 +106,11 @@ public class IssueDetailCommentsFragment extends BaseFragment implements AppRequ
     public void onRequestStarted(String requestTag) {
         if (requestTag.equalsIgnoreCase(RequestTags.GET_COMMENTS_FOR_ISSUE)) {
             isRequestRunning = true;
-            hideErrorLayout();
-            showProgressLayout();
+
+            if (adapter == null) {
+                hideErrorLayout();
+                showProgressLayout();
+            }
         } else if (requestTag.equalsIgnoreCase(RequestTags.ADD_COMMENT_ON_ISSUE)) {
             if (progressDialog != null)
                 progressDialog.dismiss();
@@ -120,8 +123,10 @@ public class IssueDetailCommentsFragment extends BaseFragment implements AppRequ
     public void onRequestFailed(String requestTag, VolleyError error) {
         if (requestTag.equalsIgnoreCase(RequestTags.GET_COMMENTS_FOR_ISSUE)) {
             isRequestRunning = false;
-            showErrorLayout();
-            hideProgressLayout();
+            if (adapter == null) {
+                showErrorLayout();
+                hideProgressLayout();
+            }
 
             try {
                 IssueCommentsObject issuesData = (IssueCommentsObject) VolleyUtils.getResponseFromCache(IssueCommentsObject.class, requestUrl);
