@@ -24,4 +24,10 @@ public class IssueDetailActivityStreamFragment extends ActivityStreamFragment {
             AppRequests.makeActivityStreamRequest(requestUrl, this, getActivity());
         }
     }
+
+    public void scrollRecyclerViewToTop() {
+        if (recyclerView != null) {
+            recyclerView.smoothScrollToPosition(0);
+        }
+    }
 }

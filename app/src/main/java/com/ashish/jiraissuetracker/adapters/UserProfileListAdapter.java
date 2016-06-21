@@ -116,7 +116,11 @@ public class UserProfileListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 if (span.getURL().startsWith(checkUserProfile)) {
                     String userName = span.getURL().substring(checkUserProfile.length());
                     DebugUtils.log("username : " + userName);
-                    ((BaseActivity) context).openUserProfileActivity(userName);
+                    if (userName.equals(UserProfileListAdapter.this.userName)) {
+                        ((UserProfileActivity) context).scrollRecyclerViewToPosition0();
+                    } else {
+                        ((BaseActivity) context).openUserProfileActivity(userName);
+                    }
                 } else if (span.getURL().startsWith(checkIssueName)) {
                     String issueKey = span.getURL().substring(checkIssueName.length());
                     DebugUtils.log("issueKey : " + issueKey);

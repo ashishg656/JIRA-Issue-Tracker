@@ -71,6 +71,14 @@ public class IssueDetailActivity extends BaseActivityNavigationDrawer {
         tabLayout.setupWithViewPager(viewPager);
     }
 
+    public void scrollActivityStreamTo0Position() {
+        try {
+            ((IssueDetailActivityStreamFragment) fragmentHashMap.get(2)).scrollRecyclerViewToTop();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private class MyPagerAdapter extends FragmentStatePagerAdapter {
 
         public MyPagerAdapter(FragmentManager fm) {

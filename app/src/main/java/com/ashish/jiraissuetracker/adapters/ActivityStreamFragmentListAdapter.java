@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.ashish.jiraissuetracker.R;
 import com.ashish.jiraissuetracker.activities.BaseActivity;
+import com.ashish.jiraissuetracker.activities.IssueDetailActivity;
 import com.ashish.jiraissuetracker.activities.UserProfileActivity;
 import com.ashish.jiraissuetracker.extras.AppConstants;
 import com.ashish.jiraissuetracker.objects.activityStream.Entry;
@@ -43,11 +44,18 @@ public class ActivityStreamFragmentListAdapter extends RecyclerView.Adapter<Recy
     boolean isMoreAllowed;
     MyClickListener clickListener;
 
+    String issueKey;
+
     public ActivityStreamFragmentListAdapter(List<Entry> mData, Context context, boolean isMoreAllowed) {
         this.mData = mData;
         this.context = context;
         this.isMoreAllowed = isMoreAllowed;
         clickListener = new MyClickListener();
+    }
+
+    public ActivityStreamFragmentListAdapter(List<Entry> mData, Context context, boolean isMoreAllowed, String issueKey) {
+        this(mData, context, isMoreAllowed);
+        this.issueKey = issueKey;
     }
 
     @Override
@@ -106,7 +114,13 @@ public class ActivityStreamFragmentListAdapter extends RecyclerView.Adapter<Recy
                 } else if (span.getURL().startsWith(checkIssueName)) {
                     String issueKey = span.getURL().substring(checkIssueName.length());
                     DebugUtils.log("issueKey : " + issueKey);
-                    ((BaseActivity) context).openIssueDetailActivity(issueKey, issueKey);
+                    if (ActivityStreamFragmentListAdapter.this.issueKey != null && ActivityStreamFragmentListAdapter.this.issueKey.equals(issueKey)) {
+                        if(context instanceof IssueDetailActivity){
+                            ((IssueDetailActivity)context).scrollActivityStreamTo0Position();
+                        }
+                    } else {
+                        ((BaseActivity) context).openIssueDetailActivity(issueKey, issueKey);
+                    }
                 }
             }
         };

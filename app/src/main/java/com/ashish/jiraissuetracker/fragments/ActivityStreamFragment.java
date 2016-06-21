@@ -159,7 +159,7 @@ public class ActivityStreamFragment extends BaseFragment implements AppRequestLi
         List<Entry> listEntry = new ArrayList<>();
         listEntry.add(object.getFeed().getEntry());
         if (adapter == null) {
-            adapter = new ActivityStreamFragmentListAdapter(listEntry, getActivity(), isMoreAllowed);
+            adapter = new ActivityStreamFragmentListAdapter(listEntry, getActivity(), isMoreAllowed, issueKeyBundle);
             recyclerView.setAdapter(adapter);
         } else {
             adapter.addData(listEntry, isMoreAllowed);
@@ -181,7 +181,7 @@ public class ActivityStreamFragment extends BaseFragment implements AppRequestLi
         }
 
         if (adapter == null) {
-            adapter = new ActivityStreamFragmentListAdapter(object.getFeed().getEntry(), getActivity(), isMoreAllowed);
+            adapter = new ActivityStreamFragmentListAdapter(object.getFeed().getEntry(), getActivity(), isMoreAllowed, issueKeyBundle);
             recyclerView.setAdapter(adapter);
         } else {
             adapter.addData(object.getFeed().getEntry(), isMoreAllowed);
