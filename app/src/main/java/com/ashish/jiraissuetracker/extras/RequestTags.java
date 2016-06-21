@@ -23,4 +23,6 @@ public interface RequestTags {
     public String GET_COMMENTS_FOR_ISSUE = "Get Comments For Issue";
     public String ADD_COMMENT_ON_ISSUE = "Add Comment On Issue";
     public String DELETE_COMMENT_FROM_ISSUE = "Delete Comment From Issue";
+    public String EDIT_COMMENT_ON_ISSUE = "Edit Comment On Issue";
+
 }

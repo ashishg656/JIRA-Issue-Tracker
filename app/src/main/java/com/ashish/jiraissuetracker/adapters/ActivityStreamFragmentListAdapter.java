@@ -24,6 +24,7 @@ import com.ashish.jiraissuetracker.activities.UserProfileActivity;
 import com.ashish.jiraissuetracker.extras.AppConstants;
 import com.ashish.jiraissuetracker.objects.activityStream.Entry;
 import com.ashish.jiraissuetracker.objects.issues.Issue;
+import com.ashish.jiraissuetracker.preferences.ZPreferences;
 import com.ashish.jiraissuetracker.utils.DebugUtils;
 import com.ashish.jiraissuetracker.utils.TimeUtils;
 import com.ashish.jiraissuetracker.utils.TimeUtilsGMT;
@@ -88,18 +89,24 @@ public class ActivityStreamFragmentListAdapter extends RecyclerView.Adapter<Recy
         }
     }
 
-    protected void makeLinkClickable(SpannableStringBuilder strBuilder, final URLSpan span, final String userName) {
+    protected void makeLinkClickable(SpannableStringBuilder strBuilder, final URLSpan span) {
         int start = strBuilder.getSpanStart(span);
         int end = strBuilder.getSpanEnd(span);
         int flags = strBuilder.getSpanFlags(span);
         ClickableSpan clickable = new ClickableSpan() {
             public void onClick(View view) {
-                DebugUtils.log("URL clicked", span.getURL() + " User : " + userName);
+                DebugUtils.log("URL clicked", span.getURL());
 
-                if (span.getURL().toLowerCase().contains("viewprofile")) {
+                String checkUserProfile = ZPreferences.getBaseUrl(context) + "secure/ViewProfile.jspa?name=";
+                String checkIssueName = ZPreferences.getBaseUrl(context) + "browse/";
+                if (span.getURL().startsWith(checkUserProfile)) {
+                    String userName = span.getURL().substring(checkUserProfile.length());
+                    DebugUtils.log("username : " + userName);
                     ((BaseActivity) context).openUserProfileActivity(userName);
-                } else if (span.getURL().toLowerCase().contains("browse")) {
-
+                } else if (span.getURL().startsWith(checkIssueName)) {
+                    String issueKey = span.getURL().substring(checkIssueName.length());
+                    DebugUtils.log("issueKey : " + issueKey);
+                    ((BaseActivity) context).openIssueDetailActivity(issueKey, issueKey);
                 }
             }
         };
@@ -112,7 +119,7 @@ public class ActivityStreamFragmentListAdapter extends RecyclerView.Adapter<Recy
         SpannableStringBuilder strBuilder = new SpannableStringBuilder(sequence);
         URLSpan[] urls = strBuilder.getSpans(0, sequence.length(), URLSpan.class);
         for (URLSpan span : urls) {
-            makeLinkClickable(strBuilder, span, userName);
+            makeLinkClickable(strBuilder, span);
         }
         text.setText(strBuilder);
         text.setMovementMethod(LinkMovementMethod.getInstance());

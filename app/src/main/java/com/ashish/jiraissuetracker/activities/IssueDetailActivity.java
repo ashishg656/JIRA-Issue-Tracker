@@ -3,28 +3,21 @@ package com.ashish.jiraissuetracker.activities;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
-import android.widget.FrameLayout;
-import android.widget.TextView;
 
 import com.ashish.jiraissuetracker.R;
-import com.ashish.jiraissuetracker.fragments.ActivityStreamFragment;
-import com.ashish.jiraissuetracker.fragments.IssueCommentsFragment;
+import com.ashish.jiraissuetracker.fragments.IssueDetailCommentsFragment;
 import com.ashish.jiraissuetracker.fragments.IssueDetailMainFragment;
 import com.ashish.jiraissuetracker.fragments.IssuesFragment;
 import com.ashish.jiraissuetracker.fragments.ProjectListingFragment;
 
 import java.util.HashMap;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by Ashish on 16/06/16.
@@ -92,7 +85,7 @@ public class IssueDetailActivity extends BaseActivityNavigationDrawer {
             if (pos == 0)
                 fragment = IssueDetailMainFragment.newInstance(bundle);
             else if (pos == 1)
-                fragment = IssueCommentsFragment.newInstance(bundle);
+                fragment = IssueDetailCommentsFragment.newInstance(bundle);
             else if (pos == 2)
                 fragment = ProjectListingFragment.newInstance(bundle);
             else

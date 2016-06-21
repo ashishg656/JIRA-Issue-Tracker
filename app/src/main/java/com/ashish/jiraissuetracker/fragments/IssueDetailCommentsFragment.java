@@ -14,11 +14,9 @@ import com.android.volley.VolleyError;
 import com.ashish.jiraissuetracker.R;
 import com.ashish.jiraissuetracker.activities.BaseActivity;
 import com.ashish.jiraissuetracker.adapters.IssuesCommentsListAdapter;
-import com.ashish.jiraissuetracker.adapters.IssuesFragmentListAdapter;
 import com.ashish.jiraissuetracker.extras.RequestTags;
 import com.ashish.jiraissuetracker.objects.issueComments.Comment;
 import com.ashish.jiraissuetracker.objects.issueComments.IssueCommentsObject;
-import com.ashish.jiraissuetracker.objects.issues.SearchListingResponseObject;
 import com.ashish.jiraissuetracker.preferences.ZPreferences;
 import com.ashish.jiraissuetracker.requests.AppRequests;
 import com.ashish.jiraissuetracker.requests.AppUrls;
@@ -32,7 +30,7 @@ import org.json.JSONObject;
 /**
  * Created by Ashish on 20/06/16.
  */
-public class IssueCommentsFragment extends BaseFragment implements AppRequestListener, View.OnClickListener, AppRequestListenerJsonObject {
+public class IssueDetailCommentsFragment extends BaseFragment implements AppRequestListener, View.OnClickListener, AppRequestListenerJsonObject {
 
     RecyclerView recyclerView;
     LinearLayoutManager layoutManager;
@@ -49,8 +47,8 @@ public class IssueCommentsFragment extends BaseFragment implements AppRequestLis
     ProgressDialog progressDialog;
     EditText commentEditText;
 
-    public static IssueCommentsFragment newInstance(Bundle e) {
-        IssueCommentsFragment frg = new IssueCommentsFragment();
+    public static IssueDetailCommentsFragment newInstance(Bundle e) {
+        IssueDetailCommentsFragment frg = new IssueDetailCommentsFragment();
         frg.setArguments(e);
         return frg;
     }

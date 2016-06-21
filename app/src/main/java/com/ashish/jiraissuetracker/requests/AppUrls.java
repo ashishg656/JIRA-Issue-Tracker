@@ -40,6 +40,14 @@ public class AppUrls {
                 + "&streams=update-date+BEFORE+" + lastUpdated;
     }
 
+    public static String getActivityStreamForIssue(long startAt, int pageSize, String issueKey, String lastUpdated) {
+        if (lastUpdated == null) {
+            return "activity?" + "streams=issue-key+IS+" + issueKey + "&startAt=" + startAt + "&maxResults=" + pageSize;
+        }
+        return "activity?" + "streams=issue-key+IS+" + issueKey + "&startAt=" + startAt + "&maxResults=" + pageSize
+                + "&streams=update-date+BEFORE+" + lastUpdated;
+    }
+
     public static String getActivityStreamForProject(long startAt, int pageSize, String projectId, String lastUpdated) {
         if (lastUpdated == null) {
             return "activity?" + "streams=key+IS+" + projectId + "&startAt=" + startAt + "&maxResults=" + pageSize;

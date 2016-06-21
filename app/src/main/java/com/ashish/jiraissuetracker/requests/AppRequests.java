@@ -140,6 +140,12 @@ public class AppRequests implements RequestTags {
         AppApplication.getInstance().addToRequestQueue(request, DELETE_COMMENT_FROM_ISSUE);
     }
 
+    public static void makeEditCommentRequest(String url, AppRequestListenerJsonObject requestListener, Context context, JSONObject jsonObject) {
+        CustomJsonObjectRequest request = new CustomJsonObjectRequest(Request.Method.PUT, url, jsonObject,
+                EDIT_COMMENT_ON_ISSUE, requestListener, null, getHeader(context));
+        AppApplication.getInstance().addToRequestQueue(request, EDIT_COMMENT_ON_ISSUE);
+    }
+
     public static HashMap<String, String> getHeader(Context context) {
         HashMap<String, String> headers = new HashMap<>();
         headers.put("Authorization", ZPreferences.getHeaderTokenAuth(context));

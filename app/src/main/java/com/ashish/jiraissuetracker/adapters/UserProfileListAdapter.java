@@ -21,6 +21,7 @@ import com.ashish.jiraissuetracker.extras.AppConstants;
 import com.ashish.jiraissuetracker.glideImageRequest.GlideRequestManager;
 import com.ashish.jiraissuetracker.objects.activityStream.Entry;
 import com.ashish.jiraissuetracker.objects.login.LoginObjectResponse;
+import com.ashish.jiraissuetracker.preferences.ZPreferences;
 import com.ashish.jiraissuetracker.utils.DebugUtils;
 import com.ashish.jiraissuetracker.utils.TimeUtils;
 import com.ashish.jiraissuetracker.utils.TimeUtilsGMT;
@@ -102,21 +103,24 @@ public class UserProfileListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         }
     }
 
-    protected void makeLinkClickable(SpannableStringBuilder strBuilder, final URLSpan span, final String userName) {
+    protected void makeLinkClickable(SpannableStringBuilder strBuilder, final URLSpan span) {
         int start = strBuilder.getSpanStart(span);
         int end = strBuilder.getSpanEnd(span);
         int flags = strBuilder.getSpanFlags(span);
         ClickableSpan clickable = new ClickableSpan() {
             public void onClick(View view) {
-                DebugUtils.log("URL clicked", span.getURL() + " User : " + userName);
-                if (span.getURL().toLowerCase().contains("viewprofile")) {
-                    if (userName.equals(UserProfileListAdapter.this.userName)) {
-                        ((UserProfileActivity) context).scrollRecyclerViewToPosition0();
-                    } else {
-                        ((BaseActivity) context).openUserProfileActivity(userName);
-                    }
-                } else if (span.getURL().toLowerCase().contains("browse")) {
+                DebugUtils.log("URL clicked", span.getURL());
 
+                String checkUserProfile = ZPreferences.getBaseUrl(context) + "secure/ViewProfile.jspa?name=";
+                String checkIssueName = ZPreferences.getBaseUrl(context) + "browse/";
+                if (span.getURL().startsWith(checkUserProfile)) {
+                    String userName = span.getURL().substring(checkUserProfile.length());
+                    DebugUtils.log("username : " + userName);
+                    ((BaseActivity) context).openUserProfileActivity(userName);
+                } else if (span.getURL().startsWith(checkIssueName)) {
+                    String issueKey = span.getURL().substring(checkIssueName.length());
+                    DebugUtils.log("issueKey : " + issueKey);
+                    ((BaseActivity) context).openIssueDetailActivity(issueKey, issueKey);
                 }
             }
         };
@@ -129,7 +133,7 @@ public class UserProfileListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         SpannableStringBuilder strBuilder = new SpannableStringBuilder(sequence);
         URLSpan[] urls = strBuilder.getSpans(0, sequence.length(), URLSpan.class);
         for (URLSpan span : urls) {
-            makeLinkClickable(strBuilder, span, userName);
+            makeLinkClickable(strBuilder, span);
         }
         text.setText(strBuilder);
         text.setMovementMethod(LinkMovementMethod.getInstance());

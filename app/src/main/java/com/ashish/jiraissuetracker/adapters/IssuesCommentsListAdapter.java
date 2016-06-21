@@ -9,6 +9,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -24,8 +27,12 @@ import com.ashish.jiraissuetracker.preferences.ZPreferences;
 import com.ashish.jiraissuetracker.requests.AppRequests;
 import com.ashish.jiraissuetracker.requests.AppUrls;
 import com.ashish.jiraissuetracker.serverApi.AppRequestListener;
+import com.ashish.jiraissuetracker.serverApi.AppRequestListenerJsonObject;
 import com.ashish.jiraissuetracker.serverApi.ImageRequestManager;
 import com.ashish.jiraissuetracker.utils.TimeUtils;
+import com.ashish.jiraissuetracker.utils.VolleyUtils;
+
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -34,7 +41,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 /**
  * Created by Ashish on 10/06/16.
  */
-public class IssuesCommentsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements AppConstants, AppRequestListener {
+public class IssuesCommentsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements AppConstants, AppRequestListener, AppRequestListenerJsonObject {
 
     List<Comment> mData;
     Context context;
@@ -43,8 +50,9 @@ public class IssuesCommentsListAdapter extends RecyclerView.Adapter<RecyclerView
     int greenColor, redColor;
     String issueId;
 
-    CommentHolder deleteCurrentHolder;
+    CommentHolder deleteCurrentHolder, editCurrentHolder;
     ProgressDialog progressDialog;
+    AlertDialog alertDialog;
 
     public IssuesCommentsListAdapter(List<Comment> mData, Context context, boolean isMoreAllowed, String issueId) {
         this.mData = mData;
@@ -97,6 +105,9 @@ public class IssuesCommentsListAdapter extends RecyclerView.Adapter<RecyclerView
 
             holder.delete.setTag(holder);
             holder.delete.setOnClickListener(clickListener);
+
+            holder.edit.setTag(holder);
+            holder.edit.setOnClickListener(clickListener);
         }
     }
 
@@ -162,7 +173,63 @@ public class IssuesCommentsListAdapter extends RecyclerView.Adapter<RecyclerView
                     CommentHolder holder = (CommentHolder) view.getTag();
                     showAlertDialogForDeleteComment(holder);
                     break;
+                case R.id.edit_comment:
+                    holder = (CommentHolder) view.getTag();
+                    showAlertDialogForEditComment(holder);
+                    break;
             }
+        }
+    }
+
+    private void showAlertDialogForEditComment(CommentHolder holder) {
+        editCurrentHolder = holder;
+
+        LinearLayout layout = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.edittext_dialog_layout, null, false);
+        EditText editText = (EditText) layout.findViewById(R.id.editext_dialog);
+        editText.setText(mData.get(holder.getAdapterPosition()).getBody());
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context).setPositiveButton("DONE", null).setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        }).setView(layout)
+                .setTitle("Edit comment");
+
+        alertDialog = builder.create();
+        alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                Button button = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                button.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View view) {
+                        sendUpdateCommentRequest();
+                    }
+                });
+            }
+        });
+        alertDialog.show();
+    }
+
+    private void sendUpdateCommentRequest() {
+        EditText editText = (EditText) alertDialog.findViewById(R.id.editext_dialog);
+
+        if (editText != null && editText.getText().toString().trim().length() > 0) {
+            String url = ZPreferences.getBaseUrl(context) + AppUrls.getDeleteCommentUrl(issueId, mData.get(editCurrentHolder.getAdapterPosition()).getId());
+
+            try {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("body", editText.getText().toString().trim());
+
+                AppRequests.makeEditCommentRequest(url, IssuesCommentsListAdapter.this, context, jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else if (editText != null) {
+            ((BaseActivity) context).makeToast("Comment cannot be left blank. Please enter comment.");
         }
     }
 
@@ -183,7 +250,7 @@ public class IssuesCommentsListAdapter extends RecyclerView.Adapter<RecyclerView
         }).setMessage("Are you sure you want to delete this comment?")
                 .setTitle("Delete comment");
 
-        AlertDialog alertDialog = builder.create();
+        alertDialog = builder.create();
         alertDialog.show();
     }
 
@@ -194,6 +261,11 @@ public class IssuesCommentsListAdapter extends RecyclerView.Adapter<RecyclerView
                 progressDialog.dismiss();
 
             progressDialog = ProgressDialog.show(context, "Deleting comment", "Please wait while deleting comment", true, false);
+        } else if (requestTag.equalsIgnoreCase(RequestTags.EDIT_COMMENT_ON_ISSUE)) {
+            if (progressDialog != null)
+                progressDialog.dismiss();
+
+            progressDialog = ProgressDialog.show(context, "Editing comment", "Please wait while editing comment", true, false);
         }
     }
 
@@ -204,6 +276,41 @@ public class IssuesCommentsListAdapter extends RecyclerView.Adapter<RecyclerView
                 progressDialog.dismiss();
 
             ((BaseActivity) context).makeToast("Unable to delete comment. Please check internet settings and try again.");
+        } else if (requestTag.equalsIgnoreCase(RequestTags.EDIT_COMMENT_ON_ISSUE)) {
+            if (progressDialog != null)
+                progressDialog.dismiss();
+
+            ((BaseActivity) context).makeToast("Unable to edit comment. Please check internet settings and try again.");
+        }
+    }
+
+    @Override
+    public void onRequestCompleted(String requestTag, JSONObject response) {
+        if (requestTag.equalsIgnoreCase(RequestTags.EDIT_COMMENT_ON_ISSUE)) {
+            if (progressDialog != null)
+                progressDialog.dismiss();
+
+            ((BaseActivity) context).makeToast("Successfully edited comment.");
+
+            try {
+                Comment comment = (Comment) VolleyUtils.getResponseObject(response, Comment.class);
+                commentObjectEdited(comment);
+
+                if (alertDialog != null)
+                    alertDialog.dismiss();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void commentObjectEdited(Comment comment) {
+        for (int i = 0; i < mData.size(); i++) {
+            if (mData.get(i).getId().equals(comment.getId())) {
+                mData.set(i, comment);
+                notifyItemChanged(i);
+                return;
+            }
         }
     }
 
