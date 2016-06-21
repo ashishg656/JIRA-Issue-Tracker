@@ -42,7 +42,9 @@ public class ActivityStreamFragment extends BaseFragment implements AppRequestLi
     int pageSize = 20;
     boolean isMoreAllowed = true;
     boolean isRequestRunning = false;
-    private String lastUpdated = null;
+    String lastUpdated = null;
+
+    String issueKeyBundle;
 
     public static ActivityStreamFragment newInstance(Bundle e) {
         ActivityStreamFragment frg = new ActivityStreamFragment();
@@ -80,6 +82,10 @@ public class ActivityStreamFragment extends BaseFragment implements AppRequestLi
                 }
             }
         });
+
+        if (getArguments().containsKey("issuekey")) {
+            issueKeyBundle = getArguments().getString("issuekey");
+        }
 
         setProgressAndErrorLayoutVariables();
 
@@ -120,7 +126,7 @@ public class ActivityStreamFragment extends BaseFragment implements AppRequestLi
         }
     }
 
-    private void getDataFromXml(String response) {
+    public void getDataFromXml(String response) {
         JSONObject jsonObj = null;
         try {
             DebugUtils.log("Starting XML to Json Process");
@@ -147,7 +153,7 @@ public class ActivityStreamFragment extends BaseFragment implements AppRequestLi
         }
     }
 
-    private void setAdapterData(ActivityStreamObjectNonArray object) {
+    public void setAdapterData(ActivityStreamObjectNonArray object) {
         isMoreAllowed = false;
 
         List<Entry> listEntry = new ArrayList<>();
@@ -160,7 +166,7 @@ public class ActivityStreamFragment extends BaseFragment implements AppRequestLi
         }
     }
 
-    private void setAdapterData(ActivityStreamObject object) {
+    public void setAdapterData(ActivityStreamObject object) {
         if (object != null && object.getFeed() != null && object.getFeed().getEntry() != null) {
             if (object.getFeed().getEntry().size() < pageSize) {
                 isMoreAllowed = false;

@@ -12,6 +12,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 
 import com.ashish.jiraissuetracker.R;
+import com.ashish.jiraissuetracker.fragments.ActivityStreamFragment;
+import com.ashish.jiraissuetracker.fragments.IssueDetailActivityStreamFragment;
 import com.ashish.jiraissuetracker.fragments.IssueDetailCommentsFragment;
 import com.ashish.jiraissuetracker.fragments.IssueDetailMainFragment;
 import com.ashish.jiraissuetracker.fragments.IssuesFragment;
@@ -80,6 +82,7 @@ public class IssueDetailActivity extends BaseActivityNavigationDrawer {
             Bundle bundle = new Bundle();
 
             bundle.putString("issueid", issueId);
+            bundle.putString("issuekey", issueKey);
 
             Fragment fragment = null;
             if (pos == 0)
@@ -87,7 +90,7 @@ public class IssueDetailActivity extends BaseActivityNavigationDrawer {
             else if (pos == 1)
                 fragment = IssueDetailCommentsFragment.newInstance(bundle);
             else if (pos == 2)
-                fragment = ProjectListingFragment.newInstance(bundle);
+                fragment = IssueDetailActivityStreamFragment.newInstance(bundle);
             else
                 fragment = IssuesFragment.newInstance(bundle);
 
@@ -97,7 +100,7 @@ public class IssueDetailActivity extends BaseActivityNavigationDrawer {
 
         @Override
         public int getCount() {
-            return 2;
+            return 3;
         }
 
         @Override
@@ -107,7 +110,7 @@ public class IssueDetailActivity extends BaseActivityNavigationDrawer {
             } else if (position == 1) {
                 return "Comments";
             } else if (position == 2) {
-                return "Projects";
+                return "Activity Stream";
             } else {
                 return "Dashboards";
             }
