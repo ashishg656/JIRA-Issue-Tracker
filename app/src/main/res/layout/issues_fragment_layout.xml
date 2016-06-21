@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/z_grey_shade_2"
-    android:orientation="vertical">
+    android:clipToPadding="false"
+    android:orientation="vertical"
+    android:paddingTop="114dp">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:paddingTop="114dp" />
+        android:layout_height="match_parent" />
 
-</LinearLayout>
+    <include layout="@layout/progress_layout" />
+
+    <include layout="@layout/error_layout" />
+
+</FrameLayout>

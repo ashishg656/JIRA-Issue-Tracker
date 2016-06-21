@@ -57,6 +57,7 @@ public class ActivityStreamFragment extends BaseFragment implements AppRequestLi
         rootView = inflater.inflate(R.layout.issues_fragment_layout, container, false);
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview);
+        setProgressAndErrorLayoutVariables();
 
         return rootView;
     }
@@ -86,8 +87,6 @@ public class ActivityStreamFragment extends BaseFragment implements AppRequestLi
         if (getArguments().containsKey("issuekey")) {
             issueKeyBundle = getArguments().getString("issuekey");
         }
-
-        setProgressAndErrorLayoutVariables();
 
         loadData();
     }
@@ -155,6 +154,8 @@ public class ActivityStreamFragment extends BaseFragment implements AppRequestLi
 
     public void setAdapterData(ActivityStreamObjectNonArray object) {
         isMoreAllowed = false;
+        hideErrorLayout();
+        hideProgressLayout();
 
         List<Entry> listEntry = new ArrayList<>();
         listEntry.add(object.getFeed().getEntry());
@@ -179,6 +180,9 @@ public class ActivityStreamFragment extends BaseFragment implements AppRequestLi
                 DebugUtils.log("StartAt for Activity Stream Fragment = " + startAt);
             }
         }
+
+        hideErrorLayout();
+        hideProgressLayout();
 
         if (adapter == null) {
             adapter = new ActivityStreamFragmentListAdapter(object.getFeed().getEntry(), getActivity(), isMoreAllowed, issueKeyBundle);

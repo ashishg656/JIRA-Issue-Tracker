@@ -6,9 +6,13 @@ import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.ashish.jiraissuetracker.R;
+import com.ashish.jiraissuetracker.extras.ProgressLayoutAnimation;
 import com.ashish.jiraissuetracker.fragments.ChangeIssueStatusFragment;
 import com.ashish.jiraissuetracker.fragments.IssueDetailCommentsFragment;
 import com.ashish.jiraissuetracker.objects.getIssueTransitions.Transition;
@@ -24,6 +28,11 @@ public class BaseActivity extends AppCompatActivity {
 
     Toolbar toolbar;
     Toast toast;
+
+    View progressDarkCircle, progressLightCircle;
+    ImageView progressImage;
+    FrameLayout progressLayoutContainer;
+    ProgressLayoutAnimation animForProgressLayoutAnimated;
 
     public void makeToast(String message) {
         if (toast != null) {
@@ -47,15 +56,22 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void setProgressAndErrorLayoutVariables() {
-
+        progressDarkCircle = (View) findViewById(R.id.dark_circle);
+        progressLightCircle = (View) findViewById(R.id.light_circle);
+        progressImage = (ImageView) findViewById(R.id.image_progress);
+        progressLayoutContainer = (FrameLayout) findViewById(R.id.progresslayutcontainre);
     }
 
     public void showProgressLayout() {
-
+        animForProgressLayoutAnimated = new ProgressLayoutAnimation(
+                progressDarkCircle, progressLightCircle, progressImage,
+                progressLayoutContainer, this);
+        animForProgressLayoutAnimated.startAnimations();
     }
 
     public void hideProgressLayout() {
-
+        if (animForProgressLayoutAnimated != null)
+            animForProgressLayoutAnimated.stopAnimations();
     }
 
     public void showErrorLayout() {

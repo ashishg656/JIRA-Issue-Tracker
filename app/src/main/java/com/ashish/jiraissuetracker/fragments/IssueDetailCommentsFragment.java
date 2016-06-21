@@ -60,6 +60,7 @@ public class IssueDetailCommentsFragment extends BaseFragment implements AppRequ
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview);
         sendComment = (LinearLayout) rootView.findViewById(R.id.send_comment_to_server);
         commentEditText = (EditText) rootView.findViewById(R.id.comment_box);
+        setProgressAndErrorLayoutVariables();
 
         return rootView;
     }
@@ -89,8 +90,6 @@ public class IssueDetailCommentsFragment extends BaseFragment implements AppRequ
                 }
             }
         });
-
-        setProgressAndErrorLayoutVariables();
 
         loadData();
     }

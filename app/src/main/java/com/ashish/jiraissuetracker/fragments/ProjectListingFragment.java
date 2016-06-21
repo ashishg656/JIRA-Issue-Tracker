@@ -47,6 +47,7 @@ public class ProjectListingFragment extends BaseFragment implements AppRequestLi
         rootView = inflater.inflate(R.layout.issues_fragment_layout, container, false);
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview);
+        setProgressAndErrorLayoutVariables();
 
         return rootView;
     }
@@ -59,8 +60,6 @@ public class ProjectListingFragment extends BaseFragment implements AppRequestLi
         recyclerView.setLayoutManager(layoutManager);
 
         recyclerView.setPadding(0, getActivity().getResources().getDimensionPixelSize(R.dimen.z_recycler_padding_top), 0, 0);
-
-        setProgressAndErrorLayoutVariables();
 
         loadData();
     }
@@ -84,7 +83,7 @@ public class ProjectListingFragment extends BaseFragment implements AppRequestLi
     public void onRequestFailed(String requestTag, VolleyError error) {
         if (requestTag.equalsIgnoreCase(RequestTags.GET_ALL_PROJECTS)) {
             hideProgressLayout();
-            showProgressLayout();
+            showErrorLayout();
         }
     }
 

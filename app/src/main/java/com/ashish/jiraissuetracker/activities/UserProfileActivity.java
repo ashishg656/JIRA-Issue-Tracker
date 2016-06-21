@@ -53,6 +53,8 @@ public class UserProfileActivity extends BaseActivity implements AppRequestListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_profile_activity_layout);
 
+        setProgressAndErrorLayoutVariables();
+
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

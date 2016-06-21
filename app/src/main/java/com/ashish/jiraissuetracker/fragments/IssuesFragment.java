@@ -63,6 +63,7 @@ public class IssuesFragment extends BaseFragment implements AppRequestListener, 
         rootView = inflater.inflate(R.layout.issues_fragment_layout, container, false);
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview);
+        setProgressAndErrorLayoutVariables();
 
         return rootView;
     }
@@ -88,8 +89,6 @@ public class IssuesFragment extends BaseFragment implements AppRequestListener, 
                 }
             }
         });
-
-        setProgressAndErrorLayoutVariables();
 
         loadData();
     }

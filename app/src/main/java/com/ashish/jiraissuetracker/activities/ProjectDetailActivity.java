@@ -86,6 +86,8 @@ public class ProjectDetailActivity extends BaseActivity implements AppRequestLis
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        setProgressAndErrorLayoutVariables();
+
         if (getIntent().hasExtra("projectobj")) {
             projectListingObject = getIntent().getExtras().getParcelable("projectobj");
         } else if (getIntent().hasExtra("projectid")) {
