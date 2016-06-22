@@ -103,6 +103,9 @@ public class IssuesCommentsListAdapter extends RecyclerView.Adapter<RecyclerView
                 holder.actionButtonsLayout.setVisibility(View.GONE);
             }
 
+            holder.container.setTag(comment.getAuthor().getName());
+            holder.container.setOnClickListener(clickListener);
+
             holder.delete.setTag(holder);
             holder.delete.setOnClickListener(clickListener);
 
@@ -176,6 +179,10 @@ public class IssuesCommentsListAdapter extends RecyclerView.Adapter<RecyclerView
                 case R.id.edit_comment:
                     holder = (CommentHolder) view.getTag();
                     showAlertDialogForEditComment(holder);
+                    break;
+                case R.id.commentlayouttoopenuserprofile:
+                    String userName = (String) view.getTag();
+                    ((BaseActivity) context).openUserProfileActivity(userName);
                     break;
             }
         }

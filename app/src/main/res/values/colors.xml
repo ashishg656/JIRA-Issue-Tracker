@@ -37,6 +37,7 @@
     <color name="ripple_color">#42ffffff</color>
     <color name="green_color_primary">#1b5e20</color>
     <color name="red_color_primary">#f44336</color>
+    <color name="teal_color">#009688</color>
 
     <color name="bnc_progress_layout_light_circle">#ffebee</color>
     <color name="bnc_progress_layout_dark_circle">#ffcdd2</color>

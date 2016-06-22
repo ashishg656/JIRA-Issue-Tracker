@@ -152,6 +152,12 @@ public class AppRequests implements RequestTags {
         AppApplication.getInstance().addToRequestQueue(request, GET_ISSUE_CHANGELOG);
     }
 
+    public static void makeSearchByTextRequest(String url, AppRequestListener requestListener, Context context) {
+        CustomStringRequest request = new CustomStringRequest(Request.Method.GET, url,
+                SEARCH_BY_TEXT, requestListener, null, getHeader(context));
+        AppApplication.getInstance().addToRequestQueue(request, SEARCH_BY_TEXT);
+    }
+
     public static HashMap<String, String> getHeader(Context context) {
         HashMap<String, String> headers = new HashMap<>();
         headers.put("Authorization", ZPreferences.getHeaderTokenAuth(context));

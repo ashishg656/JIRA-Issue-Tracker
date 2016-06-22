@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ashish.jiraissuetracker.R;
+import com.ashish.jiraissuetracker.activities.BaseActivity;
 import com.ashish.jiraissuetracker.objects.issueHistory.History;
 import com.ashish.jiraissuetracker.objects.issueHistory.IssueHistoryObject;
 import com.ashish.jiraissuetracker.objects.issueHistory.Item;
@@ -26,10 +27,16 @@ public class IssueChangelogListAdapter extends RecyclerView.Adapter<RecyclerView
 
     Context context;
     List<History> mData;
+    MyClickListener clickListener;
+
+    int commentColorBlue, commentColorRed;
 
     public IssueChangelogListAdapter(Context context, List<History> mData) {
         this.context = context;
         this.mData = mData;
+        clickListener = new MyClickListener();
+        commentColorBlue = context.getResources().getColor(R.color.colorAccent);
+        commentColorRed = context.getResources().getColor(R.color.red_color_primary);
     }
 
     private class ChangeHolder extends RecyclerView.ViewHolder {
@@ -37,7 +44,7 @@ public class IssueChangelogListAdapter extends RecyclerView.Adapter<RecyclerView
         CircleImageView image;
         TextView name, time, field, fieldData, from, fromData, to, toData;
         TextView field2, fieldData2, from2, fromData2, to2, toData2;
-        LinearLayout secondLayout, toContainer, toContainer2;
+        LinearLayout secondLayout, toContainer, toContainer2, openUserProfileLayout;
 
         public ChangeHolder(View v) {
             super(v);
@@ -59,6 +66,7 @@ public class IssueChangelogListAdapter extends RecyclerView.Adapter<RecyclerView
             secondLayout = (LinearLayout) v.findViewById(R.id.second_issue_history_layout);
             toContainer = (LinearLayout) v.findViewById(R.id.tocontainer);
             toContainer2 = (LinearLayout) v.findViewById(R.id.tocontainer2);
+            openUserProfileLayout = (LinearLayout) v.findViewById(R.id.openuserprofilechangelogitem);
         }
     }
 
@@ -80,6 +88,9 @@ public class IssueChangelogListAdapter extends RecyclerView.Adapter<RecyclerView
         holder.time.setText(TimeUtils.getPostTimeGMTActivityStream(history.getCreated()));
 
         ImageRequestManager.requestImage(holder.image, history.getAuthor().getAvatarUrls().get48x48());
+
+        holder.openUserProfileLayout.setTag(history.getAuthor().getName());
+        holder.openUserProfileLayout.setOnClickListener(clickListener);
 
         if (history.getItems().size() == 1) {
             holder.secondLayout.setVisibility(View.GONE);
@@ -106,6 +117,7 @@ public class IssueChangelogListAdapter extends RecyclerView.Adapter<RecyclerView
 
             if (item.getField().equalsIgnoreCase("Comment")) {
                 holder.toContainer.setVisibility(View.GONE);
+                holder.fromData.setTextColor(commentColorBlue);
 
                 if (item.getFrom() != null) {
                     holder.fromData.setText(item.getFrom());
@@ -117,6 +129,7 @@ public class IssueChangelogListAdapter extends RecyclerView.Adapter<RecyclerView
             } else {
                 holder.toContainer.setVisibility(View.VISIBLE);
                 holder.from.setVisibility(View.VISIBLE);
+                holder.fromData.setTextColor(commentColorRed);
 
                 if (item.getToString() != null) {
                     holder.toData.setText(item.getToString());
@@ -137,6 +150,7 @@ public class IssueChangelogListAdapter extends RecyclerView.Adapter<RecyclerView
 
             if (item.getField().equalsIgnoreCase("Comment")) {
                 holder.toContainer2.setVisibility(View.GONE);
+                holder.fromData.setTextColor(commentColorBlue);
 
                 if (item.getFrom() != null) {
                     holder.fromData2.setText(item.getFrom());
@@ -148,6 +162,7 @@ public class IssueChangelogListAdapter extends RecyclerView.Adapter<RecyclerView
             } else {
                 holder.toContainer2.setVisibility(View.VISIBLE);
                 holder.from2.setVisibility(View.VISIBLE);
+                holder.fromData.setTextColor(commentColorRed);
 
                 if (item.getToString() != null) {
                     holder.toData2.setText(item.getToString());
@@ -162,6 +177,19 @@ public class IssueChangelogListAdapter extends RecyclerView.Adapter<RecyclerView
                 } else if (item.getFrom() != null) {
                     holder.fromData2.setText(item.getFrom());
                 }
+            }
+        }
+    }
+
+    private class MyClickListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()) {
+                case R.id.openuserprofilechangelogitem:
+                    String userName = (String) view.getTag();
+                    ((BaseActivity) context).openUserProfileActivity(userName);
+                    break;
             }
         }
     }

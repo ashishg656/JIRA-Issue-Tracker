@@ -100,6 +100,10 @@ public class AppUrls {
         return "rest/api/2/issue/" + issueId + "/comment/" + commentId;
     }
 
+    public static String getSearchByTextUrl(String searchString) {
+        return AppUrls.SEARCH_ISSUES_URL + "=text~'" + searchString + "'+order+by+updatedDate&maxResults=100";
+    }
+
     public static String getUserProfileUrl() {
         return LOGIN_URL;
     }
