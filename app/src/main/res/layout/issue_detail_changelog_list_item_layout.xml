@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="6dp"
+    android:layout_marginLeft="6dp"
+    android:layout_marginRight="6dp"
+    android:background="@drawable/ic_cart_bg_shadow"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/commentlayouttoopenuserprofile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:foreground="?attr/selectableItemBackground">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/z_margin_medium"
+                android:paddingTop="@dimen/z_margin_6dp">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/circularimage"
+                    android:layout_width="@dimen/z_seen_by_uploader_image_height"
+                    android:layout_height="@dimen/z_seen_by_uploader_image_height"
+                    android:src="@drawable/test_user" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/z_margin_small"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:paddingRight="@dimen/z_margin_medium">
+
+
+                    <TextView
+                        android:id="@+id/uploadrname"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Ashish Goel"
+                        android:textColor="@color/z_text_color_dark"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/time"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/z_margin_mini"
+                        android:text="3 days ago"
+                        android:textColor="@color/z_text_color_light"
+                        android:textSize="@dimen/z_font_supermini" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/z_margin_medium">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/field"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Field : "
+                        android:textColor="@color/z_text_color_light"
+                        android:textSize="@dimen/z_font_supermini" />
+
+                    <TextView
+                        android:id="@+id/fielddata"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:text="Comment"
+                        android:textColor="@color/z_text_color_medium_dark"
+                        android:textSize="@dimen/z_font_supermini" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/z_margin_mini"
+                    android:layout_weight="4"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/from"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="From : "
+                        android:textColor="@color/z_text_color_light"
+                        android:textSize="@dimen/z_font_supermini" />
+
+                    <TextView
+                        android:id="@+id/fromdata"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:text="Comment"
+                        android:textColor="@color/red_color_primary"
+                        android:textSize="@dimen/z_font_supermini" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/tocontainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/z_margin_mini"
+                    android:layout_weight="4"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/to"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="To : "
+                        android:textColor="@color/z_text_color_light"
+                        android:textSize="@dimen/z_font_supermini" />
+
+                    <TextView
+                        android:id="@+id/todata"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:text="Comment"
+                        android:textColor="@color/green_color_primary"
+                        android:textSize="@dimen/z_font_supermini" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/second_issue_history_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/z_margin_medium"
+                android:paddingLeft="@dimen/z_margin_medium"
+                android:paddingRight="@dimen/z_margin_medium">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="@dimen/z_margin_medium"
+                    android:background="@color/z_grey_shade_3" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/field2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Field : "
+                        android:textColor="@color/z_text_color_light"
+                        android:textSize="@dimen/z_font_supermini" />
+
+                    <TextView
+                        android:id="@+id/fielddata2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:text="Comment"
+                        android:textColor="@color/z_text_color_medium_dark"
+                        android:textSize="@dimen/z_font_supermini" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/z_margin_mini"
+                    android:layout_weight="4"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/from2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="From : "
+                        android:textColor="@color/z_text_color_light"
+                        android:textSize="@dimen/z_font_supermini" />
+
+                    <TextView
+                        android:id="@+id/fromdata2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:text="Comment"
+                        android:textColor="@color/red_color_primary"
+                        android:textSize="@dimen/z_font_supermini" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/tocontainer2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/z_margin_mini"
+                    android:layout_weight="4"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/to2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="To : "
+                        android:textColor="@color/z_text_color_light"
+                        android:textSize="@dimen/z_font_supermini" />
+
+                    <TextView
+                        android:id="@+id/todata2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:text="Comment"
+                        android:textColor="@color/green_color_primary"
+                        android:textSize="@dimen/z_font_supermini" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
+
+</LinearLayout>

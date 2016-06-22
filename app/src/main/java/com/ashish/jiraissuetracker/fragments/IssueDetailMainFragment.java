@@ -515,4 +515,10 @@ public class IssueDetailMainFragment extends BaseFragment implements AppRequestL
             e.printStackTrace();
         }
     }
+
+    public void scrollRecyclerViewToTop() {
+        if (scrollView != null) {
+            scrollView.fullScroll(View.FOCUS_UP);
+        }
+    }
 }

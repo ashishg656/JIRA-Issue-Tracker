@@ -1,37 +1,26 @@
 package com.ashish.jiraissuetracker.adapters;
 
 import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
-import android.text.Spanned;
-import android.text.SpannedString;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.URLSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ashish.jiraissuetracker.R;
 import com.ashish.jiraissuetracker.activities.BaseActivity;
 import com.ashish.jiraissuetracker.activities.IssueDetailActivity;
-import com.ashish.jiraissuetracker.activities.UserProfileActivity;
 import com.ashish.jiraissuetracker.extras.AppConstants;
 import com.ashish.jiraissuetracker.objects.activityStream.Entry;
-import com.ashish.jiraissuetracker.objects.issues.Issue;
 import com.ashish.jiraissuetracker.preferences.ZPreferences;
 import com.ashish.jiraissuetracker.utils.DebugUtils;
-import com.ashish.jiraissuetracker.utils.TimeUtils;
 import com.ashish.jiraissuetracker.utils.TimeUtilsGMT;
-import com.ashish.jiraissuetracker.utils.UIUtils;
 
-import java.sql.Time;
 import java.util.List;
 
 /**
@@ -116,7 +105,7 @@ public class ActivityStreamFragmentListAdapter extends RecyclerView.Adapter<Recy
                     DebugUtils.log("issueKey : " + issueKey);
                     if (ActivityStreamFragmentListAdapter.this.issueKey != null && ActivityStreamFragmentListAdapter.this.issueKey.equals(issueKey)) {
                         if(context instanceof IssueDetailActivity){
-                            ((IssueDetailActivity)context).scrollActivityStreamTo0Position();
+                            ((IssueDetailActivity)context).switchToFragment1IssueDetail();
                         }
                     } else {
                         ((BaseActivity) context).openIssueDetailActivity(issueKey, issueKey);

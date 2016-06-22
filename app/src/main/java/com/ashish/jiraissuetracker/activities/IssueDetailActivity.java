@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import com.ashish.jiraissuetracker.R;
 import com.ashish.jiraissuetracker.fragments.ActivityStreamFragment;
 import com.ashish.jiraissuetracker.fragments.IssueDetailActivityStreamFragment;
+import com.ashish.jiraissuetracker.fragments.IssueDetailChangelogFragment;
 import com.ashish.jiraissuetracker.fragments.IssueDetailCommentsFragment;
 import com.ashish.jiraissuetracker.fragments.IssueDetailMainFragment;
 import com.ashish.jiraissuetracker.fragments.IssuesFragment;
@@ -71,9 +72,10 @@ public class IssueDetailActivity extends BaseActivityNavigationDrawer {
         tabLayout.setupWithViewPager(viewPager);
     }
 
-    public void scrollActivityStreamTo0Position() {
+    public void switchToFragment1IssueDetail() {
         try {
-            ((IssueDetailActivityStreamFragment) fragmentHashMap.get(2)).scrollRecyclerViewToTop();
+            viewPager.setCurrentItem(0, true);
+            ((IssueDetailMainFragment) fragmentHashMap.get(0)).scrollRecyclerViewToTop();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -100,7 +102,7 @@ public class IssueDetailActivity extends BaseActivityNavigationDrawer {
             else if (pos == 2)
                 fragment = IssueDetailActivityStreamFragment.newInstance(bundle);
             else
-                fragment = IssuesFragment.newInstance(bundle);
+                fragment = IssueDetailChangelogFragment.newInstance(bundle);
 
             fragmentHashMap.put(pos, fragment);
             return fragment;
@@ -108,7 +110,7 @@ public class IssueDetailActivity extends BaseActivityNavigationDrawer {
 
         @Override
         public int getCount() {
-            return 3;
+            return 4;
         }
 
         @Override
@@ -120,7 +122,7 @@ public class IssueDetailActivity extends BaseActivityNavigationDrawer {
             } else if (position == 2) {
                 return "Activity Stream";
             } else {
-                return "Dashboards";
+                return "Changelog";
             }
         }
     }

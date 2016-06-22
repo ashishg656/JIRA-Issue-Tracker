@@ -88,6 +88,10 @@ public class AppUrls {
         return "rest/api/2/issue/" + issueId + "/comment?startAt=" + startAt + "&maxResults=" + pageSize + "&orderBy=-created";
     }
 
+    public static String getIssueChangelogUrl(String issueId) {
+        return "rest/api/2/issue/" + issueId + "?expand=changelog&fields=summary";
+    }
+
     public static String getAddCommentOnIssuePostUrl(String issueId) {
         return "rest/api/2/issue/" + issueId + "/comment";
     }
