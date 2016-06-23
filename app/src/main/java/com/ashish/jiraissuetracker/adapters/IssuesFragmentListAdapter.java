@@ -136,6 +136,12 @@ public class IssuesFragmentListAdapter extends RecyclerView.Adapter<RecyclerView
         notifyDataSetChanged();
     }
 
+    public void changeDataSet(List<Issue> issues, boolean isMoreAllowed) {
+        this.mData = issues;
+        this.isMoreAllowed = isMoreAllowed;
+        notifyDataSetChanged();
+    }
+
     private class IssueHolder extends RecyclerView.ViewHolder {
 
         TextView key, summary, type, priority, status, updateTime;

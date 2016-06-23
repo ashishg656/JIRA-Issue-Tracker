@@ -139,4 +139,9 @@ public class BaseActivity extends AppCompatActivity {
         intent.putExtra("issuekey", issueKey);
         startActivity(intent);
     }
+
+    public void openSearchByTextActivity() {
+        Intent intent = new Intent(this, SearchByTextActivity.class);
+        startActivity(intent);
+    }
 }

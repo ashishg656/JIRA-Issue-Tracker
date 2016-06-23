@@ -14,6 +14,8 @@ import com.ashish.jiraissuetracker.serverApi.CustomStringRequest;
 
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 
 /**
@@ -153,6 +155,7 @@ public class AppRequests implements RequestTags {
     }
 
     public static void makeSearchByTextRequest(String url, AppRequestListener requestListener, Context context) {
+        url = url.replace(" ", "%20");
         CustomStringRequest request = new CustomStringRequest(Request.Method.GET, url,
                 SEARCH_BY_TEXT, requestListener, null, getHeader(context));
         AppApplication.getInstance().addToRequestQueue(request, SEARCH_BY_TEXT);
