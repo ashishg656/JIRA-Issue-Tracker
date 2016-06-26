@@ -104,6 +104,14 @@ public class AppUrls {
         return AppUrls.SEARCH_ISSUES_URL + "=text~'" + searchString + "'+order+by+updatedDate&maxResults=100";
     }
 
+    public static String getAllUsersUrl() {
+        return "rest/api/2/user/search?username=com&maxResults=1000";
+    }
+
+    public static String getUsersAutoCompleteUrl(String userName) {
+        return "rest/api/2/user/search?username=" + userName + "&maxResults=1000";
+    }
+
     public static String getUserProfileUrl() {
         return LOGIN_URL;
     }

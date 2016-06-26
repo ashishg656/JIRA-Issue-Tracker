@@ -161,6 +161,12 @@ public class AppRequests implements RequestTags {
         AppApplication.getInstance().addToRequestQueue(request, SEARCH_BY_TEXT);
     }
 
+    public static void makeSearchIssuesRequestWithPostData(String url, AppRequestListenerJsonObject requestListener, Context context, JSONObject jsonObject) {
+        CustomJsonObjectRequest request = new CustomJsonObjectRequest(Request.Method.POST, url, jsonObject,
+                SEARCH_BY_POST_DATA_CUSTOM_RESULTS, requestListener, null, getHeaderWithContentType(context));
+        AppApplication.getInstance().addToRequestQueue(request, SEARCH_BY_POST_DATA_CUSTOM_RESULTS);
+    }
+
     public static HashMap<String, String> getHeader(Context context) {
         HashMap<String, String> headers = new HashMap<>();
         headers.put("Authorization", ZPreferences.getHeaderTokenAuth(context));

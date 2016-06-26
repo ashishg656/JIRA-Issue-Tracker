@@ -15,4 +15,8 @@
     <string name="issue_detail_unwatch_issue">UNWATCH</string>
     <string name="failed_to_vote_issue">Failed to vote/unvote issue. Please check internet settings and make sure that you have required permissions to vote on this issue.</string>
     <string name="failed_to_watch_issue">Failed to watch/unwatch issue. Please check internet settings and make sure that you have required permissions to vote on this issue.</string>
+
+    <string-array name="sort_order_options">
+        <item></item>
+    </string-array>
 </resources>

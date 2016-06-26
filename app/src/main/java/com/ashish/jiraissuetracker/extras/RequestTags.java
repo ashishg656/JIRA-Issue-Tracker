@@ -26,5 +26,6 @@ public interface RequestTags {
     public String EDIT_COMMENT_ON_ISSUE = "Edit Comment On Issue";
     public String GET_ISSUE_CHANGELOG = "Get Issue Changelog";
     public String SEARCH_BY_TEXT = "Search By Text";
+    public String SEARCH_BY_POST_DATA_CUSTOM_RESULTS = "Search By Post Data With Search API and JQL in json payload";
 
 }

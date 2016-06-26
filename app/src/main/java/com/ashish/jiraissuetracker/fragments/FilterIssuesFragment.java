@@ -1,0 +1,124 @@
+package com.ashish.jiraissuetracker.fragments;
+
+import android.app.Dialog;
+import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.ashish.jiraissuetracker.R;
+import com.ashish.jiraissuetracker.activities.FilterIssuesActivity;
+
+/**
+ * Created by Ashish on 24/06/16.
+ */
+public class FilterIssuesFragment extends BaseFragment implements View.OnClickListener {
+
+    EditText filterText, filterIssueKey;
+
+    TextView filterOrder, filterAssignee, filterReporter, filterLabels,
+            filterProject, filterPriority, filterResolution, filterStatus, filterType, filterComponents;
+    LinearLayout filterOrderLayout, filterAssigneeLayout, filterReporterLayout, filterLabelsLayout,
+            filterProjectLayout, filterPriorityLayout, filterResolutionLayout, filterStatusLayout, filterTypeLayout, filterComponentsLayout;
+
+    AlertDialog.Builder builder;
+    AlertDialog dialog;
+
+    public static FilterIssuesFragment newInstance(Bundle b) {
+        FilterIssuesFragment frg = new FilterIssuesFragment();
+        frg.setArguments(b);
+        return frg;
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        rootView = inflater.inflate(R.layout.filter_issues_fragment_layout, container, false);
+
+        filterText = (EditText) rootView.findViewById(R.id.filter_text);
+        filterIssueKey = (EditText) rootView.findViewById(R.id.filter_issuekey);
+        filterOrder = (TextView) rootView.findViewById(R.id.filter_order_text);
+        filterAssignee = (TextView) rootView.findViewById(R.id.filter_assignee);
+        filterReporter = (TextView) rootView.findViewById(R.id.filter_reporter);
+        filterLabels = (TextView) rootView.findViewById(R.id.filter_labels);
+        filterProject = (TextView) rootView.findViewById(R.id.filter_project);
+        filterPriority = (TextView) rootView.findViewById(R.id.filter_priority);
+        filterResolution = (TextView) rootView.findViewById(R.id.filter_resolution);
+        filterStatus = (TextView) rootView.findViewById(R.id.filter_status);
+        filterType = (TextView) rootView.findViewById(R.id.filter_type);
+        filterComponents = (TextView) rootView.findViewById(R.id.filter_components);
+
+        filterOrderLayout = (LinearLayout) rootView.findViewById(R.id.filter_order_text_container);
+        filterAssigneeLayout = (LinearLayout) rootView.findViewById(R.id.filter_assignee_container);
+        filterReporterLayout = (LinearLayout) rootView.findViewById(R.id.filter_reporter_c);
+        filterLabelsLayout = (LinearLayout) rootView.findViewById(R.id.filter_labels_c);
+        filterProjectLayout = (LinearLayout) rootView.findViewById(R.id.filter_project_c);
+        filterPriorityLayout = (LinearLayout) rootView.findViewById(R.id.filter_priority_c);
+        filterResolutionLayout = (LinearLayout) rootView.findViewById(R.id.filter_resolution_c);
+        filterStatusLayout = (LinearLayout) rootView.findViewById(R.id.filter_status_c);
+        filterTypeLayout = (LinearLayout) rootView.findViewById(R.id.filter_type_c);
+        filterComponentsLayout = (LinearLayout) rootView.findViewById(R.id.filter_components_c);
+
+        return rootView;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        filterOrderLayout.setOnClickListener(this);
+        filterAssigneeLayout.setOnClickListener(this);
+        filterReporterLayout.setOnClickListener(this);
+        filterLabelsLayout.setOnClickListener(this);
+        filterProjectLayout.setOnClickListener(this);
+        filterPriorityLayout.setOnClickListener(this);
+        filterResolutionLayout.setOnClickListener(this);
+        filterStatusLayout.setOnClickListener(this);
+        filterTypeLayout.setOnClickListener(this);
+        filterComponentsLayout.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.filter_order_text_container:
+                openSortOrderDialog();
+                break;
+            case R.id.filter_assignee_container:
+
+                break;
+            case R.id.filter_reporter_c:
+
+                break;
+            case R.id.filter_labels_c:
+
+                break;
+            case R.id.filter_project_c:
+
+                break;
+            case R.id.filter_priority_c:
+
+                break;
+            case R.id.filter_resolution_c:
+
+                break;
+            case R.id.filter_status_c:
+
+                break;
+            case R.id.filter_type_c:
+
+                break;
+            case R.id.filter_components_c:
+
+                break;
+        }
+    }
+
+    private void openSortOrderDialog() {
+        builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Select Sort Order");
+    }
+}
