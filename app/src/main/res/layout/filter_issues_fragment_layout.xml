@@ -8,11 +8,14 @@
         android:layout_height="match_parent"
         android:background="@color/z_grey_shade_1"
         android:orientation="vertical"
-        android:padding="@dimen/z_margin_large">
+        android:padding="@dimen/z_margin_6dp">
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/z_margin_small"
+            android:layout_marginRight="@dimen/z_margin_small"
+            android:layout_marginTop="@dimen/z_margin_large">
 
             <EditText
                 android:id="@+id/filter_text"
@@ -27,6 +30,8 @@
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/z_margin_small"
+            android:layout_marginRight="@dimen/z_margin_small"
             android:layout_marginTop="@dimen/z_margin_small">
 
             <EditText

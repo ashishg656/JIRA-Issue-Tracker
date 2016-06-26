@@ -52,6 +52,15 @@
                         app:tabTextColor="@color/z_white_transparency" />
                 </android.support.design.widget.AppBarLayout>
             </FrameLayout>
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/FloatingActionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="@dimen/fab_margin"
+                android:src="@drawable/ic_forward_arror"
+                app:fabSize="normal" />
         </FrameLayout>
 
 

@@ -64,6 +64,8 @@ public class HomeActivity extends BaseActivityNavigationDrawer implements View.O
         viewPager = (ViewPager) findViewById(R.id.pager_launch);
         appBarLayout = (AppBarLayout) findViewById(R.id.appbarlayout);
 
+        findViewById(R.id.FloatingActionButton).setOnClickListener(this);
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("JIRA Issue Tracker");
@@ -83,7 +85,9 @@ public class HomeActivity extends BaseActivityNavigationDrawer implements View.O
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-
+            case R.id.FloatingActionButton:
+                ((BaseActivity)this).openFilterIssuesActivity(true);
+                break;
         }
     }
 

@@ -144,4 +144,10 @@ public class BaseActivity extends AppCompatActivity {
         Intent intent = new Intent(this, SearchByTextActivity.class);
         startActivity(intent);
     }
+
+    public void openFilterIssuesActivity(boolean openFilterLayout) {
+        Intent intent = new Intent(this, FilterIssuesActivity.class);
+        intent.putExtra("openfilter", openFilterLayout);
+        startActivity(intent);
+    }
 }
