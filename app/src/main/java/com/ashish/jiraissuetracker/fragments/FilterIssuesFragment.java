@@ -1,8 +1,11 @@
 package com.ashish.jiraissuetracker.fragments;
 
 import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +15,9 @@ import android.widget.TextView;
 
 import com.ashish.jiraissuetracker.R;
 import com.ashish.jiraissuetracker.activities.FilterIssuesActivity;
+import com.ashish.jiraissuetracker.extras.AppConstants;
+import com.ashish.jiraissuetracker.interfaces.FilterIssueinterface;
+import com.ashish.jiraissuetracker.objects.issueComments.Author;
 
 /**
  * Created by Ashish on 24/06/16.
@@ -27,6 +33,17 @@ public class FilterIssuesFragment extends BaseFragment implements View.OnClickLi
 
     AlertDialog.Builder builder;
     AlertDialog dialog;
+    FilterIssueinterface issueinterface;
+
+    int selectedItem;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof FilterIssuesActivity) {
+            issueinterface = (FilterIssueinterface) context;
+        }
+    }
 
     public static FilterIssuesFragment newInstance(Bundle b) {
         FilterIssuesFragment frg = new FilterIssuesFragment();
@@ -79,6 +96,8 @@ public class FilterIssuesFragment extends BaseFragment implements View.OnClickLi
         filterStatusLayout.setOnClickListener(this);
         filterTypeLayout.setOnClickListener(this);
         filterComponentsLayout.setOnClickListener(this);
+
+        setData();
     }
 
     @Override
@@ -88,10 +107,10 @@ public class FilterIssuesFragment extends BaseFragment implements View.OnClickLi
                 openSortOrderDialog();
                 break;
             case R.id.filter_assignee_container:
-
+                openSelectAssigneeFragment();
                 break;
             case R.id.filter_reporter_c:
-
+                openSelectReporterFragment();
                 break;
             case R.id.filter_labels_c:
 
@@ -117,8 +136,65 @@ public class FilterIssuesFragment extends BaseFragment implements View.OnClickLi
         }
     }
 
+    private void openSelectAssigneeFragment() {
+        Bundle b = new Bundle();
+        b.putInt("type", AppConstants.FILTER_USER_SELECT_ASSIGNEE);
+
+        getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,
+                SelectUserFragment.newInstance(b)).addToBackStack("user").commitAllowingStateLoss();
+    }
+
+    private void openSelectReporterFragment() {
+        Bundle b = new Bundle();
+        b.putInt("type", AppConstants.FILTER_USER_SELECT_REPORTER);
+
+        getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,
+                SelectUserFragment.newInstance(b)).addToBackStack("user").commitAllowingStateLoss();
+    }
+
     private void openSortOrderDialog() {
-        builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Select Sort Order");
+        String[] listItems = getActivity().getResources().getStringArray(R.array.sort_order_options_values);
+        selectedItem = issueinterface.getSelectedSortOrderPosition();
+
+        builder = new AlertDialog.Builder(getActivity()).setTitle("Select Sort Order")
+                .setMessage(null)
+                .setSingleChoiceItems(listItems, issueinterface.getSelectedSortOrderPosition(), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        selectedItem = i;
+                    }
+                }).setPositiveButton("DONE", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        issueinterface.setSelectedSortOrderPosition(selectedItem);
+
+                        setData();
+                    }
+                }).setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+
+        dialog = builder.create();
+        dialog.show();
+    }
+
+    public void setData() {
+        try {
+            String[] items = getActivity().getResources().getStringArray(R.array.sort_order_options);
+
+            filterOrder.setText(items[issueinterface.getSelectedSortOrderPosition()]);
+
+            if (issueinterface.getSelectedAssignee() == null) {
+                filterAssignee.setText("All");
+            } else {
+                String assignee = TextUtils.join(", ", issueinterface.getSelectedAssignee());
+                filterAssignee.setText(assignee);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

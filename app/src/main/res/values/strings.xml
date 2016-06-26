@@ -17,6 +17,30 @@
     <string name="failed_to_watch_issue">Failed to watch/unwatch issue. Please check internet settings and make sure that you have required permissions to vote on this issue.</string>
 
     <string-array name="sort_order_options">
-        <item></item>
+        <item>updated</item>
+        <item>created</item>
+        <item>due</item>
+        <item>resolved</item>
+        <item>lastViewed</item>
+        <item>priority</item>
+        <item>status</item>
+        <item>timeSpent</item>
+        <item>type</item>
+        <item>votes</item>
+        <item>watchers</item>
+    </string-array>
+
+    <string-array name="sort_order_options_values">
+        <item>Date Updated</item>
+        <item>Date Created</item>
+        <item>Due Date</item>
+        <item>Date Resolved</item>
+        <item>Last Viewed Time</item>
+        <item>Priority</item>
+        <item>Status</item>
+        <item>Time Spent</item>
+        <item>Issue Type</item>
+        <item>Number of votes</item>
+        <item>Number of watchers</item>
     </string-array>
 </resources>

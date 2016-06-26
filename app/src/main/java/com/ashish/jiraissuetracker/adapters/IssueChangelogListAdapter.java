@@ -63,6 +63,7 @@ public class IssueChangelogListAdapter extends RecyclerView.Adapter<RecyclerView
             fromData2 = (TextView) v.findViewById(R.id.fromdata2);
             to2 = (TextView) v.findViewById(R.id.to2);
             toData2 = (TextView) v.findViewById(R.id.todata2);
+            toData2 = (TextView) v.findViewById(R.id.todata2);
             secondLayout = (LinearLayout) v.findViewById(R.id.second_issue_history_layout);
             toContainer = (LinearLayout) v.findViewById(R.id.tocontainer);
             toContainer2 = (LinearLayout) v.findViewById(R.id.tocontainer2);
