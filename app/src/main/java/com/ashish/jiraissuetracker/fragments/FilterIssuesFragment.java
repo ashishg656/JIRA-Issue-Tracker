@@ -27,9 +27,9 @@ public class FilterIssuesFragment extends BaseFragment implements View.OnClickLi
     EditText filterText, filterIssueKey, filterLabels;
 
     TextView filterOrder, filterAssignee, filterReporter,
-            filterProject, filterPriority, filterResolution, filterStatus, filterType, filterComponents;
+            filterProject, filterPriority, filterResolution, filterStatus, filterType;
     LinearLayout filterOrderLayout, filterAssigneeLayout, filterReporterLayout,
-            filterProjectLayout, filterPriorityLayout, filterResolutionLayout, filterStatusLayout, filterTypeLayout, filterComponentsLayout;
+            filterProjectLayout, filterPriorityLayout, filterResolutionLayout, filterStatusLayout, filterTypeLayout;
 
     AlertDialog.Builder builder;
     AlertDialog dialog;
@@ -66,7 +66,6 @@ public class FilterIssuesFragment extends BaseFragment implements View.OnClickLi
         filterResolution = (TextView) rootView.findViewById(R.id.filter_resolution);
         filterStatus = (TextView) rootView.findViewById(R.id.filter_status);
         filterType = (TextView) rootView.findViewById(R.id.filter_type);
-        filterComponents = (TextView) rootView.findViewById(R.id.filter_components);
 
         filterOrderLayout = (LinearLayout) rootView.findViewById(R.id.filter_order_text_container);
         filterAssigneeLayout = (LinearLayout) rootView.findViewById(R.id.filter_assignee_container);
@@ -76,7 +75,6 @@ public class FilterIssuesFragment extends BaseFragment implements View.OnClickLi
         filterResolutionLayout = (LinearLayout) rootView.findViewById(R.id.filter_resolution_c);
         filterStatusLayout = (LinearLayout) rootView.findViewById(R.id.filter_status_c);
         filterTypeLayout = (LinearLayout) rootView.findViewById(R.id.filter_type_c);
-        filterComponentsLayout = (LinearLayout) rootView.findViewById(R.id.filter_components_c);
 
         return rootView;
     }
@@ -93,7 +91,6 @@ public class FilterIssuesFragment extends BaseFragment implements View.OnClickLi
         filterResolutionLayout.setOnClickListener(this);
         filterStatusLayout.setOnClickListener(this);
         filterTypeLayout.setOnClickListener(this);
-        filterComponentsLayout.setOnClickListener(this);
 
         setData();
     }
@@ -117,16 +114,13 @@ public class FilterIssuesFragment extends BaseFragment implements View.OnClickLi
                 openSelectPriorityFragment();
                 break;
             case R.id.filter_resolution_c:
-
+                openSelectResolutionsFragment();
                 break;
             case R.id.filter_status_c:
-
+                openSelectStatusesFragment();
                 break;
             case R.id.filter_type_c:
-
-                break;
-            case R.id.filter_components_c:
-
+                openSelectTypesFragment();
                 break;
         }
     }
@@ -151,6 +145,25 @@ public class FilterIssuesFragment extends BaseFragment implements View.OnClickLi
         Bundle b = new Bundle();
         getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,
                 SelectProjectFragment.newInstance(b)).addToBackStack("project").commitAllowingStateLoss();
+    }
+
+    private void openSelectResolutionsFragment() {
+        Bundle b = new Bundle();
+        getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,
+                SelectResolutionsFragment.newInstance(b)).addToBackStack("resolution").commitAllowingStateLoss();
+    }
+
+    private void openSelectStatusesFragment() {
+        Bundle b = new Bundle();
+
+        getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,
+                SelectStatusesFragment.newInstance(b)).addToBackStack("status").commitAllowingStateLoss();
+    }
+
+    private void openSelectTypesFragment() {
+        Bundle b = new Bundle();
+        getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,
+                SelectTypesFragment.newInstance(b)).addToBackStack("type").commitAllowingStateLoss();
     }
 
     private void openSelectPriorityFragment() {
@@ -225,6 +238,27 @@ public class FilterIssuesFragment extends BaseFragment implements View.OnClickLi
             } else {
                 String priorities = TextUtils.join(", ", issueinterface.getSelectedPriorities());
                 filterPriority.setText(priorities);
+            }
+
+            if (issueinterface.getSelectedResolution() == null || issueinterface.getSelectedResolution().size() == 0) {
+                filterResolution.setText("All");
+            } else {
+                String priorities = TextUtils.join(", ", issueinterface.getSelectedResolution());
+                filterResolution.setText(priorities);
+            }
+
+            if (issueinterface.getSelectedStatus() == null || issueinterface.getSelectedStatus().size() == 0) {
+                filterStatus.setText("All");
+            } else {
+                String priorities = TextUtils.join(", ", issueinterface.getSelectedStatus());
+                filterStatus.setText(priorities);
+            }
+
+            if (issueinterface.getSelectedType() == null || issueinterface.getSelectedType().size() == 0) {
+                filterType.setText("All");
+            } else {
+                String priorities = TextUtils.join(", ", issueinterface.getSelectedType());
+                filterType.setText(priorities);
             }
         } catch (Exception e) {
             e.printStackTrace();

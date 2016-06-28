@@ -27,5 +27,17 @@ public interface FilterIssueinterface {
 
     public void setSelectedPriorities(List<String> selectedPriorities);
 
+    public List<String> getSelectedResolution();
+
+    public void setSelectedResolution(List<String> selectedResolution);
+
+    public List<String> getSelectedStatus();
+
+    public void setSelectedStatus(List<String> selectedStatus);
+
+    public List<String> getSelectedType();
+
+    public void setSelectedType(List<String> selectedType);
+
     void setFilterDataAgain();
 }

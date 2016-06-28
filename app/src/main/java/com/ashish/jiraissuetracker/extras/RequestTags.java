@@ -29,5 +29,8 @@ public interface RequestTags {
     public String SEARCH_BY_POST_DATA_CUSTOM_RESULTS = "Search By Post Data With Search API and JQL in json payload";
     public String GET_ALL_USERS = "Get All Users";
     public String GET_ALL_PRIORITIES = "Get All Priorities";
+    public String GET_ALL_RESOLUTIONS = "Get All Resolutions";
+    public String GET_ALL_STATUSES = "Get All Statuses";
+    public String GET_ALL_ISSUE_TYPES = "Get All Issue Types";
 
 }

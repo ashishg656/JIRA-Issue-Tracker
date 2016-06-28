@@ -14,8 +14,6 @@ import com.ashish.jiraissuetracker.serverApi.CustomStringRequest;
 
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.HashMap;
 
 /**
@@ -176,6 +174,24 @@ public class AppRequests implements RequestTags {
         CustomStringRequest request = new CustomStringRequest(Request.Method.GET, url,
                 GET_ALL_PRIORITIES, requestListener, null, getHeader(context));
         AppApplication.getInstance().addToRequestQueue(request, GET_ALL_PRIORITIES);
+    }
+
+    public static void makeGetAllResolutionsRequest(String url, AppRequestListener requestListener, Context context) {
+        CustomStringRequest request = new CustomStringRequest(Request.Method.GET, url,
+                GET_ALL_RESOLUTIONS, requestListener, null, getHeader(context));
+        AppApplication.getInstance().addToRequestQueue(request, GET_ALL_RESOLUTIONS);
+    }
+
+    public static void makeGetAllStatusesRequest(String url, AppRequestListener requestListener, Context context) {
+        CustomStringRequest request = new CustomStringRequest(Request.Method.GET, url,
+                GET_ALL_STATUSES, requestListener, null, getHeader(context));
+        AppApplication.getInstance().addToRequestQueue(request, GET_ALL_STATUSES);
+    }
+
+    public static void makeGetAllIssueTypesRequest(String url, AppRequestListener requestListener, Context context) {
+        CustomStringRequest request = new CustomStringRequest(Request.Method.GET, url,
+                GET_ALL_ISSUE_TYPES, requestListener, null, getHeader(context));
+        AppApplication.getInstance().addToRequestQueue(request, GET_ALL_ISSUE_TYPES);
     }
 
     public static HashMap<String, String> getHeader(Context context) {

@@ -116,6 +116,18 @@ public class AppUrls {
         return "rest/api/2/priority";
     }
 
+    public static String getAllResolutionsUrl() {
+        return "rest/api/2/resolution";
+    }
+
+    public static String getAllStatusesUrl() {
+        return "/rest/api/2/status";
+    }
+
+    public static String getAllIssueTypesUrl() {
+        return "rest/api/2/issuetype";
+    }
+
     public static String getUserProfileUrl() {
         return LOGIN_URL;
     }

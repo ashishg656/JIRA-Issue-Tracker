@@ -443,7 +443,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/z_margin_large"
             android:background="@drawable/ic_cart_bg_shadow"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <LinearLayout
                 android:id="@+id/filter_components_c"

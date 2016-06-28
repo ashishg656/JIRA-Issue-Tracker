@@ -5,7 +5,15 @@ package com.ashish.jiraissuetracker.objects.issueDetail;
  */
 public class Resolution {
 
-    String description, name;
+    String description, name, id;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getDescription() {
         return description;
