@@ -111,10 +111,10 @@ public class FilterIssuesFragment extends BaseFragment implements View.OnClickLi
                 openSelectReporterFragment();
                 break;
             case R.id.filter_project_c:
-
+                openSelectProjectFragment();
                 break;
             case R.id.filter_priority_c:
-
+                openSelectPriorityFragment();
                 break;
             case R.id.filter_resolution_c:
 
@@ -145,6 +145,18 @@ public class FilterIssuesFragment extends BaseFragment implements View.OnClickLi
 
         getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,
                 SelectUserFragment.newInstance(b)).addToBackStack("user").commitAllowingStateLoss();
+    }
+
+    private void openSelectProjectFragment() {
+        Bundle b = new Bundle();
+        getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,
+                SelectProjectFragment.newInstance(b)).addToBackStack("project").commitAllowingStateLoss();
+    }
+
+    private void openSelectPriorityFragment() {
+        Bundle b = new Bundle();
+        getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,
+                SelectPriorityFragment.newInstance(b)).addToBackStack("priority").commitAllowingStateLoss();
     }
 
     private void openSortOrderDialog() {
@@ -180,7 +192,12 @@ public class FilterIssuesFragment extends BaseFragment implements View.OnClickLi
         try {
             String[] items = getActivity().getResources().getStringArray(R.array.sort_order_options);
 
-            filterOrder.setText(items[issueinterface.getSelectedSortOrderPosition()]);
+            try {
+                filterOrder.setText(items[issueinterface.getSelectedSortOrderPosition()]);
+            } catch (Exception e) {
+                e.printStackTrace();
+                filterOrder.setText("Default");
+            }
 
             if (issueinterface.getSelectedAssignee() == null || issueinterface.getSelectedAssignee().size() == 0) {
                 filterAssignee.setText("All");
@@ -194,6 +211,20 @@ public class FilterIssuesFragment extends BaseFragment implements View.OnClickLi
             } else {
                 String assignee = TextUtils.join(", ", issueinterface.getSelectedReporter());
                 filterReporter.setText(assignee);
+            }
+
+            if (issueinterface.getSelectedprojects() == null || issueinterface.getSelectedprojects().size() == 0) {
+                filterProject.setText("All");
+            } else {
+                String projects = TextUtils.join(", ", issueinterface.getSelectedprojects());
+                filterProject.setText(projects);
+            }
+
+            if (issueinterface.getSelectedPriorities() == null || issueinterface.getSelectedPriorities().size() == 0) {
+                filterPriority.setText("All");
+            } else {
+                String priorities = TextUtils.join(", ", issueinterface.getSelectedPriorities());
+                filterPriority.setText(priorities);
             }
         } catch (Exception e) {
             e.printStackTrace();

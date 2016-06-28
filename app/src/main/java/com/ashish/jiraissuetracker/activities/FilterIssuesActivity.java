@@ -24,7 +24,7 @@ import java.util.List;
 public class FilterIssuesActivity extends BaseActivity implements FilterIssueinterface {
 
     public int selectedSortOrderPosition = 0;
-    List<String> selectedAssignee, selectedReporter;
+    List<String> selectedAssignee, selectedReporter, selectedprojects, selectedPriorities;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,20 +55,44 @@ public class FilterIssuesActivity extends BaseActivity implements FilterIssueint
         this.selectedSortOrderPosition = selectedSortOrderPosition;
     }
 
+    @Override
     public List<String> getSelectedAssignee() {
         return selectedAssignee;
     }
 
+    @Override
     public void setSelectedAssignee(List<String> selectedAssignee) {
         this.selectedAssignee = selectedAssignee;
     }
 
+    @Override
     public List<String> getSelectedReporter() {
         return selectedReporter;
     }
 
+    @Override
     public void setSelectedReporter(List<String> selectedReporter) {
         this.selectedReporter = selectedReporter;
+    }
+
+    @Override
+    public List<String> getSelectedprojects() {
+        return selectedprojects;
+    }
+
+    @Override
+    public void setSelectedprojects(List<String> selectedprojects) {
+        this.selectedprojects = selectedprojects;
+    }
+
+    @Override
+    public List<String> getSelectedPriorities() {
+        return selectedPriorities;
+    }
+
+    @Override
+    public void setSelectedPriorities(List<String> selectedPriorities) {
+        this.selectedPriorities = selectedPriorities;
     }
 
     @Override

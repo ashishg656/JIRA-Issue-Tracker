@@ -172,6 +172,12 @@ public class AppRequests implements RequestTags {
         AppApplication.getInstance().addToRequestQueue(request, SEARCH_BY_POST_DATA_CUSTOM_RESULTS);
     }
 
+    public static void makeGetAllPrioritiesRequest(String url, AppRequestListener requestListener, Context context) {
+        CustomStringRequest request = new CustomStringRequest(Request.Method.GET, url,
+                GET_ALL_PRIORITIES, requestListener, null, getHeader(context));
+        AppApplication.getInstance().addToRequestQueue(request, GET_ALL_PRIORITIES);
+    }
+
     public static HashMap<String, String> getHeader(Context context) {
         HashMap<String, String> headers = new HashMap<>();
         headers.put("Authorization", ZPreferences.getHeaderTokenAuth(context));

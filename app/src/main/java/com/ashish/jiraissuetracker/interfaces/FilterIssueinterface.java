@@ -19,5 +19,13 @@ public interface FilterIssueinterface {
 
     public void setSelectedReporter(List<String> selectedReporter);
 
+    public List<String> getSelectedprojects();
+
+    public void setSelectedprojects(List<String> selectedprojects);
+
+    public List<String> getSelectedPriorities();
+
+    public void setSelectedPriorities(List<String> selectedPriorities);
+
     void setFilterDataAgain();
 }
