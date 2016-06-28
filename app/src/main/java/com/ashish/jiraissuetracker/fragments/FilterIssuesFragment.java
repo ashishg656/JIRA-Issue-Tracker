@@ -24,11 +24,11 @@ import com.ashish.jiraissuetracker.objects.issueComments.Author;
  */
 public class FilterIssuesFragment extends BaseFragment implements View.OnClickListener {
 
-    EditText filterText, filterIssueKey;
+    EditText filterText, filterIssueKey, filterLabels;
 
-    TextView filterOrder, filterAssignee, filterReporter, filterLabels,
+    TextView filterOrder, filterAssignee, filterReporter,
             filterProject, filterPriority, filterResolution, filterStatus, filterType, filterComponents;
-    LinearLayout filterOrderLayout, filterAssigneeLayout, filterReporterLayout, filterLabelsLayout,
+    LinearLayout filterOrderLayout, filterAssigneeLayout, filterReporterLayout,
             filterProjectLayout, filterPriorityLayout, filterResolutionLayout, filterStatusLayout, filterTypeLayout, filterComponentsLayout;
 
     AlertDialog.Builder builder;
@@ -60,7 +60,7 @@ public class FilterIssuesFragment extends BaseFragment implements View.OnClickLi
         filterOrder = (TextView) rootView.findViewById(R.id.filter_order_text);
         filterAssignee = (TextView) rootView.findViewById(R.id.filter_assignee);
         filterReporter = (TextView) rootView.findViewById(R.id.filter_reporter);
-        filterLabels = (TextView) rootView.findViewById(R.id.filter_labels);
+        filterLabels = (EditText) rootView.findViewById(R.id.filter_labels);
         filterProject = (TextView) rootView.findViewById(R.id.filter_project);
         filterPriority = (TextView) rootView.findViewById(R.id.filter_priority);
         filterResolution = (TextView) rootView.findViewById(R.id.filter_resolution);
@@ -71,7 +71,6 @@ public class FilterIssuesFragment extends BaseFragment implements View.OnClickLi
         filterOrderLayout = (LinearLayout) rootView.findViewById(R.id.filter_order_text_container);
         filterAssigneeLayout = (LinearLayout) rootView.findViewById(R.id.filter_assignee_container);
         filterReporterLayout = (LinearLayout) rootView.findViewById(R.id.filter_reporter_c);
-        filterLabelsLayout = (LinearLayout) rootView.findViewById(R.id.filter_labels_c);
         filterProjectLayout = (LinearLayout) rootView.findViewById(R.id.filter_project_c);
         filterPriorityLayout = (LinearLayout) rootView.findViewById(R.id.filter_priority_c);
         filterResolutionLayout = (LinearLayout) rootView.findViewById(R.id.filter_resolution_c);
@@ -89,7 +88,6 @@ public class FilterIssuesFragment extends BaseFragment implements View.OnClickLi
         filterOrderLayout.setOnClickListener(this);
         filterAssigneeLayout.setOnClickListener(this);
         filterReporterLayout.setOnClickListener(this);
-        filterLabelsLayout.setOnClickListener(this);
         filterProjectLayout.setOnClickListener(this);
         filterPriorityLayout.setOnClickListener(this);
         filterResolutionLayout.setOnClickListener(this);
@@ -111,9 +109,6 @@ public class FilterIssuesFragment extends BaseFragment implements View.OnClickLi
                 break;
             case R.id.filter_reporter_c:
                 openSelectReporterFragment();
-                break;
-            case R.id.filter_labels_c:
-
                 break;
             case R.id.filter_project_c:
 
@@ -187,11 +182,18 @@ public class FilterIssuesFragment extends BaseFragment implements View.OnClickLi
 
             filterOrder.setText(items[issueinterface.getSelectedSortOrderPosition()]);
 
-            if (issueinterface.getSelectedAssignee() == null) {
+            if (issueinterface.getSelectedAssignee() == null || issueinterface.getSelectedAssignee().size() == 0) {
                 filterAssignee.setText("All");
             } else {
                 String assignee = TextUtils.join(", ", issueinterface.getSelectedAssignee());
                 filterAssignee.setText(assignee);
+            }
+
+            if (issueinterface.getSelectedReporter() == null || issueinterface.getSelectedReporter().size() == 0) {
+                filterReporter.setText("All");
+            } else {
+                String assignee = TextUtils.join(", ", issueinterface.getSelectedReporter());
+                filterReporter.setText(assignee);
             }
         } catch (Exception e) {
             e.printStackTrace();

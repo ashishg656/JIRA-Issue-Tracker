@@ -140,8 +140,7 @@ public class SelectUserFragmentListAdapter extends RecyclerView.Adapter<Recycler
     }
 
     public List<String> getSelectedItemsString() {
-        List<String> items =
-                new ArrayList<String>(selectedItems.size());
+        List<String> items = new ArrayList<>(selectedItems.size());
         for (int i = 0; i < selectedItems.size(); i++) {
             items.add(mData.get(selectedItems.keyAt(i)).getName());
         }

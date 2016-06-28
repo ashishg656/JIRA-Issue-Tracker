@@ -121,11 +121,7 @@ public class SelectUserFragment extends BaseFragment implements AppRequestListen
 
     private void setAdapterData(List<Author> mData) {
         Author unassigned = new Author();
-        unassigned.setName("Unassigned");
-        unassigned.setEmailAddress("EMPTY");
-        unassigned.setDisplayName("Unassigned");
-        unassigned.setKey("EMPTY");
-
+        unassigned = unassigned.getUnassignedAuthor(unassigned);
         mData.add(0, unassigned);
 
         if (type == AppConstants.FILTER_USER_SELECT_ASSIGNEE) {
@@ -141,13 +137,17 @@ public class SelectUserFragment extends BaseFragment implements AppRequestListen
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.cancel_fragment:
-                if (type == AppConstants.FILTER_USER_SELECT_ASSIGNEE) {
-                    issueinterface.setSelectedAssignee(adapter.getSelectedItemsString());
-                } else if (type == AppConstants.FILTER_USER_SELECT_REPORTER) {
-                    issueinterface.setSelectedReporter(adapter.getSelectedItemsString());
+                try {
+                    if (type == AppConstants.FILTER_USER_SELECT_ASSIGNEE) {
+                        issueinterface.setSelectedAssignee(adapter.getSelectedItemsString());
+                    } else if (type == AppConstants.FILTER_USER_SELECT_REPORTER) {
+                        issueinterface.setSelectedReporter(adapter.getSelectedItemsString());
+                    }
+                    issueinterface.setFilterDataAgain();
+                    getActivity().onBackPressed();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                issueinterface.setFilterDataAgain();
-                getActivity().onBackPressed();
                 break;
         }
     }
