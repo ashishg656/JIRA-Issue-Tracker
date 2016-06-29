@@ -21,6 +21,8 @@ import com.ashish.jiraissuetracker.interfaces.FilterIssueinterface;
 import com.ashish.jiraissuetracker.objects.issueComments.Author;
 import com.ashish.jiraissuetracker.utils.UIUtils;
 
+import java.util.List;
+
 /**
  * Created by Ashish on 24/06/16.
  */
@@ -39,6 +41,7 @@ public class FilterIssuesFragment extends BaseFragment implements View.OnClickLi
     TextView removeAllFilters;
 
     int selectedItem;
+    boolean showedEditFilterDialog;
 
     @Override
     public void onAttach(Context context) {
@@ -157,6 +160,66 @@ public class FilterIssuesFragment extends BaseFragment implements View.OnClickLi
 
         dialog = builder.create();
         dialog.show();
+    }
+
+    private void showConfirmExitDiaog() {
+        builder = new AlertDialog.Builder(getActivity()).setTitle("Exit Filter")
+                .setMessage("You have not applied your changes yet. Are you sure you want to discard filter changes?")
+                .setPositiveButton("EXIT", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        showedEditFilterDialog = true;
+                        getActivity().onBackPressed();
+                    }
+                }).setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        showedEditFilterDialog = false;
+                    }
+                }).setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialogInterface) {
+                        showedEditFilterDialog = false;
+                    }
+                });
+
+        dialog = builder.create();
+        dialog.show();
+    }
+
+    public boolean checkIfIgnoreBackPress() {
+        if (showedEditFilterDialog) {
+            return false;
+        }
+
+        if (!checkIfListEmpty(issueinterface.getSelectedAssignee(), issueinterface.getSelectedReporter()
+                , issueinterface.getSelectedprojects(), issueinterface.getSelectedPriorities(), issueinterface.getSelectedResolution(),
+                issueinterface.getSelectedStatus(), issueinterface.getSelectedType())
+                || !checkIfEdittextEmpty(issueinterface.getIssueKey(), issueinterface.getText(), issueinterface.getLabels())
+                || issueinterface.getSelectedSortOrderPosition() != 0) {
+            showConfirmExitDiaog();
+
+            return true;
+        }
+        return false;
+    }
+
+    boolean checkIfEdittextEmpty(String... args) {
+        for (String string : args) {
+            if (string != null && string.trim().length() > 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    boolean checkIfListEmpty(List<String>... args) {
+        for (List<String> list : args) {
+            if (list != null && list.size() > 0) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private void removeAllFilters() {

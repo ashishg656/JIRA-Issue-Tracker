@@ -6,6 +6,7 @@ import android.animation.ObjectAnimator;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -112,6 +113,19 @@ public class FilterIssuesActivity extends BaseActivity implements FilterIssueint
     public void onBackPressed() {
         if (floatingActionButton.getVisibility() == View.GONE) {
             showFloatingActionButton();
+        }
+
+        try {
+            String fragmentTag = getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName();
+            Fragment currentFragment = getSupportFragmentManager()
+                    .findFragmentByTag(fragmentTag);
+            if (currentFragment instanceof FilterIssuesFragment) {
+                if (((FilterIssuesFragment) currentFragment).checkIfIgnoreBackPress()) {
+                    return;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         /* handle fab icon on back press */
