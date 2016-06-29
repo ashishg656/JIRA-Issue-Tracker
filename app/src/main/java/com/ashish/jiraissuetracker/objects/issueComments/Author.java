@@ -1,6 +1,9 @@
 
 package com.ashish.jiraissuetracker.objects.issueComments;
 
+import android.content.Context;
+
+import com.ashish.jiraissuetracker.preferences.ZPreferences;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -36,6 +39,15 @@ public class Author {
         unassigned.setEmailAddress("EMPTY");
         unassigned.setDisplayName("Unassigned");
         unassigned.setKey("EMPTY");
+
+        return unassigned;
+    }
+
+    public Author getSelfAuthor(Author unassigned, Context context) {
+        unassigned.setName(ZPreferences.getUserProfileID(context));
+        unassigned.setEmailAddress(ZPreferences.getUserEmail(context));
+        unassigned.setDisplayName("SELF");
+        unassigned.setKey("SELF");
 
         return unassigned;
     }

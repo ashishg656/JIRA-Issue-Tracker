@@ -9,46 +9,23 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginBottom="40dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="40dp"
         android:background="@drawable/dialog_bg"
         android:orientation="vertical">
 
 
-        <LinearLayout
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center">
-
-            <LinearLayout
-                android:layout_width="@dimen/material_button_height"
-                android:layout_height="@dimen/material_button_height"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true"
-                android:gravity="center">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/ic_hardware_left_arrow" />
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:includeFontPadding="false"
-                android:paddingBottom="@dimen/z_margin_medium"
-                android:paddingRight="@dimen/z_margin_medium"
-                android:paddingTop="@dimen/z_margin_medium"
-                android:text="Select User"
-                android:textColor="@color/z_text_color_dark"
-                android:textSize="@dimen/z_font_small"
-                android:textStyle="bold" />
-        </LinearLayout>
+            android:layout_marginTop="2dp"
+            android:padding="@dimen/z_margin_medium"
+            android:text="Select User"
+            android:textColor="@color/z_text_color_dark"
+            android:textSize="@dimen/z_font_small"
+            android:textStyle="bold" />
 
         <View
             android:layout_width="match_parent"

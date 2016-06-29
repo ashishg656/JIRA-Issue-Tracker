@@ -12,12 +12,11 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.ashish.jiraissuetracker.R;
 import com.ashish.jiraissuetracker.activities.FilterIssuesActivity;
-import com.ashish.jiraissuetracker.adapters.SelectPriorityFragmentListAdapter;
 import com.ashish.jiraissuetracker.adapters.SelectStatusesFragmentListAdapter;
 import com.ashish.jiraissuetracker.extras.RequestTags;
 import com.ashish.jiraissuetracker.interfaces.FilterIssueinterface;
 import com.ashish.jiraissuetracker.objects.getAllStatusForProject.Status;
-import com.ashish.jiraissuetracker.objects.issueDetail.Priority;
+import com.ashish.jiraissuetracker.objects.issueDetail.Resolution;
 import com.ashish.jiraissuetracker.preferences.ZPreferences;
 import com.ashish.jiraissuetracker.requests.AppRequests;
 import com.ashish.jiraissuetracker.requests.AppUrls;
@@ -27,6 +26,8 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -57,7 +58,7 @@ public class SelectStatusesFragment extends BaseFragment implements View.OnClick
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.select_user_fragment_layout, container, false);
+        rootView = inflater.inflate(R.layout.select_project_fragment_layout, container, false);
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.issue_type_select_list);
         setProgressAndErrorLayoutVariables();
@@ -110,8 +111,32 @@ public class SelectStatusesFragment extends BaseFragment implements View.OnClick
             }.getType();
             List<Status> mData = new Gson().fromJson(response, listType);
 
+            mData = filterAdapterDataForDuplicates(mData);
+
             setAdapterData(mData);
         }
+    }
+
+    private List<Status> filterAdapterDataForDuplicates(List<Status> mData) {
+        List<Status> newList = new ArrayList<>();
+        List<String> temp = new ArrayList<>();
+
+        for (Status status : mData) {
+            if (!temp.contains(status.getName())) {
+                temp.add(status.getName());
+                newList.add(status);
+            }
+        }
+
+        Collections.sort(newList, new Comparator<Status>() {
+
+            public int compare(Status o1, Status o2) {
+                return o2.getName().compareTo(o1.getName());
+            }
+        });
+        Collections.reverse(newList);
+
+        return newList;
     }
 
     private void setAdapterData(List<Status> object) {

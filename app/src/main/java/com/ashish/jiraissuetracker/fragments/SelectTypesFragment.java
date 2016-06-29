@@ -12,11 +12,9 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.ashish.jiraissuetracker.R;
 import com.ashish.jiraissuetracker.activities.FilterIssuesActivity;
-import com.ashish.jiraissuetracker.adapters.SelectPriorityFragmentListAdapter;
 import com.ashish.jiraissuetracker.adapters.SelectTypesFragmentListAdapter;
 import com.ashish.jiraissuetracker.extras.RequestTags;
 import com.ashish.jiraissuetracker.interfaces.FilterIssueinterface;
-import com.ashish.jiraissuetracker.objects.issueDetail.Priority;
 import com.ashish.jiraissuetracker.objects.issues.Issuetype;
 import com.ashish.jiraissuetracker.preferences.ZPreferences;
 import com.ashish.jiraissuetracker.requests.AppRequests;
@@ -57,7 +55,7 @@ public class SelectTypesFragment extends BaseFragment implements View.OnClickLis
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.select_user_fragment_layout, container, false);
+        rootView = inflater.inflate(R.layout.select_project_fragment_layout, container, false);
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.issue_type_select_list);
         setProgressAndErrorLayoutVariables();

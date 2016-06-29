@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -37,7 +38,6 @@ public class SelectResolutionsFragmentListAdapter extends RecyclerView.Adapter<R
     List<String> selectedAlready;
 
     SparseBooleanArray selectedItems;
-    private GenericRequestBuilder<Uri, InputStream, SVG, PictureDrawable> requestBuilder;
     MyClickListener clickListener;
 
     public SelectResolutionsFragmentListAdapter(Context context, List<Resolution> mData, List<String> selectedAlready) {
@@ -45,7 +45,6 @@ public class SelectResolutionsFragmentListAdapter extends RecyclerView.Adapter<R
         this.mData = mData;
         this.selectedAlready = selectedAlready;
 
-        requestBuilder = GlideRequestManager.getRequestBuilder(context, R.drawable.resolution_placeholder);
         clickListener = new MyClickListener();
         selectedItems = new SparseBooleanArray();
 
@@ -83,6 +82,10 @@ public class SelectResolutionsFragmentListAdapter extends RecyclerView.Adapter<R
         holder.email.setEllipsize(TextUtils.TruncateAt.END);
         holder.email.setText(resolution.getDescription());
 
+        holder.imageNonCircular.setVisibility(View.VISIBLE);
+        holder.image.setVisibility(View.GONE);
+        holder.imageNonCircular.setImageResource(R.drawable.resolution_placeholder);
+
         holder.container.setTag(position);
         holder.container.setOnClickListener(clickListener);
     }
@@ -106,6 +109,7 @@ public class SelectResolutionsFragmentListAdapter extends RecyclerView.Adapter<R
         TextView name, email;
         CheckBox checkBox;
         LinearLayout container;
+        ImageView imageNonCircular;
 
         public UserHolder(View v) {
             super(v);
@@ -114,6 +118,7 @@ public class SelectResolutionsFragmentListAdapter extends RecyclerView.Adapter<R
             email = (TextView) v.findViewById(R.id.time);
             container = (LinearLayout) v.findViewById(R.id.openuserprofilechangelogitem);
             checkBox = (CheckBox) v.findViewById(R.id.checkbox_1);
+            imageNonCircular = (ImageView) v.findViewById(R.id.circularimageImage);
         }
     }
 

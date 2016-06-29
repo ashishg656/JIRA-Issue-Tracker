@@ -39,5 +39,17 @@ public interface FilterIssueinterface {
 
     public void setSelectedType(List<String> selectedType);
 
+    public String getText();
+
+    public void setText(String text);
+
+    public String getIssueKey();
+
+    public void setIssueKey(String issueKey);
+
+    public String getLabels();
+
+    public void setLabels(String labels);
+
     void setFilterDataAgain();
 }

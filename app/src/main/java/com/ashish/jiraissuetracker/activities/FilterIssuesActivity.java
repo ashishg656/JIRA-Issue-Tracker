@@ -25,6 +25,7 @@ public class FilterIssuesActivity extends BaseActivity implements FilterIssueint
 
     public int selectedSortOrderPosition = 0;
     List<String> selectedAssignee, selectedReporter, selectedprojects, selectedPriorities, selectedResolution, selectedStatus, selectedType;
+    String text, issueKey, labels;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,6 +124,36 @@ public class FilterIssuesActivity extends BaseActivity implements FilterIssueint
     @Override
     public void setSelectedType(List<String> selectedType) {
         this.selectedType = selectedType;
+    }
+
+    @Override
+    public String getText() {
+        return text;
+    }
+
+    @Override
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    @Override
+    public String getIssueKey() {
+        return issueKey;
+    }
+
+    @Override
+    public void setIssueKey(String issueKey) {
+        this.issueKey = issueKey;
+    }
+
+    @Override
+    public String getLabels() {
+        return labels;
+    }
+
+    @Override
+    public void setLabels(String labels) {
+        this.labels = labels;
     }
 
     @Override

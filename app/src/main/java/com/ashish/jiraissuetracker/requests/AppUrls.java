@@ -105,7 +105,7 @@ public class AppUrls {
     }
 
     public static String getAllUsersUrl() {
-        return "rest/api/2/user/search?username=com&maxResults=1000";
+        return "rest/api/2/user/search?username=co&maxResults=1000";
     }
 
     public static String getUsersAutoCompleteUrl(String userName) {

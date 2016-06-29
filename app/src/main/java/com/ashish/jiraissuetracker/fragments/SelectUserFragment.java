@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -18,7 +17,6 @@ import com.ashish.jiraissuetracker.extras.AppConstants;
 import com.ashish.jiraissuetracker.extras.RequestTags;
 import com.ashish.jiraissuetracker.interfaces.FilterIssueinterface;
 import com.ashish.jiraissuetracker.objects.issueComments.Author;
-import com.ashish.jiraissuetracker.objects.projectListing.ProjectListingObject;
 import com.ashish.jiraissuetracker.preferences.ZPreferences;
 import com.ashish.jiraissuetracker.requests.AppRequests;
 import com.ashish.jiraissuetracker.requests.AppUrls;
@@ -123,6 +121,10 @@ public class SelectUserFragment extends BaseFragment implements AppRequestListen
         Author unassigned = new Author();
         unassigned = unassigned.getUnassignedAuthor(unassigned);
         mData.add(0, unassigned);
+
+        Author selfAuthor = new Author();
+        selfAuthor = selfAuthor.getSelfAuthor(selfAuthor, getActivity());
+        mData.add(1, selfAuthor);
 
         if (type == AppConstants.FILTER_USER_SELECT_ASSIGNEE) {
             adapter = new SelectUserFragmentListAdapter(getActivity(), mData, issueinterface.getSelectedAssignee());

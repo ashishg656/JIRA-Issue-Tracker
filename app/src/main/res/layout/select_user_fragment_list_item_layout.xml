@@ -16,11 +16,32 @@
         android:paddingLeft="@dimen/z_margin_medium"
         android:paddingTop="@dimen/z_margin_6dp">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/circularimage"
+        <FrameLayout
             android:layout_width="@dimen/select_user_list_item_image_radius"
-            android:layout_height="@dimen/select_user_list_item_image_radius"
-            android:src="@drawable/test_user" />
+            android:layout_height="@dimen/select_user_list_item_image_radius">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/circularimage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/test_user" />
+
+            <ImageView
+                android:id="@+id/circularimageImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerInside"
+                android:src="@drawable/test_user"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/circularimageImageIssueType"
+                android:layout_width="@dimen/issue_list_issue_type_image_height"
+                android:layout_height="@dimen/issue_list_issue_type_image_height"
+                android:layout_gravity="center"
+                android:src="@drawable/test_user"
+                android:visibility="gone" />
+        </FrameLayout>
 
         <LinearLayout
             android:layout_width="0dp"

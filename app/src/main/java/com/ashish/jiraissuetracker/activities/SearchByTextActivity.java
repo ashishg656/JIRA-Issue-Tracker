@@ -74,6 +74,8 @@ public class SearchByTextActivity extends BaseActivity implements AppRequestList
 
         swipeRefreshLayout.setColorSchemeColors(R.color.colorPrimary, R.color.green_color_primary, R.color.red_color_primary);
 
+        clearButton.setVisibility(View.GONE);
+
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {

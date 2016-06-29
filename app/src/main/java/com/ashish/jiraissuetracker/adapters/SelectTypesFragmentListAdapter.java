@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -83,13 +84,16 @@ public class SelectTypesFragmentListAdapter extends RecyclerView.Adapter<Recycle
         holder.email.setEllipsize(TextUtils.TruncateAt.END);
         holder.email.setText(issuetype.getDescription());
 
+        holder.imageNonCircular.setVisibility(View.VISIBLE);
+        holder.image.setVisibility(View.GONE);
+
         try {
             if (issuetype.getIconUrl() != null) {
                 String url = issuetype.getIconUrl();
                 Uri uri = Uri.parse(url);
                 requestBuilder.diskCacheStrategy(DiskCacheStrategy.SOURCE)
                         .load(uri)
-                        .into(holder.image);
+                        .into(holder.imageNonCircular);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -118,6 +122,7 @@ public class SelectTypesFragmentListAdapter extends RecyclerView.Adapter<Recycle
         TextView name, email;
         CheckBox checkBox;
         LinearLayout container;
+        ImageView imageNonCircular;
 
         public UserHolder(View v) {
             super(v);
@@ -126,6 +131,7 @@ public class SelectTypesFragmentListAdapter extends RecyclerView.Adapter<Recycle
             email = (TextView) v.findViewById(R.id.time);
             container = (LinearLayout) v.findViewById(R.id.openuserprofilechangelogitem);
             checkBox = (CheckBox) v.findViewById(R.id.checkbox_1);
+            imageNonCircular = (ImageView) v.findViewById(R.id.circularimageImageIssueType);
         }
     }
 

@@ -86,9 +86,12 @@ public class SelectUserFragmentListAdapter extends RecyclerView.Adapter<Recycler
                 requestBuilder.diskCacheStrategy(DiskCacheStrategy.SOURCE)
                         .load(uri)
                         .into(holder.image);
+            } else {
+                holder.image.setImageResource(R.drawable.test_user);
             }
         } catch (Exception e) {
             e.printStackTrace();
+            holder.image.setImageResource(R.drawable.test_user);
         }
 
         holder.container.setTag(position);

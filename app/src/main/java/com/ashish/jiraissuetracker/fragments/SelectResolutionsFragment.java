@@ -12,12 +12,9 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.ashish.jiraissuetracker.R;
 import com.ashish.jiraissuetracker.activities.FilterIssuesActivity;
-import com.ashish.jiraissuetracker.adapters.SelectPriorityFragmentListAdapter;
 import com.ashish.jiraissuetracker.adapters.SelectResolutionsFragmentListAdapter;
 import com.ashish.jiraissuetracker.extras.RequestTags;
-import com.ashish.jiraissuetracker.fragments.BaseFragment;
 import com.ashish.jiraissuetracker.interfaces.FilterIssueinterface;
-import com.ashish.jiraissuetracker.objects.issueDetail.Priority;
 import com.ashish.jiraissuetracker.objects.issueDetail.Resolution;
 import com.ashish.jiraissuetracker.preferences.ZPreferences;
 import com.ashish.jiraissuetracker.requests.AppRequests;
@@ -58,7 +55,7 @@ public class SelectResolutionsFragment extends BaseFragment implements View.OnCl
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.select_user_fragment_layout, container, false);
+        rootView = inflater.inflate(R.layout.select_project_fragment_layout, container, false);
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.issue_type_select_list);
         setProgressAndErrorLayoutVariables();
@@ -111,8 +108,24 @@ public class SelectResolutionsFragment extends BaseFragment implements View.OnCl
             }.getType();
             List<Resolution> mData = new Gson().fromJson(response, listType);
 
+            mData = filterAdapterDataForDuplicates(mData);
+
             setAdapterData(mData);
         }
+    }
+
+    private List<Resolution> filterAdapterDataForDuplicates(List<Resolution> mData) {
+        List<Resolution> newList = new ArrayList<>();
+        List<String> temp = new ArrayList<>();
+
+        for (Resolution resolution : mData) {
+            if (!temp.contains(resolution.getName())) {
+                temp.add(resolution.getName());
+                newList.add(resolution);
+            }
+        }
+
+        return newList;
     }
 
     private void setAdapterData(List<Resolution> object) {

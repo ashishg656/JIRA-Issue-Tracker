@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -83,13 +84,16 @@ public class SelectPriorityFragmentListAdapter extends RecyclerView.Adapter<Recy
         holder.email.setEllipsize(TextUtils.TruncateAt.END);
         holder.email.setText(priority.getDescription());
 
+        holder.imageNonCircular.setVisibility(View.VISIBLE);
+        holder.image.setVisibility(View.GONE);
+
         try {
             if (priority.getIconUrl() != null) {
                 String url = priority.getIconUrl();
                 Uri uri = Uri.parse(url);
                 requestBuilder.diskCacheStrategy(DiskCacheStrategy.SOURCE)
                         .load(uri)
-                        .into(holder.image);
+                        .into(holder.imageNonCircular);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -115,6 +119,7 @@ public class SelectPriorityFragmentListAdapter extends RecyclerView.Adapter<Recy
     private class UserHolder extends RecyclerView.ViewHolder {
 
         CircleImageView image;
+        ImageView imageNonCircular;
         TextView name, email;
         CheckBox checkBox;
         LinearLayout container;
@@ -122,6 +127,7 @@ public class SelectPriorityFragmentListAdapter extends RecyclerView.Adapter<Recy
         public UserHolder(View v) {
             super(v);
             image = (CircleImageView) v.findViewById(R.id.circularimage);
+            imageNonCircular = (ImageView) v.findViewById(R.id.circularimageImage);
             name = (TextView) v.findViewById(R.id.uploadrname);
             email = (TextView) v.findViewById(R.id.time);
             container = (LinearLayout) v.findViewById(R.id.openuserprofilechangelogitem);

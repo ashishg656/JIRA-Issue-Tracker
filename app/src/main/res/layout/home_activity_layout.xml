@@ -59,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|end"
                 android:layout_margin="@dimen/fab_margin"
-                android:src="@drawable/ic_forward_arror"
+                android:src="@drawable/ic_hardware_right_arrow"
                 app:fabSize="normal" />
         </FrameLayout>
 
