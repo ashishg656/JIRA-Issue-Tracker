@@ -24,6 +24,9 @@ public class GlideRequestManager {
     private static GenericRequestBuilder<Uri, InputStream, SVG, PictureDrawable> requestBuilder;
 
     public static GenericRequestBuilder getRequestBuilder(Context context) {
+        if (context == null) {
+            return null;
+        }
         requestBuilder = Glide.with(context)
                 .using(Glide.buildStreamModelLoader(Uri.class, context), InputStream.class)
                 .from(Uri.class)
@@ -56,6 +59,10 @@ public class GlideRequestManager {
     }
 
     public GenericRequestBuilder getRequestBuilderCommon(Context context) {
+        if (context == null) {
+            return null;
+        }
+
         GenericRequestBuilder builder = Glide.with(context)
                 .using(Glide.buildStreamModelLoader(Uri.class, context), InputStream.class)
                 .from(Uri.class)

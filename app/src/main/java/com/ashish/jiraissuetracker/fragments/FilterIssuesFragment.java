@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -18,6 +19,7 @@ import com.ashish.jiraissuetracker.activities.FilterIssuesActivity;
 import com.ashish.jiraissuetracker.extras.AppConstants;
 import com.ashish.jiraissuetracker.interfaces.FilterIssueinterface;
 import com.ashish.jiraissuetracker.objects.issueComments.Author;
+import com.ashish.jiraissuetracker.utils.UIUtils;
 
 /**
  * Created by Ashish on 24/06/16.
@@ -34,6 +36,7 @@ public class FilterIssuesFragment extends BaseFragment implements View.OnClickLi
     AlertDialog.Builder builder;
     AlertDialog dialog;
     FilterIssueinterface issueinterface;
+    TextView removeAllFilters;
 
     int selectedItem;
 
@@ -67,6 +70,8 @@ public class FilterIssuesFragment extends BaseFragment implements View.OnClickLi
         filterStatus = (TextView) rootView.findViewById(R.id.filter_status);
         filterType = (TextView) rootView.findViewById(R.id.filter_type);
 
+        removeAllFilters = (TextView) rootView.findViewById(R.id.remove_all_filters);
+
         filterOrderLayout = (LinearLayout) rootView.findViewById(R.id.filter_order_text_container);
         filterAssigneeLayout = (LinearLayout) rootView.findViewById(R.id.filter_assignee_container);
         filterReporterLayout = (LinearLayout) rootView.findViewById(R.id.filter_reporter_c);
@@ -91,6 +96,10 @@ public class FilterIssuesFragment extends BaseFragment implements View.OnClickLi
         filterResolutionLayout.setOnClickListener(this);
         filterStatusLayout.setOnClickListener(this);
         filterTypeLayout.setOnClickListener(this);
+        removeAllFilters.setOnClickListener(this);
+
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        setDataForEdittexts();
 
         setData();
     }
@@ -122,53 +131,106 @@ public class FilterIssuesFragment extends BaseFragment implements View.OnClickLi
             case R.id.filter_type_c:
                 openSelectTypesFragment();
                 break;
+            case R.id.remove_all_filters:
+                showRemoveAllFiltersDialog();
+                break;
         }
     }
 
+    private void showRemoveAllFiltersDialog() {
+        builder = new AlertDialog.Builder(getActivity()).setTitle("Clear Filters")
+                .setMessage("All your filters will go away. Are you sure you want to reset filters?")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        removeAllFilters();
+
+                        setData();
+                        setDataForEdittexts();
+                    }
+                }).setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+
+        dialog = builder.create();
+        dialog.show();
+    }
+
+    private void removeAllFilters() {
+        issueinterface.setSelectedSortOrderPosition(0);
+        issueinterface.setText(null);
+        issueinterface.setLabels(null);
+        issueinterface.setIssueKey(null);
+        issueinterface.setSelectedAssignee(null);
+        issueinterface.setSelectedPriorities(null);
+        issueinterface.setSelectedprojects(null);
+        issueinterface.setSelectedReporter(null);
+        issueinterface.setSelectedResolution(null);
+        issueinterface.setSelectedStatus(null);
+        issueinterface.setSelectedType(null);
+    }
+
     private void openSelectAssigneeFragment() {
+        issueinterface.hideFloatingActionButton();
+
         Bundle b = new Bundle();
         b.putInt("type", AppConstants.FILTER_USER_SELECT_ASSIGNEE);
 
-        getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,
+        getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fragment_container_fullscreen,
                 SelectUserFragment.newInstance(b)).addToBackStack("user").commitAllowingStateLoss();
     }
 
     private void openSelectReporterFragment() {
+        issueinterface.hideFloatingActionButton();
+
         Bundle b = new Bundle();
         b.putInt("type", AppConstants.FILTER_USER_SELECT_REPORTER);
 
-        getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,
+        getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fragment_container_fullscreen,
                 SelectUserFragment.newInstance(b)).addToBackStack("user").commitAllowingStateLoss();
     }
 
     private void openSelectProjectFragment() {
+        issueinterface.hideFloatingActionButton();
+
         Bundle b = new Bundle();
-        getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,
+        getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fragment_container_fullscreen,
                 SelectProjectFragment.newInstance(b)).addToBackStack("project").commitAllowingStateLoss();
     }
 
     private void openSelectResolutionsFragment() {
+        issueinterface.hideFloatingActionButton();
+
         Bundle b = new Bundle();
-        getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,
+        getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fragment_container_fullscreen,
                 SelectResolutionsFragment.newInstance(b)).addToBackStack("resolution").commitAllowingStateLoss();
     }
 
     private void openSelectStatusesFragment() {
+        issueinterface.hideFloatingActionButton();
+
         Bundle b = new Bundle();
 
-        getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,
+        getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fragment_container_fullscreen,
                 SelectStatusesFragment.newInstance(b)).addToBackStack("status").commitAllowingStateLoss();
     }
 
     private void openSelectTypesFragment() {
+        issueinterface.hideFloatingActionButton();
+
         Bundle b = new Bundle();
-        getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,
+        getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fragment_container_fullscreen,
                 SelectTypesFragment.newInstance(b)).addToBackStack("type").commitAllowingStateLoss();
     }
 
     private void openSelectPriorityFragment() {
+        issueinterface.hideFloatingActionButton();
+
         Bundle b = new Bundle();
-        getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,
+        getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fragment_container_fullscreen,
                 SelectPriorityFragment.newInstance(b)).addToBackStack("priority").commitAllowingStateLoss();
     }
 
@@ -263,5 +325,17 @@ public class FilterIssuesFragment extends BaseFragment implements View.OnClickLi
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    void setDataForEdittexts() {
+        filterLabels.setText(issueinterface.getLabels());
+        filterText.setText(issueinterface.getText());
+        filterIssueKey.setText(issueinterface.getIssueKey());
+    }
+
+    public void saveDataForEdittexts() {
+        issueinterface.setIssueKey(filterIssueKey.getText().toString().trim());
+        issueinterface.setLabels(filterLabels.getText().toString().trim());
+        issueinterface.setText(filterText.getText().toString().trim());
     }
 }

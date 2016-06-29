@@ -14,18 +14,32 @@
         android:paddingRight="@dimen/z_margin_6dp"
         android:paddingTop="@dimen/z_margin_6dp">
 
+        <TextView
+            android:id="@+id/remove_all_filters"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:gravity="right"
+            android:padding="@dimen/z_margin_large"
+            android:text="REMOVE ALL FILTERS"
+            android:textColor="@color/red_color_primary"
+            android:textStyle="bold" />
+
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/z_margin_small"
             android:layout_marginRight="@dimen/z_margin_small"
-            android:layout_marginTop="@dimen/z_margin_large">
+            android:layout_marginTop="@dimen/z_margin_medium">
 
             <EditText
                 android:id="@+id/filter_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Text : Summary, Description, Comments"
+                android:imeOptions="actionNext"
+                android:singleLine="true"
                 android:textColor="@color/z_text_color_medium_dark"
                 android:textColorLink="@color/z_text_color_light"
                 android:textSize="@dimen/z_font_mini" />
@@ -43,6 +57,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Issue key"
+                android:imeOptions="actionNext"
+                android:singleLine="true"
                 android:textColor="@color/z_text_color_medium_dark"
                 android:textColorLink="@color/z_text_color_light"
                 android:textSize="@dimen/z_font_mini" />
@@ -60,6 +76,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Labels"
+                android:imeOptions="actionDone"
+                android:singleLine="true"
                 android:textColor="@color/z_text_color_medium_dark"
                 android:textColorLink="@color/z_text_color_light"
                 android:textSize="@dimen/z_font_mini" />

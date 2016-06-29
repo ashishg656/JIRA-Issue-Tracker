@@ -5,9 +5,12 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.media.Image;
+import android.os.Build;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 
@@ -50,10 +53,32 @@ public class UIUtils {
     }
 
     public static void hideSoftKeyboard(Activity context) {
-        View v = context.getWindow().getCurrentFocus();
-        if (v != null) {
-            InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+        try {
+            View v = context.getWindow().getCurrentFocus();
+            if (v != null) {
+                InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+            } else {
+                try {
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void removeViewTreeObserver(View view, ViewTreeObserver.OnGlobalLayoutListener victim) {
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                view.getViewTreeObserver().removeOnGlobalLayoutListener(victim);
+            } else {
+                view.getViewTreeObserver().removeGlobalOnLayoutListener(victim);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

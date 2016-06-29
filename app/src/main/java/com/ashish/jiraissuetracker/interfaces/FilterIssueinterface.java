@@ -51,5 +51,9 @@ public interface FilterIssueinterface {
 
     public void setLabels(String labels);
 
+    public void hideFloatingActionButton();
+
+    public void showFloatingActionButton();
+
     void setFilterDataAgain();
 }
