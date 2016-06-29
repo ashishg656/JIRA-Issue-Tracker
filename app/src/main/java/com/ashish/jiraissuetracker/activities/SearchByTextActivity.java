@@ -57,6 +57,11 @@ public class SearchByTextActivity extends BaseActivity implements AppRequestList
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         setProgressAndErrorLayoutVariables();
+        setEmptyScreenVariables(getResources().getString(R.string.search_activity_no_data_heading)
+                , getResources().getString(R.string.search_activity_no_data_desc)
+                , R.drawable.empty_search_screen);
+
+        hideEmptyScreenLayout();
 
         FrameLayout toolbarView = (FrameLayout) getLayoutInflater().inflate(R.layout.search_by_text_activity_toolbar_view, null, false);
         toolbar.addView(toolbarView);
@@ -177,6 +182,7 @@ public class SearchByTextActivity extends BaseActivity implements AppRequestList
             showErrorLayout();
             hideProgressLayout();
             hideSwipeRefreshLayout();
+            hideEmptyScreenLayout();
 
             UIUtils.hideSoftKeyboard(this);
         }
@@ -191,12 +197,23 @@ public class SearchByTextActivity extends BaseActivity implements AppRequestList
 
             UIUtils.hideSoftKeyboard(this);
 
-            SearchListingResponseObject issuesData = (SearchListingResponseObject) VolleyUtils.getResponseObject(response, SearchListingResponseObject.class);
-            setAdapterData(issuesData);
+            try {
+                SearchListingResponseObject issuesData = (SearchListingResponseObject) VolleyUtils.getResponseObject(response, SearchListingResponseObject.class);
+                setAdapterData(issuesData);
+            } catch (Exception e) {
+                e.printStackTrace();
+                showErrorLayout();
+            }
         }
     }
 
     private void setAdapterData(SearchListingResponseObject issuesData) {
+        if (issuesData == null || issuesData.getIssues() == null || issuesData.getIssues().size() == 0) {
+            showEmptyScreenLayout();
+        } else {
+            hideEmptyScreenLayout();
+        }
+
         if (adapter == null) {
             adapter = new IssuesFragmentListAdapter(issuesData.getIssues(), this, false);
             recyclerView.setAdapter(adapter);

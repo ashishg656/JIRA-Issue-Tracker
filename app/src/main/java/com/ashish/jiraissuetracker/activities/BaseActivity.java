@@ -9,6 +9,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ashish.jiraissuetracker.R;
@@ -33,6 +35,10 @@ public class BaseActivity extends AppCompatActivity {
     ImageView progressImage;
     FrameLayout progressLayoutContainer;
     ProgressLayoutAnimation animForProgressLayoutAnimated;
+
+    LinearLayout emptyScreenLayout;
+    ImageView emptyScreenImage;
+    TextView emptyScreenTextBold, emptyScreenTextLight;
 
     public void makeToast(String message) {
         if (toast != null) {
@@ -60,6 +66,30 @@ public class BaseActivity extends AppCompatActivity {
         progressLightCircle = (View) findViewById(R.id.light_circle);
         progressImage = (ImageView) findViewById(R.id.image_progress);
         progressLayoutContainer = (FrameLayout) findViewById(R.id.progresslayutcontainre);
+    }
+
+    public void setEmptyScreenVariables(String heading, String description, int imageSource) {
+        emptyScreenLayout = (LinearLayout) findViewById(R.id.emptyScreenLayout);
+        emptyScreenImage = (ImageView) findViewById(R.id.emptyScreenImage);
+        emptyScreenTextBold = (TextView) findViewById(R.id.emptyScreenTextBold);
+        emptyScreenTextLight = (TextView) findViewById(R.id.emptyScreenTextLight);
+
+        emptyScreenTextLight.setText(description);
+        emptyScreenTextBold.setText(heading);
+
+        try {
+            emptyScreenImage.setImageResource(imageSource);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    void showEmptyScreenLayout() {
+        emptyScreenLayout.setVisibility(View.VISIBLE);
+    }
+
+    void hideEmptyScreenLayout() {
+        emptyScreenLayout.setVisibility(View.GONE);
     }
 
     public void showProgressLayout() {

@@ -31,6 +31,8 @@
             <include layout="@layout/progress_layout" />
 
             <include layout="@layout/error_layout" />
+
+            <include layout="@layout/empty_screen_layout" />
         </FrameLayout>
     </LinearLayout>
 

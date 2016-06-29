@@ -7,8 +7,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/z_grey_shade_1"
+        android:clipToPadding="false"
         android:orientation="vertical"
-        android:padding="@dimen/z_margin_6dp">
+        android:paddingBottom="@dimen/z_margin_fab_bottom_list"
+        android:paddingLeft="@dimen/z_margin_6dp"
+        android:paddingRight="@dimen/z_margin_6dp"
+        android:paddingTop="@dimen/z_margin_6dp">
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"

@@ -36,4 +36,5 @@
     <dimen name="comments_user_image_radius">50dp</dimen>
     <dimen name="z_seen_by_uploader_image_height">50dp</dimen>
     <dimen name="select_user_list_item_image_radius">40dp</dimen>
+    <dimen name="z_margin_fab_bottom_list">60dp</dimen>
 </resources>

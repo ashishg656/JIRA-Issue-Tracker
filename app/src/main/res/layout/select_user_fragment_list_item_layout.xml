@@ -36,8 +36,8 @@
 
             <ImageView
                 android:id="@+id/circularimageImageIssueType"
-                android:layout_width="@dimen/issue_list_issue_type_image_height"
-                android:layout_height="@dimen/issue_list_issue_type_image_height"
+                android:layout_width="@dimen/z_margin_xlarge"
+                android:layout_height="@dimen/z_margin_xlarge"
                 android:layout_gravity="center"
                 android:src="@drawable/test_user"
                 android:visibility="gone" />
