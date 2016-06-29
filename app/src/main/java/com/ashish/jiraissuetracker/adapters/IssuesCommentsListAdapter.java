@@ -55,6 +55,10 @@ public class IssuesCommentsListAdapter extends RecyclerView.Adapter<RecyclerView
     AlertDialog alertDialog;
 
     public IssuesCommentsListAdapter(List<Comment> mData, Context context, boolean isMoreAllowed, String issueId) {
+        if (context == null) {
+            return;
+        }
+
         this.mData = mData;
         this.context = context;
         this.isMoreAllowed = isMoreAllowed;

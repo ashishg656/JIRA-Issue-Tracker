@@ -38,6 +38,10 @@ public class IssuesFragmentListAdapter extends RecyclerView.Adapter<RecyclerView
     private GenericRequestBuilder<Uri, InputStream, SVG, PictureDrawable> requestBuilderIssueType, requestBuilderIssuePriority;
 
     public IssuesFragmentListAdapter(List<Issue> mData, Context context, boolean isMoreAllowed) {
+        if (context == null) {
+            return;
+        }
+
         this.mData = mData;
         this.context = context;
         this.isMoreAllowed = isMoreAllowed;

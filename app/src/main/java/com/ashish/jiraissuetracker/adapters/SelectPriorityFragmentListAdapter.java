@@ -42,6 +42,10 @@ public class SelectPriorityFragmentListAdapter extends RecyclerView.Adapter<Recy
     MyClickListener clickListener;
 
     public SelectPriorityFragmentListAdapter(Context context, List<Priority> mData, List<String> selectedAlready) {
+        if (context == null) {
+            return;
+        }
+
         this.context = context;
         this.mData = mData;
         this.selectedAlready = selectedAlready;

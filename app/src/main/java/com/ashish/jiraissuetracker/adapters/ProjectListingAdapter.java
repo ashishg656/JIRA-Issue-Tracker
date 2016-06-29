@@ -36,6 +36,10 @@ public class ProjectListingAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private GenericRequestBuilder<Uri, InputStream, SVG, PictureDrawable> requestBuilder;
 
     public ProjectListingAdapter(Context context, List<ProjectListingObject> mData) {
+        if (context == null) {
+            return;
+        }
+
         this.context = context;
         this.mData = mData;
         clickListener = new MyClickListener();

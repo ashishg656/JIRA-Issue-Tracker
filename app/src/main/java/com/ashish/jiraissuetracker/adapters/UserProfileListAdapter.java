@@ -50,6 +50,10 @@ public class UserProfileListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     private GenericRequestBuilder<Uri, InputStream, SVG, PictureDrawable> requestBuilder;
 
     public UserProfileListAdapter(Context context, LoginObjectResponse mData, String userName) {
+        if (context == null) {
+            return;
+        }
+
         this.context = context;
         this.userName = userName;
         this.profileDetails = mData;

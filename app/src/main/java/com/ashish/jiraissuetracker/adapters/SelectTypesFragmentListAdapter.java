@@ -42,6 +42,10 @@ public class SelectTypesFragmentListAdapter extends RecyclerView.Adapter<Recycle
     MyClickListener clickListener;
 
     public SelectTypesFragmentListAdapter(Context context, List<Issuetype> mData, List<String> selectedAlready) {
+        if (context == null) {
+            return;
+        }
+
         this.context = context;
         this.mData = mData;
         this.selectedAlready = selectedAlready;

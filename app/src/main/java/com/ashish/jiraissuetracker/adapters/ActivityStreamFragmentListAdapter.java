@@ -36,6 +36,10 @@ public class ActivityStreamFragmentListAdapter extends RecyclerView.Adapter<Recy
     String issueKey;
 
     public ActivityStreamFragmentListAdapter(List<Entry> mData, Context context, boolean isMoreAllowed) {
+        if (context == null) {
+            return;
+        }
+
         this.mData = mData;
         this.context = context;
         this.isMoreAllowed = isMoreAllowed;
@@ -104,8 +108,8 @@ public class ActivityStreamFragmentListAdapter extends RecyclerView.Adapter<Recy
                     String issueKey = span.getURL().substring(checkIssueName.length());
                     DebugUtils.log("issueKey : " + issueKey);
                     if (ActivityStreamFragmentListAdapter.this.issueKey != null && ActivityStreamFragmentListAdapter.this.issueKey.equals(issueKey)) {
-                        if(context instanceof IssueDetailActivity){
-                            ((IssueDetailActivity)context).switchToFragment1IssueDetail();
+                        if (context instanceof IssueDetailActivity) {
+                            ((IssueDetailActivity) context).switchToFragment1IssueDetail();
                         }
                     } else {
                         ((BaseActivity) context).openIssueDetailActivity(issueKey, issueKey);

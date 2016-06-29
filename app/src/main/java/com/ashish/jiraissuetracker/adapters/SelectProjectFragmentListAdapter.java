@@ -40,6 +40,10 @@ public class SelectProjectFragmentListAdapter extends RecyclerView.Adapter<Recyc
     MyClickListener clickListener;
 
     public SelectProjectFragmentListAdapter(Context context, List<ProjectListingObject> mData, List<String> selectedAlready) {
+        if (context == null) {
+            return;
+        }
+
         this.context = context;
         this.mData = mData;
         this.selectedAlready = selectedAlready;

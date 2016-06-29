@@ -45,6 +45,10 @@ public class ProjectDetailListAdapter extends RecyclerView.Adapter<RecyclerView.
     private GenericRequestBuilder<Uri, InputStream, SVG, PictureDrawable> requestBuilder, requestBuilderIssueType, requestBuilderIssuePriority;
 
     public ProjectDetailListAdapter(Context context, ProjectListingObject mData) {
+        if (context == null) {
+            return;
+        }
+
         this.context = context;
         this.projectListingObject = mData;
         clickListener = new MyClickListener();

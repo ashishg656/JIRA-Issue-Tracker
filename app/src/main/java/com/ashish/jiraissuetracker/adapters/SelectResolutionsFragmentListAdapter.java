@@ -41,6 +41,10 @@ public class SelectResolutionsFragmentListAdapter extends RecyclerView.Adapter<R
     MyClickListener clickListener;
 
     public SelectResolutionsFragmentListAdapter(Context context, List<Resolution> mData, List<String> selectedAlready) {
+        if (context == null) {
+            return;
+        }
+
         this.context = context;
         this.mData = mData;
         this.selectedAlready = selectedAlready;

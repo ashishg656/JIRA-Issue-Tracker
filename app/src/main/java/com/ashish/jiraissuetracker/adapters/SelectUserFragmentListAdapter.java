@@ -39,6 +39,10 @@ public class SelectUserFragmentListAdapter extends RecyclerView.Adapter<Recycler
     MyClickListener clickListener;
 
     public SelectUserFragmentListAdapter(Context context, List<Author> mData, List<String> selectedAlready) {
+        if (context == null) {
+            return;
+        }
+
         this.context = context;
         this.mData = mData;
         this.selectedAlready = selectedAlready;

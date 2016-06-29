@@ -32,6 +32,10 @@ public class IssueChangelogListAdapter extends RecyclerView.Adapter<RecyclerView
     int commentColorBlue, commentColorRed;
 
     public IssueChangelogListAdapter(Context context, List<History> mData) {
+        if (context == null) {
+            return;
+        }
+
         this.context = context;
         this.mData = mData;
         clickListener = new MyClickListener();

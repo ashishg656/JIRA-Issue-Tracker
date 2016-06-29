@@ -40,6 +40,10 @@ public class ChangeIssueStatusFragmentListAdapter extends BaseAdapter implements
     ProgressDialog progressDialog;
 
     public ChangeIssueStatusFragmentListAdapter(String issueId, List<Transition> mData, String currentStatus, Context context) {
+        if (context == null) {
+            return;
+        }
+
         this.mData = mData;
         this.currentStatus = currentStatus;
         this.context = context;
