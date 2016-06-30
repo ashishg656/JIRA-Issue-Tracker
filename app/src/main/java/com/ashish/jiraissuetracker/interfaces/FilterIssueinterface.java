@@ -55,5 +55,5 @@ public interface FilterIssueinterface {
 
     public void showFloatingActionButton();
 
-    void setFilterDataAgain();
+    void setFilterDataAgain(int type, List<String> data);
 }

@@ -141,11 +141,10 @@ public class SelectUserFragment extends BaseFragment implements AppRequestListen
             case R.id.cancel_fragment:
                 try {
                     if (type == AppConstants.FILTER_USER_SELECT_ASSIGNEE) {
-                        issueinterface.setSelectedAssignee(adapter.getSelectedItemsString());
+                        issueinterface.setFilterDataAgain(AppConstants.FILTER_SET_ASSIGNEE, adapter.getSelectedItemsString());
                     } else if (type == AppConstants.FILTER_USER_SELECT_REPORTER) {
-                        issueinterface.setSelectedReporter(adapter.getSelectedItemsString());
+                        issueinterface.setFilterDataAgain(AppConstants.FILTER_SET_REPORTER, adapter.getSelectedItemsString());
                     }
-                    issueinterface.setFilterDataAgain();
                     getActivity().onBackPressed();
                 } catch (Exception e) {
                     e.printStackTrace();

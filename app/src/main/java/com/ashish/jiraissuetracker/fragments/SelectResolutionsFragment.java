@@ -13,6 +13,7 @@ import com.android.volley.VolleyError;
 import com.ashish.jiraissuetracker.R;
 import com.ashish.jiraissuetracker.activities.FilterIssuesActivity;
 import com.ashish.jiraissuetracker.adapters.SelectResolutionsFragmentListAdapter;
+import com.ashish.jiraissuetracker.extras.AppConstants;
 import com.ashish.jiraissuetracker.extras.RequestTags;
 import com.ashish.jiraissuetracker.interfaces.FilterIssueinterface;
 import com.ashish.jiraissuetracker.objects.issueDetail.Resolution;
@@ -138,8 +139,7 @@ public class SelectResolutionsFragment extends BaseFragment implements View.OnCl
         switch (view.getId()) {
             case R.id.cancel_fragment:
                 try {
-                    issueinterface.setSelectedResolution(adapter.getSelectedItemsString());
-                    issueinterface.setFilterDataAgain();
+                    issueinterface.setFilterDataAgain(AppConstants.FILTER_SET_RESOLUTION, adapter.getSelectedItemsString());
                     getActivity().onBackPressed();
                 } catch (Exception e) {
                     e.printStackTrace();

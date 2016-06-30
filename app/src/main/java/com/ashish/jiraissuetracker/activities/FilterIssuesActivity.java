@@ -14,6 +14,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AccelerateInterpolator;
 
 import com.ashish.jiraissuetracker.R;
+import com.ashish.jiraissuetracker.extras.AppConstants;
 import com.ashish.jiraissuetracker.extras.ZAnimatorListener;
 import com.ashish.jiraissuetracker.fragments.FilterIssuesFragment;
 import com.ashish.jiraissuetracker.fragments.IssuesJqlUrlFragment;
@@ -218,6 +219,61 @@ public class FilterIssuesActivity extends BaseActivity implements FilterIssueint
     }
 
     @Override
+    public void setFilterDataAgain(int type, List<String> data) {
+        try {
+            for (Fragment frg : getSupportFragmentManager().getFragments()) {
+                if (frg instanceof FilterIssuesFragment) {
+                    FilterIssuesFragment fragment = (FilterIssuesFragment) frg;
+                    if (type == AppConstants.FILTER_SET_TYPE) {
+                        fragment.selectedType = data;
+                    } else if (type == AppConstants.FILTER_SET_ASSIGNEE) {
+                        fragment.selectedAssignee = data;
+                    } else if (type == AppConstants.FILTER_SET_PRIORITY) {
+                        fragment.selectedPriorities = data;
+                    } else if (type == AppConstants.FILTER_SET_PROJECTS) {
+                        fragment.selectedProjects = data;
+                    } else if (type == AppConstants.FILTER_SET_REPORTER) {
+                        fragment.selectedReporter = data;
+                    } else if (type == AppConstants.FILTER_SET_RESOLUTION) {
+                        fragment.selectedResolution = data;
+                    } else if (type == AppConstants.FILTER_SET_STATUS) {
+                        fragment.selectedStatus = data;
+                    }
+                    fragment.setData();
+                    return;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.FloatingActionButton:
+                try {
+                    if (getSupportFragmentManager() != null && getSupportFragmentManager().getFragments() != null) {
+                        for (Fragment fragment : getSupportFragmentManager().getFragments()) {
+                            if (fragment instanceof FilterIssuesFragment) {
+                                Bundle bundle = new Bundle();
+                                bundle.putBoolean("from_jql", true);
+                                ((FilterIssuesFragment) fragment).setDataFromFilterToActivity();
+                                setIssuesFragmentWithJqlPostRequest(bundle);
+                                return;
+                            }
+                        }
+                    }
+
+                    addFilterIssuesFragment();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+        }
+    }
+
+    @Override
     public int getSelectedSortOrderPosition() {
         return selectedSortOrderPosition;
     }
@@ -327,42 +383,4 @@ public class FilterIssuesActivity extends BaseActivity implements FilterIssueint
         this.labels = labels;
     }
 
-    @Override
-    public void setFilterDataAgain() {
-        try {
-            for (Fragment fragment : getSupportFragmentManager().getFragments()) {
-                if (fragment instanceof FilterIssuesFragment) {
-                    ((FilterIssuesFragment) fragment).setData();
-                    return;
-                }
-            }
-        } catch (Exception e) {
-
-        }
-    }
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.FloatingActionButton:
-                try {
-                    if (getSupportFragmentManager() != null && getSupportFragmentManager().getFragments() != null) {
-                        for (Fragment fragment : getSupportFragmentManager().getFragments()) {
-                            if (fragment instanceof FilterIssuesFragment) {
-                                Bundle bundle = new Bundle();
-                                bundle.putBoolean("from_jql", true);
-                                ((FilterIssuesFragment) fragment).saveDataForEdittexts();
-                                setIssuesFragmentWithJqlPostRequest(bundle);
-                                return;
-                            }
-                        }
-                    }
-
-                    addFilterIssuesFragment();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                break;
-        }
-    }
 }

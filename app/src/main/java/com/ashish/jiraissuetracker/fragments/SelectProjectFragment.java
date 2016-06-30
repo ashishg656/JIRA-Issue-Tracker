@@ -13,6 +13,7 @@ import com.android.volley.VolleyError;
 import com.ashish.jiraissuetracker.R;
 import com.ashish.jiraissuetracker.activities.FilterIssuesActivity;
 import com.ashish.jiraissuetracker.adapters.SelectProjectFragmentListAdapter;
+import com.ashish.jiraissuetracker.extras.AppConstants;
 import com.ashish.jiraissuetracker.extras.RequestTags;
 import com.ashish.jiraissuetracker.interfaces.FilterIssueinterface;
 import com.ashish.jiraissuetracker.objects.projectListing.ProjectListingObject;
@@ -122,8 +123,7 @@ public class SelectProjectFragment extends BaseFragment implements View.OnClickL
         switch (view.getId()) {
             case R.id.cancel_fragment:
                 try {
-                    issueinterface.setSelectedprojects(adapter.getSelectedItemsString());
-                    issueinterface.setFilterDataAgain();
+                    issueinterface.setFilterDataAgain(AppConstants.FILTER_SET_PROJECTS, adapter.getSelectedItemsString());
                     getActivity().onBackPressed();
                 } catch (Exception e) {
                     e.printStackTrace();

@@ -1,6 +1,5 @@
 package com.ashish.jiraissuetracker.fragments;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -18,8 +17,6 @@ import com.ashish.jiraissuetracker.R;
 import com.ashish.jiraissuetracker.activities.FilterIssuesActivity;
 import com.ashish.jiraissuetracker.extras.AppConstants;
 import com.ashish.jiraissuetracker.interfaces.FilterIssueinterface;
-import com.ashish.jiraissuetracker.objects.issueComments.Author;
-import com.ashish.jiraissuetracker.utils.UIUtils;
 
 import java.util.List;
 
@@ -40,8 +37,12 @@ public class FilterIssuesFragment extends BaseFragment implements View.OnClickLi
     FilterIssueinterface issueinterface;
     TextView removeAllFilters;
 
-    int selectedItem;
+    int selectedItemTemp;
     boolean showedEditFilterDialog;
+
+    public int selectedSortOrderPosition = 0;
+    public List<String> selectedAssignee, selectedReporter, selectedProjects, selectedPriorities, selectedResolution, selectedStatus, selectedType;
+    String text, issueKey, labels;
 
     @Override
     public void onAttach(Context context) {
@@ -102,8 +103,10 @@ public class FilterIssuesFragment extends BaseFragment implements View.OnClickLi
         removeAllFilters.setOnClickListener(this);
 
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        setDataForEdittexts();
 
+        setDataFromActivityToFilter();
+
+        setDataForEdittexts();
         setData();
     }
 
@@ -190,50 +193,25 @@ public class FilterIssuesFragment extends BaseFragment implements View.OnClickLi
     public boolean checkIfIgnoreBackPress() {
         if (showedEditFilterDialog) {
             return false;
-        }
-
-        if (!checkIfListEmpty(issueinterface.getSelectedAssignee(), issueinterface.getSelectedReporter()
-                , issueinterface.getSelectedprojects(), issueinterface.getSelectedPriorities(), issueinterface.getSelectedResolution(),
-                issueinterface.getSelectedStatus(), issueinterface.getSelectedType())
-                || !checkIfEdittextEmpty(issueinterface.getIssueKey(), issueinterface.getText(), issueinterface.getLabels())
-                || issueinterface.getSelectedSortOrderPosition() != 0) {
-            showConfirmExitDiaog();
-
+        } else {
             return true;
         }
-        return false;
-    }
-
-    boolean checkIfEdittextEmpty(String... args) {
-        for (String string : args) {
-            if (string != null && string.trim().length() > 0) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    boolean checkIfListEmpty(List<String>... args) {
-        for (List<String> list : args) {
-            if (list != null && list.size() > 0) {
-                return false;
-            }
-        }
-        return true;
     }
 
     private void removeAllFilters() {
-        issueinterface.setSelectedSortOrderPosition(0);
-        issueinterface.setText(null);
-        issueinterface.setLabels(null);
-        issueinterface.setIssueKey(null);
-        issueinterface.setSelectedAssignee(null);
-        issueinterface.setSelectedPriorities(null);
-        issueinterface.setSelectedprojects(null);
-        issueinterface.setSelectedReporter(null);
-        issueinterface.setSelectedResolution(null);
-        issueinterface.setSelectedStatus(null);
-        issueinterface.setSelectedType(null);
+        selectedSortOrderPosition = 0;
+
+        text = null;
+        labels = null;
+        issueKey = null;
+
+        selectedAssignee = null;
+        selectedReporter = null;
+        selectedPriorities = null;
+        selectedProjects = null;
+        selectedResolution = null;
+        selectedStatus = null;
+        selectedType = null;
     }
 
     private void openSelectAssigneeFragment() {
@@ -299,19 +277,19 @@ public class FilterIssuesFragment extends BaseFragment implements View.OnClickLi
 
     private void openSortOrderDialog() {
         String[] listItems = getActivity().getResources().getStringArray(R.array.sort_order_options_values);
-        selectedItem = issueinterface.getSelectedSortOrderPosition();
+        selectedItemTemp = selectedSortOrderPosition;
 
         builder = new AlertDialog.Builder(getActivity()).setTitle("Select Sort Order")
                 .setMessage(null)
-                .setSingleChoiceItems(listItems, issueinterface.getSelectedSortOrderPosition(), new DialogInterface.OnClickListener() {
+                .setSingleChoiceItems(listItems, selectedSortOrderPosition, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        selectedItem = i;
+                        selectedItemTemp = i;
                     }
                 }).setPositiveButton("DONE", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        issueinterface.setSelectedSortOrderPosition(selectedItem);
+                        selectedSortOrderPosition = selectedItemTemp;
 
                         setData();
                     }
@@ -331,58 +309,58 @@ public class FilterIssuesFragment extends BaseFragment implements View.OnClickLi
             String[] items = getActivity().getResources().getStringArray(R.array.sort_order_options);
 
             try {
-                filterOrder.setText(items[issueinterface.getSelectedSortOrderPosition()]);
+                filterOrder.setText(items[selectedSortOrderPosition]);
             } catch (Exception e) {
                 e.printStackTrace();
                 filterOrder.setText("Default");
             }
 
-            if (issueinterface.getSelectedAssignee() == null || issueinterface.getSelectedAssignee().size() == 0) {
+            if (selectedAssignee == null || selectedAssignee.size() == 0) {
                 filterAssignee.setText("All");
             } else {
-                String assignee = TextUtils.join(", ", issueinterface.getSelectedAssignee());
+                String assignee = TextUtils.join(", ", selectedAssignee);
                 filterAssignee.setText(assignee);
             }
 
-            if (issueinterface.getSelectedReporter() == null || issueinterface.getSelectedReporter().size() == 0) {
+            if (selectedReporter == null || selectedReporter.size() == 0) {
                 filterReporter.setText("All");
             } else {
-                String assignee = TextUtils.join(", ", issueinterface.getSelectedReporter());
+                String assignee = TextUtils.join(", ", selectedReporter);
                 filterReporter.setText(assignee);
             }
 
-            if (issueinterface.getSelectedprojects() == null || issueinterface.getSelectedprojects().size() == 0) {
+            if (selectedProjects == null || selectedProjects.size() == 0) {
                 filterProject.setText("All");
             } else {
-                String projects = TextUtils.join(", ", issueinterface.getSelectedprojects());
+                String projects = TextUtils.join(", ", selectedProjects);
                 filterProject.setText(projects);
             }
 
-            if (issueinterface.getSelectedPriorities() == null || issueinterface.getSelectedPriorities().size() == 0) {
+            if (selectedPriorities == null || selectedPriorities.size() == 0) {
                 filterPriority.setText("All");
             } else {
-                String priorities = TextUtils.join(", ", issueinterface.getSelectedPriorities());
+                String priorities = TextUtils.join(", ", selectedPriorities);
                 filterPriority.setText(priorities);
             }
 
-            if (issueinterface.getSelectedResolution() == null || issueinterface.getSelectedResolution().size() == 0) {
+            if (selectedResolution == null || selectedResolution.size() == 0) {
                 filterResolution.setText("All");
             } else {
-                String priorities = TextUtils.join(", ", issueinterface.getSelectedResolution());
+                String priorities = TextUtils.join(", ", selectedResolution);
                 filterResolution.setText(priorities);
             }
 
-            if (issueinterface.getSelectedStatus() == null || issueinterface.getSelectedStatus().size() == 0) {
+            if (selectedStatus == null || selectedStatus.size() == 0) {
                 filterStatus.setText("All");
             } else {
-                String priorities = TextUtils.join(", ", issueinterface.getSelectedStatus());
+                String priorities = TextUtils.join(", ", selectedStatus);
                 filterStatus.setText(priorities);
             }
 
-            if (issueinterface.getSelectedType() == null || issueinterface.getSelectedType().size() == 0) {
+            if (selectedType == null || selectedType.size() == 0) {
                 filterType.setText("All");
             } else {
-                String priorities = TextUtils.join(", ", issueinterface.getSelectedType());
+                String priorities = TextUtils.join(", ", selectedType);
                 filterType.setText(priorities);
             }
         } catch (Exception e) {
@@ -390,15 +368,41 @@ public class FilterIssuesFragment extends BaseFragment implements View.OnClickLi
         }
     }
 
-    void setDataForEdittexts() {
-        filterLabels.setText(issueinterface.getLabels());
-        filterText.setText(issueinterface.getText());
-        filterIssueKey.setText(issueinterface.getIssueKey());
+    void setDataFromActivityToFilter() {
+        labels = issueinterface.getLabels();
+        text = issueinterface.getText();
+        issueKey = issueinterface.getIssueKey();
+
+        selectedSortOrderPosition = issueinterface.getSelectedSortOrderPosition();
+
+        selectedAssignee = issueinterface.getSelectedAssignee();
+        selectedReporter = issueinterface.getSelectedReporter();
+        selectedProjects = issueinterface.getSelectedprojects();
+        selectedPriorities = issueinterface.getSelectedPriorities();
+        selectedResolution = issueinterface.getSelectedResolution();
+        selectedStatus = issueinterface.getSelectedStatus();
+        selectedType = issueinterface.getSelectedType();
     }
 
-    public void saveDataForEdittexts() {
+    public void setDataFromFilterToActivity() {
         issueinterface.setIssueKey(filterIssueKey.getText().toString().trim());
         issueinterface.setLabels(filterLabels.getText().toString().trim());
         issueinterface.setText(filterText.getText().toString().trim());
+
+        issueinterface.setSelectedSortOrderPosition(selectedSortOrderPosition);
+
+        issueinterface.setSelectedStatus(selectedStatus);
+        issueinterface.setSelectedType(selectedType);
+        issueinterface.setSelectedResolution(selectedResolution);
+        issueinterface.setSelectedprojects(selectedProjects);
+        issueinterface.setSelectedPriorities(selectedPriorities);
+        issueinterface.setSelectedAssignee(selectedAssignee);
+        issueinterface.setSelectedReporter(selectedReporter);
+    }
+
+    void setDataForEdittexts() {
+        filterLabels.setText(labels);
+        filterText.setText(text);
+        filterIssueKey.setText(issueKey);
     }
 }
