@@ -112,6 +112,10 @@ public class AppUrls {
         return "rest/api/2/user/search?username=" + userName + "&maxResults=1000";
     }
 
+    public static String getSearchIssuesRequestWithPostDataUrl() {
+        return "rest/api/2/search";
+    }
+
     public static String getAllPrioritiesUrl() {
         return "rest/api/2/priority";
     }

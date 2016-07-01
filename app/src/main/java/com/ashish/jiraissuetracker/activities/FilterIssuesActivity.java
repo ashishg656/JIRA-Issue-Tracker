@@ -205,12 +205,14 @@ public class FilterIssuesActivity extends BaseActivity implements FilterIssueint
         }
     }
 
-    public void setIssuesFragmentWithJqlPostRequest(Bundle bundle) {
+    public void setIssuesFragmentWithJqlPostRequest() {
         while (getSupportFragmentManager().getBackStackEntryCount() != 0) {
             getSupportFragmentManager().popBackStackImmediate();
         }
 
         UIUtils.hideSoftKeyboard(this);
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("from_jql", true);
 
         changeFabIcon(R.drawable.ic_tick, R.drawable.ic_filter_filled);
 
@@ -256,10 +258,8 @@ public class FilterIssuesActivity extends BaseActivity implements FilterIssueint
                     if (getSupportFragmentManager() != null && getSupportFragmentManager().getFragments() != null) {
                         for (Fragment fragment : getSupportFragmentManager().getFragments()) {
                             if (fragment instanceof FilterIssuesFragment) {
-                                Bundle bundle = new Bundle();
-                                bundle.putBoolean("from_jql", true);
                                 ((FilterIssuesFragment) fragment).setDataFromFilterToActivity();
-                                setIssuesFragmentWithJqlPostRequest(bundle);
+                                setIssuesFragmentWithJqlPostRequest();
                                 return;
                             }
                         }
